@@ -69,10 +69,8 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			add_filter ( 'woocommerce_checkout_update_customer_data', array( $this, 'woocommerce_checkout_update_customer_data' ), 10, 2 );
 
 			// Add Address Book to Menu
-			add_action( 'init', array( $this, 'add_endpoints' ) );
-			add_filter( 'query_vars', array( $this, 'add_query_vars' ), 0 );
 			add_filter( 'woocommerce_account_menu_items', array( $this, 'wc_address_book_add_to_menu' ), 10 );
-			add_action( 'woocommerce_account_address-book_endpoint', array( $this, 'wc_address_book_page' ), 10 );
+			add_action( 'woocommerce_account_edit-address_endpoint', array( $this, 'wc_address_book_page' ), 20 );
 
 		} // end constructor
 
@@ -246,7 +244,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			foreach ($items as $key => $value) {
 
 				if ( $key === "edit-address" ) {
-					$new_items["address-book"] = "Address Book";
+					$new_items[$key] = "Address Book";
 				} else {
 					$new_items[$key] = $value;
 				}
@@ -260,11 +258,9 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		 *
 		 * @since 1.0.0
 		 */
-		public function wc_address_book_page() {
+		public function wc_address_book_page( $type ) {
 
-			wc_get_template( 'myaccount/my-address.php' );
-
-			wc_get_template( 'myaccount/my-address-book.php', array(), '', plugin_dir_path( __FILE__ ) . 'templates/' );
+			wc_get_template( 'myaccount/my-address-book.php', array('type' 	=> $type ), '', plugin_dir_path( __FILE__ ) . 'templates/' );
 
 		}
 
