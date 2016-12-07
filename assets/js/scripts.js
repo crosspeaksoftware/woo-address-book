@@ -38,19 +38,12 @@
 			var primary_address = $('.woocommerce-Addresses .u-column2.woocommerce-Address address');
 			var alt_address = $(this).parent().siblings( 'address' );
 
-			var primary_address_title = $('.woocommerce-Addresses .u-column2.woocommerce-Address h3');
-			var alt_address_title = $(this).parent().siblings( '.title' ).children('h3');
-
 			// Swap HTML values for address and label
 			var pa_html = primary_address.html();
 			var aa_html = alt_address.html();
-			var pa_title_text = primary_address_title.text();
-			var aa_title_text = alt_address_title.text();
 
 			alt_address.html(pa_html);
 			primary_address.html(aa_html);
-			alt_address_title.html(pa_title_text);
-			primary_address_title.html(aa_title_text);
 
 			primary_address.addClass('blockUI blockOverlay wc-updating');
 			alt_address.addClass('blockUI blockOverlay wc-updating');
