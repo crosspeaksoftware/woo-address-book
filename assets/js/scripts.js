@@ -2,14 +2,25 @@
 
 	$(document).ready( function() {
 
+		// Select2 Enhancement if it exists
+		if ( $().select2 ) {
+			var wc_address_book_select_select2 = function() {
+				$( 'select#shipping_address:visible, select#address_book:visible' ).each( function() {
+					$( this ).select2();
+				});
+			};
+
+			wc_address_book_select_select2();
+		}
+
 		/*
 		 * AJAX call to delete address books.
 		 */
-		$('.address-book .delete').click( function( e ) {
+		$('.address-book .wc-address-book-delete').click( function( e ) {
 
 			e.preventDefault();
 
-			$(this).closest( '.address' ).addClass('blockUI blockOverlay wc-updating');
+			$(this).closest( '.wc-address-book-address' ).addClass('blockUI blockOverlay wc-updating');
 
 			var name = $(this).attr('id');
 
@@ -24,13 +35,12 @@
 					$('.wc-updating').remove();
 				}
 			});
-
 		});
 
 		/*
 		 * AJAX call to switch address to primary.
 		 */
-		$('.address-book .make-primary').click( function( e ) {
+		$('.address-book .wc-address-book-make-primary').click( function( e ) {
 
 			e.preventDefault();
 
@@ -73,7 +83,7 @@
 				
 				if ( name.length > 0 ) {
 
-					$(that).closest( '.shipping_address' ).addClass('blockUI blockOverlay wc-updating');
+					$(that).closest( '.shipping_address' ).addClass( 'blockUI blockOverlay wc-updating' );
 
 					$.ajax({
 						url : wc_address_book.ajax_url,
@@ -85,7 +95,6 @@
 						dataType: 'json',
 						success : function( response ) {
 
-							$('#shipping_address_label').val(response.shipping_address_label);
 							$('#shipping_address_1').val(response.shipping_address_1);
 							$('#shipping_address_2').val(response.shipping_address_2);
 							$('#shipping_city').val(response.shipping_city);

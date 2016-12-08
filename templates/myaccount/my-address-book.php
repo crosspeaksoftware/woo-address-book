@@ -43,11 +43,11 @@ if ( ! $type ) {
 
 			?>
 
-			<div class="address">
-				<div class="meta">
-					<a href="<?php echo wc_get_endpoint_url( 'edit-address', $name ); ?>" class="edit"><?php _e( 'Edit', 'woocommerce' ); ?></a>
-					<a id="<?php echo $name ?>" class="delete"><?php _e( 'Delete', 'woocommerce' ); ?></a>
-					<a id="<?php echo $name ?>" class="make-primary"><?php _e( 'Make Primary', 'woocommerce' ); ?></a>
+			<div class="wc-address-book-address">
+				<div class="wc-address-book-meta">
+					<a href="<?php echo wc_get_endpoint_url( 'edit-address', $name . '/' ); ?>" class="wc-address-book-edit"><?php _e( 'Edit', 'woocommerce' ); ?></a>
+					<a id="<?php echo $name ?>" class="wc-address-book-delete"><?php _e( 'Delete', 'woocommerce' ); ?></a>
+					<a id="<?php echo $name ?>" class="wc-address-book-make-primary"><?php _e( 'Make Primary', 'woocommerce' ); ?></a>
 				</div>
 				<address>
 					<?php

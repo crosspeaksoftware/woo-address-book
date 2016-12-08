@@ -17,6 +17,25 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
+require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+
+if ( ! in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
+	deactivate_plugins( plugin_basename( __FILE__ ) );
+
+	/**
+	 * Deactivate the plugin if Google Analytics by Yoast is not active.
+	 *
+	 * @since    1.0.0
+	 */
+	function woocommerce_notice__error() {
+		$class = 'notice notice-error';
+		$message = __( 'WoooCommerce Address Book requires WooCommerce and has been deactivated.', 'wc-address-book' );
+
+		printf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $class ), esc_attr( $message ) );
+	}
+	add_action( 'admin_notices', 'woocommerce_notice__error' );
+}
+
 // Check if WooCommerce is active.
 if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
 
@@ -28,6 +47,9 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		 * @since 1.1.0
 		 */
 		function __construct() {
+
+			// Version Number.
+			$this->version = '1.1.0';
 
 			// Load plugin text domain
 			add_action( 'init', array( $this, 'plugin_textdomain' ) );
@@ -69,13 +91,24 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		} // end constructor
 
 		/**
+		 * Version
+		 *
+		 * @since	 1.1.0
+		 *
+		 * @var		string
+		 */
+		public $version;
+
+		/**
 		 * Fired when the plugin is activated.
 		 *
 		 * @param boolean $network_wide - True if WPMU superadmin uses "Network Activate" action, false if WPMU is disabled or plugin is activated on an individual blog.
 		 * @since 1.0.0
 		 */
 		public function activate( $network_wide ) {
+		
 			flush_rewrite_rules();
+		
 		}
 
 		/**
@@ -122,8 +155,8 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			if ( ! is_admin() ) {
 				wp_enqueue_script( 'jquery' );
 
-				wp_enqueue_style( 'wc-address-book', plugins_url( '/assets/css/style.css', __FILE__ ) );
-				wp_enqueue_script( 'wc-address-book', plugins_url( '/assets/js/scripts.js' , __FILE__ ), array('jquery'), '1.0', true );
+				wp_enqueue_style( 'wc-address-book', plugins_url( '/assets/css/style.css', __FILE__ ), array(), $this->version );
+				wp_enqueue_script( 'wc-address-book', plugins_url( '/assets/js/scripts.js' , __FILE__ ), array('jquery'), $this->version, true );
 
 				wp_localize_script( 'wc-address-book', 'wc_address_book', array(
 					'ajax_url' => admin_url( 'admin-ajax.php' )
@@ -146,7 +179,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			?>
 
 			<div class="add-new-address">
-				<a href="<?php echo wc_get_endpoint_url( 'edit-address', $name ); ?>" class="add button"><?php _e( 'Add New Shipping Address', 'wc-address-book' ); ?></a>
+				<a href="<?php echo wc_get_endpoint_url( 'edit-address', $name . '/' ); ?>" class="add button"><?php _e( 'Add New Shipping Address', 'wc-address-book' ); ?></a>
 			</div>
 
 			<?php
@@ -250,7 +283,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 
 			if ( ! is_admin() && ! defined( 'DOING_AJAX' ) ) {
 
-				wp_safe_redirect( '/my-account/edit-address/' );
+				wp_safe_redirect( wc_get_account_endpoint_url( 'edit-address' ) );
 				exit;
 			}
 		}
