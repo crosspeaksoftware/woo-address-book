@@ -146,7 +146,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			?>
 
 			<div class="add-new-address">
-				<a href="<?php echo wc_get_endpoint_url( 'edit-address', $name ); ?>" class="add button"><?php _e( 'Add New Address', 'wc-address-book' ); ?></a>
+				<a href="<?php echo wc_get_endpoint_url( 'edit-address', $name ); ?>" class="add button"><?php _e( 'Add New Shipping Address', 'wc-address-book' ); ?></a>
 			</div>
 
 			<?php
@@ -177,30 +177,6 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 
 			return $name;
 
-		}
-
-		/**
-		 * Register new endpoint to use inside My Account page.
-		 *
-		 * @see https://developer.wordpress.org/reference/functions/add_rewrite_endpoint/
-		 */
-		public function add_endpoints() {
-		
-			add_rewrite_endpoint( 'address-book', EP_ROOT | EP_PAGES );
-		
-		}
-
-		/**
-		 * Add new query var.
-		 *
-		 * @param array $vars
-		 * @return array
-		 */
-		public function add_query_vars( $vars ) {
-		
-			$vars[] = 'address-book';
-			return $vars;
-		
 		}
 
 		/**
