@@ -33,7 +33,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			add_action( 'init', array( $this, 'plugin_textdomain' ) );
 
 			// Register hooks that are fired when the plugin is activated, deactivated, and uninstalled, respectively.
-			register_activation_hook( __FILE__, array( 'WC_Address_Book', 'activate' ) );
+			register_activation_hook( __FILE__, array( $this, 'activate' ) );
 			register_deactivation_hook( __FILE__, array( 'WC_Address_Book', 'deactivate' ) );
 			register_uninstall_hook( __FILE__, array( 'WC_Address_Book', 'uninstall' ) );
 
