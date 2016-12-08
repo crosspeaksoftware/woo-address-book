@@ -4,7 +4,7 @@
  *
  * @author 	Hall Internet Marketing
  * @package	WooCommerce Address Book/Templates
- * @version	1.0.0
+ * @version	1.1.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -37,7 +37,7 @@ if ( ! $type ) {
 		foreach ( $address_book as $name => $fields ) :
 
 			// Prevent default shipping from displaying here.
-			if ( 'shipping' === $name || 'billing' === $name ) {
+			if ( 'shipping' === $name ) {
 				continue;
 			}
 
