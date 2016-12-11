@@ -359,6 +359,11 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		 */
 		public function update_address_names( $user_id, $name ) {
 
+			// Only save shipping addresses.
+			if ( "billing" === $name ) {
+				return;
+			}
+
 			// Get the address book and update the label.
 			$address_names = $this->get_address_names( $user_id );
 
