@@ -188,6 +188,12 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			<?php
 		}
 
+		/**
+		 * Returns the next available shipping address name.
+		 *
+		 * @param string $address_names - An array of saved address names.
+		 * @since 1.1.0
+		 */
 		public function set_new_address_name( $address_names ) {
 
 			// Check the address book entries and add a new one.
