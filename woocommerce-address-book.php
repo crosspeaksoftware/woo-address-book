@@ -1,11 +1,11 @@
 <?php
 /*
  * Plugin Name: WooCommerce Address Book
- * Plugin URI:
- * Description: Add multiple addresses to a user account to expatiate the checkout process.
+ * Plugin URI: https://hallme.com
+ * Description: Gives customers the option to store multiple shipping addresses and retrieve them on checkout.
  * Version: 1.1
  * Author: Hall Internet Marketing
- * Author URI: http://hallme.com
+ * Author URI: https://hallme.com
  * License: GPL2
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Domain Path: /languages
