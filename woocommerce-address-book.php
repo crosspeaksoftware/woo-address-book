@@ -3,7 +3,7 @@
  * Plugin Name: WooCommerce Address Book
  * Plugin URI: https://hallme.com
  * Description: Gives customers the option to store multiple shipping addresses and retrieve them on checkout.
- * Version: 1.1
+ * Version: 1.1.1
  * Author: Hall Internet Marketing
  * Author URI: https://hallme.com
  * License: GPL2
@@ -49,7 +49,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		function __construct() {
 
 			// Version Number.
-			$this->version = '1.1.0';
+			$this->version = '1.1.1';
 
 			// Load plugin text domain
 			add_action( 'init', array( $this, 'plugin_textdomain' ) );
