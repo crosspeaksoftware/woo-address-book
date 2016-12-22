@@ -91,6 +91,9 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			// Shipping Address fields
 			add_filter( 'woocommerce_form_field_country', array( $this, 'shipping_address_country_select' ), 20, 4 );
 
+			// Standardize the address edit fields to match Woo's IDs.
+			add_action( 'woocommerce_form_field_args', array( $this, 'standardize_field_ids' ), 20, 3 );
+
 		} // end constructor
 
 		/**
@@ -298,6 +301,10 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			$field = '';
 			$label_id = $args['id'];
 			$field_container = '<p class="form-row %1$s" id="%2$s">%3$s</p>';
+
+			/**
+			* HALL EDIT: The primary purpose for this override is to replace the default 'shipping_country' with 'billing_country'.
+			*/
 
 			$countries = 'billing_country' === $key ? WC()->countries->get_allowed_countries() : WC()->countries->get_shipping_countries();
 
@@ -688,6 +695,24 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			}
 
 			return $update_customer_data;
+		}
+
+		/**
+		 * Standardize the address edit fields to match Woo's IDs.
+		 *
+		 * @param Array $args - The set of arguments being passed to the field.
+		 *
+		 * @param String $key - The name of the address being edited.
+		 *
+		 * @param String $value - The value a field will be prepopulated with.
+		 *
+		 * @since 1.1.1
+		 */
+		function standardize_field_ids( $args, $key, $value ) {
+
+			$args['id'] = preg_replace( '/^[^_]*_\s*/', 'shipping_', $args['id'] );
+
+			return $args;
 		}
 
 	} // end class
