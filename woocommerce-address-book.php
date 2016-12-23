@@ -518,7 +518,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 				foreach ( $address_book as $name => $address) {
 
 					if ( ! empty( $address[$name . '_address_1'] ) ) {
-						$address_selector['address_book']['options'][$name] = $address[$name . '_first_name'] . ' ' . $address[$name . '_last_name'] . ' - ' . $address[$name . '_address_1'] . ', ' . $address[$name . '_city'] . ', ' . $address[$name . '_state'];
+						$address_selector['address_book']['options'][$name] = $this->address_select_label( $address, $name );
 					}
 				}
 			}
@@ -527,6 +527,24 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			$fields['shipping'] = $address_selector + $fields['shipping'];
 
 			return $fields;
+		}
+
+		/**
+		 * Adds the address book select to the checkout page.
+		 *
+		 * @param array $address - An array of WooCommerce Shipping Address data.
+		 * @since 1.1.1
+		 */
+		function address_select_label( $address, $name ) {
+
+			$show_state = ( $address[$name . '_state'] ? true : false );
+
+			$label = $address[$name . '_first_name'] . ' ' . $address[$name . '_last_name'];
+			$label .= ( $address[$name . '_address_1'] ? ', ' . $address[$name . '_address_1'] : '' );
+			$label .= ( $address[$name . '_city'] ? ', ' . $address[$name . '_city'] : '' );
+			$label .= ( $address[$name . '_state'] ? ', ' . $address[$name . '_state'] : '' );
+
+			return apply_filters( 'wc_address_book_address_select_label', $label );
 		}
 
 		/**
