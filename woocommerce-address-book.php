@@ -517,7 +517,9 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 
 				foreach ( $address_book as $name => $address) {
 
-					$address_selector['address_book']['options'][$name] = $address[$name . '_first_name'] . ' ' . $address[$name . '_last_name'] . ' - ' . $address[$name . '_address_1'] . ', ' . $address[$name . '_city'] . ', ' . $address[$name . '_state'];
+					if ( ! empty( $address[$name . '_address_1'] ) ) {
+						$address_selector['address_book']['options'][$name] = $address[$name . '_first_name'] . ' ' . $address[$name . '_last_name'] . ' - ' . $address[$name . '_address_1'] . ', ' . $address[$name . '_city'] . ', ' . $address[$name . '_state'];
+					}
 				}
 			}
 
@@ -710,7 +712,9 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		 */
 		function standardize_field_ids( $args, $key, $value ) {
 
-			$args['id'] = preg_replace( '/^[^_]*_\s*/', 'shipping_', $args['id'] );
+			if ( 'address_book' != $key ) {
+				$args['id'] = preg_replace( '/^shipping[^_]/', 'shipping', $args['id'] );
+			}
 
 			return $args;
 		}
