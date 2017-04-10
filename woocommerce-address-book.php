@@ -156,32 +156,6 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		 */
 		public function uninstall( $network_wide ) {
 
-			// Make sure only admins can wipe the date.
-			if ( ! current_user_can('activate_plugins') ) {
-				return;
-			}
-
-			$users = get_users();
-			foreach ( $users as $user ) {
-
-				$address_names = $this->get_address_names( $user->ID );
-
-				if ( $address_names ) {
-
-					foreach ( $address_names as $name ) {
-						if ( 'billing' === $name || 'shipping' === $name  ) {
-							continue;
-						}
-
-						// Remove all the extra addresses.
-						$this->wc_address_book_delete( $name );
-					}
-
-					// Remove the address book.
-					delete_user_meta( $user->ID, 'wc_address_book' );
-				}
-			}
-
 			flush_rewrite_rules();
 		}
 
@@ -589,12 +563,9 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		 * @param string $address_name - The name of a specific address in the address book.
 		 * @since 1.0.0
 		 */
-		function wc_address_book_delete( $address_name = null ) {
+		function wc_address_book_delete( $address_name ) {
 
-			if ( ! isset( $address_name ) ) {
-				$address_name = $_POST['name'];
-			}
-
+			$address_name = $_POST['name'];
 			$customer_id = get_current_user_id();
 			$address_book = $this->get_address_book( $customer_id );
 			$address_names = $this->get_address_names( $customer_id );
