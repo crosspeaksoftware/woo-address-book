@@ -2,8 +2,8 @@
 /*
  * Plugin Name: WooCommerce Address Book
  * Plugin URI: https://hallme.com
- * Description: Gives customers the option to store multiple shipping addresses and retrieve them on checkout.
- * Version: 1.1.1
+ * Description: Gives your customers the option to store multiple shipping addresses and retrieve them on checkout..
+ * Version: 1.0.0
  * Author: Hall Internet Marketing
  * Author URI: https://hallme.com
  * License: GPL2
@@ -44,12 +44,12 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		/**
 		 * Initializes the plugin by setting localization, filters, and administration functions.
 		 *
-		 * @since 1.1.0
+		 * @since 1.0.0
 		 */
 		function __construct() {
 
 			// Version Number.
-			$this->version = '1.1.1';
+			$this->version = '1.0.0';
 
 			// Load plugin text domain
 			add_action( 'init', array( $this, 'plugin_textdomain' ) );
@@ -99,7 +99,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		/**
 		 * Version
 		 *
-		 * @since	 1.1.0
+		 * @since	 1.0.0
 		 *
 		 * @var		string
 		 */
@@ -213,7 +213,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		 * Returns the next available shipping address name.
 		 *
 		 * @param string $address_names - An array of saved address names.
-		 * @since 1.1.0
+		 * @since 1.0.0
 		 */
 		public function set_new_address_name( $address_names ) {
 
@@ -270,7 +270,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		/**
 		 * Modify the shipping address field to allow for available countries to displayed correctly. Overides most of woocommerce_form_field().
 		 *
-		 * @since 1.1.0
+		 * @since 1.0.0
 		 */
 		public function shipping_address_country_select( $field, $key, $args, $value ) {
 
@@ -372,7 +372,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		 *
 		 * @param int $user_id - User's ID
 		 * @param string $name - The name of the address being updated.
-		 * @since 1.1.0
+		 * @since 1.0.0
 		 */
 		public function update_address_names( $user_id, $name ) {
 
@@ -404,7 +404,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		 *
 		 * @param int $user_id - User's ID
 		 * @param string $name - The name of the address being updated.
-		 * @since 1.1.0
+		 * @since 1.0.0
 		 */
 		public function redirect_on_save( $user_id, $name ) {
 
@@ -419,7 +419,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		 * Returns an array of the customer's address names.
 		 *
 		 * @param int $user_id - User's ID
-		 * @since 1.1.0
+		 * @since 1.0.0
 		 */
 		public function get_address_names( $user_id = null ) {
 
@@ -543,7 +543,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		 * Adds the address book select to the checkout page.
 		 *
 		 * @param array $address - An array of WooCommerce Shipping Address data.
-		 * @since 1.1.1
+		 * @since 1.0.0
 		 */
 		function address_select_label( $address, $name ) {
 
@@ -599,7 +599,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		/**
 		 * Used for setting the primary shipping addresses from the my-account page.
 		 *
-		 * @since 1.1.0
+		 * @since 1.0.0
 		 */
 		function wc_address_book_make_primary() {
 
@@ -739,7 +739,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		 *
 		 * @param String $value - The value a field will be prepopulated with.
 		 *
-		 * @since 1.1.1
+		 * @since 1.0.0
 		 */
 		function standardize_field_ids( $args, $key, $value ) {
 
