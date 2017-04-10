@@ -2,25 +2,25 @@
 	clear: both;
 }
 
-.woocommerce-account .address-book .meta {
+.woocommerce-account .address-book .wc-address-book-meta {
 	float: right;
 }
 
-.woocommerce-account .address-book .meta a {
+.woocommerce-account .address-book .wc-address-book-meta a {
 	display: block;
 }
 
-.woocommerce-account .address-book .meta a:hover {
+.woocommerce-account .address-book .wc-address-book-meta a:hover {
 	cursor: pointer;
 }
 
-.wc-updating:after {
+.wc-updating:before {
 	bottom: 0;
 	content: "";
 	left: 0;
-	opacity: 0.1;
 	position: absolute;
 	right: 0;
 	top: 0;
-	z-index: 5;
+	z-index: 9999;
 }
+
