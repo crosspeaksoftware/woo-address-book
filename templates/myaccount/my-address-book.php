@@ -19,9 +19,12 @@ $address_book = $WC_Address_Book->get_address_book( $customer_id );
 // Do not display on address edit pages.
 if ( ! $type ) : ?>
 
-	<?php 
+	<?php
+
+	$shipping_address = get_user_meta( $customer_id, 'shipping_address_1', true );
+	
 	// Only display if primary addresses are set and not on an edit page.
-	if ( count ( $address_book ) > 1 ) : ?>
+	if ( ! empty( $shipping_address ) ) : ?>
 
 		<hr />
 
@@ -38,7 +41,7 @@ if ( ! $type ) : ?>
 			foreach ( $address_book as $name => $fields ) :
 
 				// Prevent default shipping from displaying here.
-				if ( 'shipping' === $name ) {
+				if ( 'shipping' === $name || 'billing' === $name ) {
 					continue;
 				}
 
