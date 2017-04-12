@@ -28,6 +28,10 @@ The address book will only begin to display after the primary shipping address h
 = Will this plugin allow my customers to ship to multiple locations with a single order? =
 No, this plugin only allows for the storage of multiple shipping addresses. If a customer would like to ship to multiple locations, they should complete multiple orders.
 
+== Screenshots ==
+1. Manage your address book on the account page. Choose your primary shipping address, or add multiple alternative addresses.
+2. Easily select your shipping address on checkout.
+
 == Changelog ==
 
 = 1.0 =
