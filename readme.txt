@@ -25,7 +25,7 @@ Gives your customers the option to store multiple shipping addresses and retriev
 = Why can't I add a new address to my address book? =
 The address book will only begin to display after the primary shipping address has been created for the customer.
 
-= Will this plugin allow my customers to ship to multiple locations with a single order =
+= Will this plugin allow my customers to ship to multiple locations with a single order? =
 No, this plugin only allows for the storage of multiple shipping addresses. If a customer would like to ship to multiple locations, they should complete multiple orders.
 
 == Changelog ==
