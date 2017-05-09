@@ -13,9 +13,13 @@ Gives your customers the option to store multiple shipping addresses and retriev
 
 Gives your customers the option to store multiple shipping addresses and retrieve them on checkout. Addresses can be updated and modified quickly and easily in /my-account/, or saved as part of the checkout process.
 
+= Code =
+
+View the source on [GitHub](https://github.com/hallme/woo-address-book). You can also submit an [issue](https://github.com/hallme/woo-address-book/issues) or pull request for anything new.
+
 == Installation ==
 
-1. Upload the `woocommerce-address-book` folder to the `/wp-content/plugins/` directory
+1. Upload the `woo-address-book` folder to the `/wp-content/plugins/` directory
 2. Make sure you have WooCommerce installed and enabled.
 3. Activate the WooCommerce Address Book through the 'Plugins' menu in WordPress.
 4. Address Book options will now appear on the customer's account page and checkout once they've entered their primary shipping address.
