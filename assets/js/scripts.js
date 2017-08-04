@@ -80,6 +80,25 @@
 			var name = $(that).val();
 
 			if ( name !== undefined ) {
+
+				if ( 'add_new' == name ) {
+
+					// Clear values when adding a new address.
+					$('.shipping_address input').each( function() {
+						$(this).val('');
+					});
+
+					// Set Country Dropdown.
+					$('#shipping_country').val('').change();
+					$("#shipping_country_chosen").find('span').html('');
+
+					// Set state dropdown.
+					$('#shipping_state').val('');
+					var stateName = $('#shipping_state option[value=""]').text();
+					$("#s2id_shipping_state").find('.select2-chosen').html(stateName).parent().removeClass('select2-default');
+
+					return;
+				}
 				
 				if ( name.length > 0 ) {
 

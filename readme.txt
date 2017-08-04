@@ -2,7 +2,7 @@
 Contributors: hallme, doomwaxer, timbhowe
 Tags: WooCommerce, address book, multiple addresses, address
 Requires at least: 4.0
-Tested up to: 4.7.3
+Tested up to: 4.8.1
 Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -37,6 +37,9 @@ No, this plugin only allows for the storage of multiple shipping addresses. If a
 2. Easily select your shipping address on checkout.
 
 == Changelog ==
+
+= 1.2 =
+* Clear checkout fields when adding a new address.
 
 = 1.1 =
 * Changed Address Book to using $_GET vars to allow for custom fields to be saved.
