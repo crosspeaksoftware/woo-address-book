@@ -48,7 +48,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		function __construct() {
 
 			// Version Number.
-			$this->version = '1.0.0';
+			$this->version = '1.1.0';
 
 			// Load plugin text domain
 			add_action( 'init', array( $this, 'plugin_textdomain' ) );
