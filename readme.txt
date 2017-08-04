@@ -38,5 +38,8 @@ No, this plugin only allows for the storage of multiple shipping addresses. If a
 
 == Changelog ==
 
+= 1.1 =
+* Changed Address Book to using $_GET vars to allow for custom fields to be saved.
+
 = 1.0 =
-* Initial Release
+* Initial Release.
