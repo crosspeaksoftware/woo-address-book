@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
-$WC_Address_Book = new WC_Address_Book; 
+$WC_Address_Book = new WC_Address_Book;
 
 $customer_id = get_current_user_id();
 $address_book = $WC_Address_Book->get_address_book( $customer_id );
@@ -22,7 +22,7 @@ if ( ! $type ) : ?>
 	<?php
 
 	$shipping_address = get_user_meta( $customer_id, 'shipping_address_1', true );
-	
+
 	// Only display if primary addresses are set and not on an edit page.
 	if ( ! empty( $shipping_address ) ) : ?>
 
@@ -63,7 +63,7 @@ if ( ! $type ) : ?>
 
 					<div class="wc-address-book-address">
 						<div class="wc-address-book-meta">
-							<a href="<?php echo wc_get_endpoint_url( 'edit-address', 'shipping/?address-book=' . $name ); ?>" class="wc-address-book-edit"><?php _e( 'Edit', 'woocommerce' ); ?></a>
+							<a href="<?php echo wc_get_endpoint_url( 'edit-address', 'shipping/?address-book=' . $name . '&edit-address=' . $name ); ?>" class="wc-address-book-edit"><?php _e( 'Edit', 'woocommerce' ); ?></a>
 							<a id="<?php echo $name ?>" class="wc-address-book-delete"><?php _e( 'Delete', 'woocommerce' ); ?></a>
 							<a id="<?php echo $name ?>" class="wc-address-book-make-primary"><?php _e( 'Make Primary', 'woocommerce' ); ?></a>
 						</div>
