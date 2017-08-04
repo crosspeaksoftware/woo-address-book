@@ -2,7 +2,7 @@
 /*
  * Plugin Name: WooCommerce Address Book
  * Description: Gives your customers the option to store multiple shipping addresses and retrieve them on checkout..
- * Version: 1.0.0
+ * Version: 1.1.0
  * Author: Hall Internet Marketing
  * Author URI: https://hallme.com
  * License: GPL2
@@ -63,10 +63,10 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 
 			// Save an address to the address book.
 			add_action( 'woocommerce_customer_save_address', array( $this, 'update_address_names' ), 10, 2 );
-			add_action( 'woocommerce_customer_save_address', array( $this, 'redirect_on_save' ), 999, 2 );
+			add_action( 'woocommerce_customer_save_address', array( $this, 'redirect_on_save' ), 9999, 2 );
 
 			// Add custom Shipping Address fields.
-			add_filter( 'woocommerce_checkout_fields', array( $this, 'shipping_address_select_field' ), 20, 1 );
+			add_filter( 'woocommerce_checkout_fields', array( $this, 'shipping_address_select_field' ), 9999, 1 );
 
 			// AJAX action to delete an address.
 			add_action( 'wp_ajax_nopriv_wc_address_book_delete', array( $this, 'wc_address_book_delete' ) );
@@ -92,6 +92,8 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 
 			// Standardize the address edit fields to match Woo's IDs.
 			add_action( 'woocommerce_form_field_args', array( $this, 'standardize_field_ids' ), 20, 3 );
+
+			add_action( 'woocommerce_shipping_fields', array( $this, 'replace_address_key' ), 1001, 2 );
 
 		} // end constructor
 
@@ -202,7 +204,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			?>
 
 			<div class="add-new-address">
-				<a href="<?php echo wc_get_endpoint_url( 'edit-address', $name . '/' ); ?>" class="add button"><?php _e( 'Add New Shipping Address', 'wc-address-book' ); ?></a>
+				<a href="<?php echo wc_get_endpoint_url( 'edit-address', 'shipping/?address-book=' . $name ); ?>" class="add button"><?php _e( 'Add New Shipping Address', 'wc-address-book' ); ?></a>
 			</div>
 
 			<?php
@@ -219,9 +221,8 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			// Check the address book entries and add a new one.
 			if ( isset( $address_names ) && ! empty( $address_names ) ) {
 
-				// Count the number of addresses and add 1
-				$keys = array_keys( $address_names );
-				$name = 'shipping' . ( count($keys) + 1 );
+				$new = str_replace('shipping', '', end( $address_names ));
+				$name = 'shipping' . intval ( $new  + 1, 10 );
 
 			} else { // Start the address book.
 
@@ -309,7 +310,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 
 			$field = '';
 			$label_id = $args['id'];
-			$field_container = '<p class="form-row %1$s" id="%2$s">%3$s</p>';
+			$field_container = '<p class="form-row form-row-wide %1$s" id="%2$s">%3$s</p>';
 
 			/**
 			* HALL EDIT: The primary purpose for this override is to replace the default 'shipping_country' with 'billing_country'.
@@ -351,7 +352,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 					$field_html .= '<span class="description">' . esc_html( $args['description'] ) . '</span>';
 				}
 
-				$container_class = 'form-row ' . esc_attr( implode( ' ', $args['class'] ) );
+				$container_class = 'form-row form-row-wide' . esc_attr( implode( ' ', $args['class'] ) );
 				$container_id = esc_attr( $args['id'] ) . '_field';
 
 				$after = ! empty( $args['clear'] ) ? '<div class="clear"></div>' : '';
@@ -374,6 +375,10 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		 * @since 1.0.0
 		 */
 		public function update_address_names( $user_id, $name ) {
+
+			if ( isset( $_GET['address-book'] ) ) {
+				$name = $_GET['address-book'];
+			}
 
 			// Only save shipping addresses.
 			if ( "billing" === $name ) {
@@ -443,17 +448,8 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 
 			$address_names = $this->get_address_names( $user_id );
 
-			$address_fields = array(
-				'_first_name',
-				'_last_name',
-				'_company',
-				'_address_1',
-				'_address_2',
-				'_city',
-				'_state',
-				'_postcode',
-				'_country'
-			);
+			// Get the set shipping fields, including any custom values.
+			$address_fields = array_keys( apply_filters( 'woocommerce_shipping_fields', $address_fields, $country ) );
 
 			$address_book = array();
 
@@ -469,6 +465,9 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 					unset($address);
 
 					foreach ( $address_fields as $field ) {
+
+						// Remove the default name so the custom ones can be added.
+						$field = str_replace( 'shipping', '', $field );
 
 						$address[$name . $field] = get_user_meta( $user_id, $name . $field, true );
 				
@@ -518,8 +517,10 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 
 			$address_selector['address_book'] = array(
 				'type' => 'select',
-				'class' => array( 'address_book' ),
+				'class' => array( 'form-row-wide', 'address_book' ),
 				'label' => __( 'Address Book', 'woocommerce' ),
+				'order' => -1,
+				'priority' => -1
 			);
 
 			if ( ! empty( $address_book ) && false !== $address_book ) {
@@ -747,6 +748,29 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			}
 
 			return $args;
+		}
+
+		/**
+		 * Replace the standard 'Shipping' address key with address book key.
+		 *
+		 * @param Array $address_fields - The set of WooCommerce Address Fields.
+		 *
+		 * @since 1.1.0
+		 */
+		function replace_address_key( $address_fields ) {
+
+			if ( isset( $_GET['address-book'] ) ) {
+
+				foreach ( $address_fields as $key => $value ) {
+
+					$newkey = str_replace( 'shipping', esc_attr( $_GET['address-book'] ), $key );
+
+					$address_fields[$newkey] = $address_fields[$key];
+					unset( $address_fields[$key] );
+				}
+			}
+
+			return $address_fields;
 		}
 
 	} // end class

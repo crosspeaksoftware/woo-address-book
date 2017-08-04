@@ -95,19 +95,22 @@
 						dataType: 'json',
 						success : function( response ) {
 
-							$('#shipping_address_1').val(response.shipping_address_1);
-							$('#shipping_address_2').val(response.shipping_address_2);
-							$('#shipping_city').val(response.shipping_city);
-							$('#shipping_company').val(response.shipping_company);
+							// Loop through all fields incase there are custom ones.
+							Object.keys(response).forEach( function(key) {
+								$('#shipping_address_1').val(response.shipping_address_1);
+								$('#' + key).val(response[key]);
+							});
+
+							// Set Country Dropdown.
 							$('#shipping_country').val(response.shipping_country).change();
 							$("#shipping_country_chosen").find('span').html(response.shipping_country_text);
-							$('#shipping_first_name').val(response.shipping_first_name);
-							$('#shipping_last_name').val(response.shipping_last_name);
-							$('#shipping_postcode').val(response.shipping_postcode);
+
+							// Set state dropdown.
 							$('#shipping_state').val(response.shipping_state);
 							var stateName = $('#shipping_state option[value="'+response.shipping_state+'"]').text();
 							$("#s2id_shipping_state").find('.select2-chosen').html(stateName).parent().removeClass('select2-default');
 
+							// Remove loading screen.
 							$( '.shipping_address' ).removeClass('blockUI blockOverlay wc-updating');
 
 						}
