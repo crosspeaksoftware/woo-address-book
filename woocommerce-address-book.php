@@ -789,6 +789,11 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 					$address_fields[$newkey] = $address_fields[$key];
 					unset( $address_fields[$key] );
 				}
+
+				// Set shipping country post value so it can be passed to get_address_fields
+				if ( isset( $_POST[ $_GET['address-book'] . '_country' ] ) ) {
+					$_POST['shipping_country'] = $_POST[ $_GET['address-book'] . '_country' ];
+				}
 			}
 
 			return $address_fields;
