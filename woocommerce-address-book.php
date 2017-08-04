@@ -483,7 +483,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 						continue;
 					}
 
-					unset($address);
+					$address = array();
 
 					foreach ( $address_fields as $field ) {
 
