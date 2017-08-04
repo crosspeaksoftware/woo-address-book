@@ -127,13 +127,13 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 				if ( empty( $address_book ) ) {
 
 					$shipping_address = get_user_meta( $user->ID, 'shipping_address_1', true );
-					
+
 					if ( ! empty( $shipping_address ) ) {
 						$this->save_address_names( $user->ID, array( 'shipping' ) );
 					}
 				}
 			}
-		
+
 			flush_rewrite_rules();
 		}
 
@@ -222,6 +222,9 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			if ( isset( $address_names ) && ! empty( $address_names ) ) {
 
 				$new = str_replace('shipping', '', end( $address_names ));
+				if ( empty( $new ) ) {
+					$new = 0;
+				}
 				$name = 'shipping' . intval ( $new  + 1, 10 );
 
 			} else { // Start the address book.
@@ -488,7 +491,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 						$field = str_replace( 'shipping', '', $field );
 
 						$address[$name . $field] = get_user_meta( $user_id, $name . $field, true );
-				
+
 					}
 
 					$address_book[$name] = $address;
