@@ -93,8 +93,6 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			// Standardize the address edit fields to match Woo's IDs.
 			add_action( 'woocommerce_form_field_args', array( $this, 'standardize_field_ids' ), 20, 3 );
 
-			add_action( 'woocommerce_shipping_fields', array( $this, 'replace_address_key' ), 1001, 2 );
-
 		} // end constructor
 
 		/**
@@ -127,13 +125,13 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 				if ( empty( $address_book ) ) {
 
 					$shipping_address = get_user_meta( $user->ID, 'shipping_address_1', true );
-					
+
 					if ( ! empty( $shipping_address ) ) {
 						$this->save_address_names( $user->ID, array( 'shipping' ) );
 					}
 				}
 			}
-		
+
 			flush_rewrite_rules();
 		}
 
@@ -204,7 +202,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			?>
 
 			<div class="add-new-address">
-				<a href="<?php echo wc_get_endpoint_url( 'edit-address', 'shipping/?address-book=' . $name ); ?>" class="add button"><?php _e( 'Add New Shipping Address', 'wc-address-book' ); ?></a>
+				<a href="<?php echo wc_get_endpoint_url( 'edit-address', 'shipping/?address-book=' . $name . '&edit-address=' . $name ); ?>" class="add button"><?php _e( 'Add New Shipping Address', 'wc-address-book' ); ?></a>
 			</div>
 
 			<?php
@@ -222,6 +220,9 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			if ( isset( $address_names ) && ! empty( $address_names ) ) {
 
 				$new = str_replace('shipping', '', end( $address_names ));
+				if ( empty( $new ) ) {
+					$new = 0;
+				}
 				$name = 'shipping' . intval ( $new  + 1, 10 );
 
 			} else { // Start the address book.
@@ -480,7 +481,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 						continue;
 					}
 
-					unset($address);
+					$address = array();
 
 					foreach ( $address_fields as $field ) {
 
@@ -488,7 +489,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 						$field = str_replace( 'shipping', '', $field );
 
 						$address[$name . $field] = get_user_meta( $user_id, $name . $field, true );
-				
+
 					}
 
 					$address_book[$name] = $address;
@@ -766,29 +767,6 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			}
 
 			return $args;
-		}
-
-		/**
-		 * Replace the standard 'Shipping' address key with address book key.
-		 *
-		 * @param Array $address_fields - The set of WooCommerce Address Fields.
-		 *
-		 * @since 1.1.0
-		 */
-		function replace_address_key( $address_fields ) {
-
-			if ( isset( $_GET['address-book'] ) ) {
-
-				foreach ( $address_fields as $key => $value ) {
-
-					$newkey = str_replace( 'shipping', esc_attr( $_GET['address-book'] ), $key );
-
-					$address_fields[$newkey] = $address_fields[$key];
-					unset( $address_fields[$key] );
-				}
-			}
-
-			return $address_fields;
 		}
 
 	} // end class
