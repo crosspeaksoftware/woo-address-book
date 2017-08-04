@@ -454,20 +454,10 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 
 			$address_names = $this->get_address_names( $user_id );
 
-			$address_fields = array(
-				'_first_name',
-				'_last_name',
-				'_company',
-				'_address_1',
-				'_address_2',
-				'_city',
-				'_state',
-				'_postcode',
-				'_country'
-			);
+			$address_fields = WC()->countries->get_address_fields( $country, 'shipping_' );
 
 			// Get the set shipping fields, including any custom values.
-			$address_fields = array_keys( apply_filters( 'woocommerce_shipping_fields', $address_fields, $country ) );
+			$address_keys = array_keys( $address_fields );
 
 			$address_book = array();
 
@@ -482,7 +472,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 
 					unset($address);
 
-					foreach ( $address_fields as $field ) {
+					foreach ( $address_keys as $field ) {
 
 						// Remove the default name so the custom ones can be added.
 						$field = str_replace( 'shipping', '', $field );
@@ -705,7 +695,10 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 
 			// Name new address and update address book.
 			if  ( ( 'add_new' === $name || ! isset( $name ) ) && false === $ignore_shipping_address ) {
-				$name = $this->set_new_address_name( $address_book );
+
+				$address_names = $this->get_address_names( $user->ID );
+				$name = $this->set_new_address_name( $address_names );
+
 			}
 
 			if ( false === $ignore_shipping_address ) {
