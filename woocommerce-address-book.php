@@ -441,12 +441,30 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		 */
 		public function get_address_book( $user_id = null ){
 
+			$countries = new WC_Countries();
+
+			if ( ! isset( $country ) ) {
+				$country = $countries->get_base_country();
+			}
+
 			if ( ! isset( $user_id ) ) {
 				$user = wp_get_current_user();
 				$user_id = $user->ID;
 			}
 
 			$address_names = $this->get_address_names( $user_id );
+
+			$address_fields = array(
+				'_first_name',
+				'_last_name',
+				'_company',
+				'_address_1',
+				'_address_2',
+				'_city',
+				'_state',
+				'_postcode',
+				'_country'
+			);
 
 			// Get the set shipping fields, including any custom values.
 			$address_fields = array_keys( apply_filters( 'woocommerce_shipping_fields', $address_fields, $country ) );
