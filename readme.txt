@@ -39,6 +39,9 @@ No, this plugin only allows for the storage of multiple shipping addresses. If a
 == Changelog ==
 
 = 1.2 =
+* Fix a bug which prevented address from saving.
+
+= 1.2 =
 * Clear checkout fields when adding a new address.
 
 = 1.1 =
