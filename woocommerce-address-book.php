@@ -17,8 +17,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+$woo_path = 'woocommerce/woocommerce.php';
 
-if ( ! in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
+if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_path ) ) {
+
 	deactivate_plugins( plugin_basename( __FILE__ ) );
 
 	/**
@@ -33,6 +35,7 @@ if ( ! in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins',
 		printf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $class ), esc_attr( $message ) );
 	}
 	add_action( 'admin_notices', 'woocommerce_notice__error' );
+	add_action( 'network_admin_notices', 'woocommerce_notice__error' );
 }
 
 // Check if WooCommerce is active.
