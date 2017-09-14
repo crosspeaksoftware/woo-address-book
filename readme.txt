@@ -38,7 +38,10 @@ No, this plugin only allows for the storage of multiple shipping addresses. If a
 
 == Changelog ==
 
-= 1.2 =
+= 1.3.0 =
+* Add multisite support
+
+= 1.2.1 =
 * Fix a bug which prevented address from saving.
 
 = 1.2 =
