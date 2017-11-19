@@ -277,7 +277,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		 */
 		public function shipping_address_country_select( $field, $key, $args, $value ) {
 
-			if ( $args['required'] ) {
+			if ( $args['required'] && ! in_array( 'validate-required', $args['class'] ) ) {
 				$args['class'][] = 'validate-required';
 				$required = ' <abbr class="required" title="' . esc_attr__( 'required', 'woocommerce'  ) . '">*</abbr>';
 			} else {
@@ -311,9 +311,10 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 				}
 			}
 
-			$field = '';
-			$label_id = $args['id'];
-			$field_container = '<p class="form-row form-row-wide %1$s" id="%2$s">%3$s</p>';
+			$field           = '';
+			$label_id        = $args['id'];
+			$sort            = $args['priority'] ? $args['priority'] : '';
+			$field_container = '<p class="form-row %1$s" id="%2$s" data-priority="' . esc_attr( $sort ) . '">%3$s</p>';
 
 			/**
 			* HALL EDIT: The primary purpose for this override is to replace the default 'shipping_country' with 'billing_country'.
@@ -321,19 +322,18 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 
 			$countries = 'billing_country' === $key ? WC()->countries->get_allowed_countries() : WC()->countries->get_shipping_countries();
 
-			if ( 1 === sizeof( $countries ) ) {
+			if ( 1 === count( $countries ) ) {
 
 				$field .= '<strong>' . current( array_values( $countries ) ) . '</strong>';
 
-				$field .= '<input type="hidden" name="' . esc_attr( $key ) . '" id="' . esc_attr( $args['id'] ) . '" value="' . current( array_keys($countries ) ) . '" ' . implode( ' ', $custom_attributes ) . ' class="country_to_state" />';
+				$field .= '<input type="hidden" name="' . esc_attr( $key ) . '" id="' . esc_attr( $args['id'] ) . '" value="' . current( array_keys( $countries ) ) . '" ' . implode( ' ', $custom_attributes ) . ' class="country_to_state" readonly="readonly" />';
 
 			} else {
 
-				$field = '<select name="' . esc_attr( $key ) . '" id="' . esc_attr( $args['id'] ) . '" ' . $args['autocomplete'] . ' class="country_to_state country_select ' . esc_attr( implode( ' ', $args['input_class'] ) ) .'" ' . implode( ' ', $custom_attributes ) . '>'
-						. '<option value="">'.__( 'Select a country&hellip;', 'woocommerce' ) .'</option>';
+				$field = '<select name="' . esc_attr( $key ) . '" id="' . esc_attr( $args['id'] ) . '" class="country_to_state country_select ' . esc_attr( implode( ' ', $args['input_class'] ) ) . '" ' . implode( ' ', $custom_attributes ) . '><option value="">' . esc_html__( 'Select a country&hellip;', 'woocommerce' ) . '</option>';
 
 				foreach ( $countries as $ckey => $cvalue ) {
-					$field .= '<option value="' . esc_attr( $ckey ) . '" '. selected( $value, $ckey, false ) . '>'. __( $cvalue, 'woocommerce' ) .'</option>';
+					$field .= '<option value="' . esc_attr( $ckey ) . '" ' . selected( $value, $ckey, false ) . '>' . $cvalue . '</option>';
 				}
 
 				$field .= '</select>';
@@ -346,7 +346,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 				$field_html = '';
 
 				if ( $args['label'] && 'checkbox' != $args['type'] ) {
-					$field_html .= '<label for="' . esc_attr( $label_id ) . '" class="' . esc_attr( implode( ' ', $args['label_class'] ) ) .'">' . $args['label'] . $required . '</label>';
+					$field_html .= '<label for="' . esc_attr( $label_id ) . '" class="' . esc_attr( implode( ' ', $args['label_class'] ) ) . '">' . $args['label'] . $required . '</label>';
 				}
 
 				$field_html .= $field;
@@ -355,12 +355,9 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 					$field_html .= '<span class="description">' . esc_html( $args['description'] ) . '</span>';
 				}
 
-				$container_class = 'form-row form-row-wide' . esc_attr( implode( ' ', $args['class'] ) );
-				$container_id = esc_attr( $args['id'] ) . '_field';
-
-				$after = ! empty( $args['clear'] ) ? '<div class="clear"></div>' : '';
-
-				$field = sprintf( $field_container, $container_class, $container_id, $field_html ) . $after;
+				$container_class = esc_attr( implode( ' ', $args['class'] ) );
+				$container_id    = esc_attr( $args['id'] ) . '_field';
+				$field           = sprintf( $field_container, $container_class, $container_id, $field_html );
 			}
 
 			if ( $args['return'] ) {
