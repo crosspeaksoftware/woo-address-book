@@ -84,13 +84,16 @@
 				if ( 'add_new' == name ) {
 
 					// Clear values when adding a new address.
-					$('.shipping_address input').each( function() {
+					$('.shipping_address input').not($('#shipping_country')).each( function() {
 						$(this).val('');
 					});
 
 					// Set Country Dropdown.
-					$('#shipping_country').val('').change();
-					$("#shipping_country_chosen").find('span').html('');
+					// Don't reset the value if only one country is available to choose.
+					if ( typeof $('#shipping_country').attr('readonly') == 'undefined' ) {
+						$('#shipping_country').val('').change();
+						$("#shipping_country_chosen").find('span').html('');
+					}
 
 					// Set state dropdown.
 					$('#shipping_state').val('');
