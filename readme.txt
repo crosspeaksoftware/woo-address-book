@@ -38,11 +38,14 @@ No, this plugin only allows for the storage of multiple shipping addresses. If a
 
 == Changelog ==
 
+= 1.3.1 =
+* Fixed a bug which prevents shipping country field from clearing if only one country is a checkout option.
+
 = 1.3.0 =
-* Add multisite support
+* Add multisite support.
 
 = 1.2.1 =
-* Fix a bug which prevented address from saving.
+* Fixed a bug which prevented address from saving.
 
 = 1.2 =
 * Clear checkout fields when adding a new address.
