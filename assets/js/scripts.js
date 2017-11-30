@@ -16,7 +16,7 @@
 		/*
 		 * AJAX call to delete address books.
 		 */
-		$('.address-book .wc-address-book-delete').click( function( e ) {
+		$('.address_book .wc-address-book-delete').click( function( e ) {
 
 			e.preventDefault();
 
@@ -40,7 +40,7 @@
 		/*
 		 * AJAX call to switch address to primary.
 		 */
-		$('.address-book .wc-address-book-make-primary').click( function( e ) {
+		$('.address_book .wc-address-book-make-primary').click( function( e ) {
 
 			e.preventDefault();
 
