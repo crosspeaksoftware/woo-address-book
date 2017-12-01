@@ -38,6 +38,9 @@ No, this plugin only allows for the storage of multiple shipping addresses. If a
 
 == Changelog ==
 
+= 1.3.2 =
+* Fixed a bug to properly reset the state value when selecting 'new address'.
+
 = 1.3.1 =
 * Fixed a bug which prevents shipping country field from clearing if only one country is a checkout option.
 
