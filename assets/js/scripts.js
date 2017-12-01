@@ -96,9 +96,8 @@
 					}
 
 					// Set state dropdown.
-					$('#shipping_state').val('');
-					var stateName = $('#shipping_state option[value=""]').text();
-					$("#s2id_shipping_state").find('.select2-chosen').html(stateName).parent().removeClass('select2-default');
+					$('#shipping_state').val('').change();
+					$("#shipping_state_chosen").find('span').html('');
 
 					return;
 				}
