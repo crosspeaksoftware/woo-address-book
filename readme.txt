@@ -38,6 +38,9 @@ No, this plugin only allows for the storage of multiple shipping addresses. If a
 
 == Changelog ==
 
+= 1.3.3 =
+* Added text domain and updated AJAX's scope on my-account. Thanks to pabl0rg and nicolasmn for their contributions!
+
 = 1.3.2 =
 * Fixed a bug to properly reset the state value when selecting 'new address'.
 
