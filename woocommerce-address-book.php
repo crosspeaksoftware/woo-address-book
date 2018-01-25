@@ -1,8 +1,8 @@
 <?php
-/*
+/**
  * Plugin Name: WooCommerce Address Book
  * Description: Gives your customers the option to store multiple shipping addresses and retrieve them on checkout..
- * Version: 1.3.2
+ * Version: 1.3.3
  * Author: Hall Internet Marketing
  * Author URI: https://hallme.com
  * License: GPL2
@@ -13,10 +13,10 @@
 
 // Prevent direct access data leaks.
 if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly
+	exit; // Exit if accessed directly.
 }
 
-require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+require_once ABSPATH . 'wp-admin/includes/plugin.php';
 $woo_path = 'woocommerce/woocommerce.php';
 
 if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_path ) ) {
@@ -29,7 +29,7 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 	 * @since    1.0.0
 	 */
 	function woocommerce_notice__error() {
-		$class = 'notice notice-error';
+		$class   = 'notice notice-error';
 		$message = __( 'WoooCommerce Address Book requires WooCommerce and has been deactivated.', 'wc-address-book' );
 
 		printf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $class ), esc_attr( $message ) );
@@ -39,7 +39,7 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 }
 
 // Check if WooCommerce is active.
-if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
+if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ), true ) ) {
 
 	class WC_Address_Book {
 
@@ -48,12 +48,12 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		 *
 		 * @since 1.0.0
 		 */
-		function __construct() {
+		public function __construct() {
 
 			// Version Number.
 			$this->version = '1.3.2';
 
-			// Load plugin text domain
+			// Load plugin text domain.
 			add_action( 'init', array( $this, 'plugin_textdomain' ) );
 
 			// Register hooks that are fired when the plugin is activated, deactivated, and uninstalled, respectively.
@@ -61,7 +61,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			register_deactivation_hook( __FILE__, array( 'WC_Address_Book', 'deactivate' ) );
 			register_uninstall_hook( __FILE__, array( 'WC_Address_Book', 'uninstall' ) );
 
-			// Enqueue Styles and Scripts
+			// Enqueue Styles and Scripts.
 			add_action( 'wp_enqueue_scripts', array( $this, 'scripts_styles' ), 20 );
 
 			// Save an address to the address book.
@@ -84,13 +84,13 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			add_action( 'wp_ajax_wc_address_book_checkout_update', array( $this, 'wc_address_book_checkout_update' ) );
 
 			// Update the customer data with the information entered on checkout.
-			add_filter ( 'woocommerce_checkout_update_customer_data', array( $this, 'woocommerce_checkout_update_customer_data' ), 10, 2 );
+			add_filter( 'woocommerce_checkout_update_customer_data', array( $this, 'woocommerce_checkout_update_customer_data' ), 10, 2 );
 
-			// Add Address Book to Menu
+			// Add Address Book to Menu.
 			add_filter( 'woocommerce_account_menu_items', array( $this, 'wc_address_book_add_to_menu' ), 10 );
 			add_action( 'woocommerce_account_edit-address_endpoint', array( $this, 'wc_address_book_page' ), 20 );
 
-			// Shipping Address fields
+			// Shipping Address fields.
 			add_filter( 'woocommerce_form_field_country', array( $this, 'shipping_address_country_select' ), 20, 4 );
 
 			// Standardize the address edit fields to match Woo's IDs.
@@ -103,9 +103,9 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		/**
 		 * Version
 		 *
-		 * @since	 1.0.0
+		 * @since 1.0.0
 		 *
-		 * @var		string
+		 * @var string
 		 */
 		public $version;
 
@@ -118,7 +118,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		public function activate( $network_wide ) {
 
 			// Make sure only admins can wipe the date.
-			if ( ! current_user_can('activate_plugins') ) {
+			if ( ! current_user_can( 'activate_plugins' ) ) {
 				return;
 			}
 
@@ -130,13 +130,13 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 				if ( empty( $address_book ) ) {
 
 					$shipping_address = get_user_meta( $user->ID, 'shipping_address_1', true );
-					
+
 					if ( ! empty( $shipping_address ) ) {
 						$this->save_address_names( $user->ID, array( 'shipping' ) );
 					}
 				}
 			}
-		
+
 			flush_rewrite_rules();
 		}
 
@@ -177,17 +177,17 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		/**
 		 * Enqueue scripts and styles
 		 *
-		 * @since	  1.0.0
+		 * @since 1.0.0
 		 */
 		public function scripts_styles() {
 			if ( ! is_admin() ) {
 				wp_enqueue_script( 'jquery' );
 
 				wp_enqueue_style( 'wc-address-book', plugins_url( '/assets/css/style.css', __FILE__ ), array(), $this->version );
-				wp_enqueue_script( 'wc-address-book', plugins_url( '/assets/js/scripts.js' , __FILE__ ), array('jquery'), $this->version, true );
+				wp_enqueue_script( 'wc-address-book', plugins_url( '/assets/js/scripts.js', __FILE__ ), array( 'jquery' ), $this->version, true );
 
 				wp_localize_script( 'wc-address-book', 'wc_address_book', array(
-					'ajax_url' => admin_url( 'admin-ajax.php' )
+					'ajax_url' => admin_url( 'admin-ajax.php' ),
 				));
 			}
 		}
@@ -199,7 +199,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		 */
 		public function add_additional_address_button() {
 
-			$user_id = get_current_user_id();
+			$user_id       = get_current_user_id();
 			$address_names = $this->get_address_names( $user_id );
 
 			$name = $this->set_new_address_name( $address_names );
@@ -224,8 +224,8 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			// Check the address book entries and add a new one.
 			if ( isset( $address_names ) && ! empty( $address_names ) ) {
 
-				$new = str_replace('shipping', '', end( $address_names ));
-				$name = 'shipping' . intval ( $new  + 1, 10 );
+				$new  = str_replace( 'shipping', '', end( $address_names ) );
+				$name = 'shipping' . intval( $new + 1, 10 );
 
 			} else { // Start the address book.
 
@@ -243,16 +243,16 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		 * @param Array $items - An array of menu items.
 		 * @since 1.0.0
 		 */
-		function wc_address_book_add_to_menu( $items ) {
+		public function wc_address_book_add_to_menu( $items ) {
 
 			$new_items = array();
 
-			foreach ($items as $key => $value) {
+			foreach ( $items as $key => $value ) {
 
-				if ( $key === "edit-address" ) {
-					$new_items[$key] = "Address Book";
+				if ( 'edit-address' === $key ) {
+					$new_items[ $key ] = 'Address Book';
 				} else {
-					$new_items[$key] = $value;
+					$new_items[ $key ] = $value;
 				}
 			}
 
@@ -262,11 +262,12 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		/**
 		 * Adds Address Book Content.
 		 *
+		 * @param String $type - The type of address.
 		 * @since 1.0.0
 		 */
 		public function wc_address_book_page( $type ) {
 
-			wc_get_template( 'myaccount/my-address-book.php', array('type' 	=> $type ), '', plugin_dir_path( __FILE__ ) . 'templates/' );
+			wc_get_template( 'myaccount/my-address-book.php', array( 'type' => $type ), '', plugin_dir_path( __FILE__ ) . 'templates/' );
 
 		}
 
@@ -277,11 +278,11 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		 */
 		public function shipping_address_country_select( $field, $key, $args, $value ) {
 
-			if ( $args['required'] && ! in_array( 'validate-required', $args['class'] ) ) {
+			if ( $args['required'] && ! in_array( 'validate-required', $args['class'], true ) ) {
 				$args['class'][] = 'validate-required';
-				$required = ' <abbr class="required" title="' . esc_attr__( 'required', 'woocommerce'  ) . '">*</abbr>';
+				$required        = '<abbr class="required" title="' . esc_attr__( 'required', 'woocommerce' ) . '">*</abbr>';
 			} else {
-				$required = '';
+				$required        = '';
 			}
 
 			$args['maxlength'] = ( $args['maxlength'] ) ? 'maxlength="' . absint( $args['maxlength'] ) . '"' : '';
@@ -296,7 +297,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 				$value = $args['default'];
 			}
 
-			// Custom attribute handling
+			// Custom attribute handling.
 			$custom_attributes = array();
 
 			if ( ! empty( $args['custom_attributes'] ) && is_array( $args['custom_attributes'] ) ) {
@@ -306,7 +307,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			}
 
 			if ( ! empty( $args['validate'] ) ) {
-				foreach( $args['validate'] as $validate ) {
+				foreach ( $args['validate'] as $validate ) {
 					$args['class'][] = 'validate-' . $validate;
 				}
 			}
@@ -345,7 +346,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			if ( ! empty( $field ) ) {
 				$field_html = '';
 
-				if ( $args['label'] && 'checkbox' != $args['type'] ) {
+				if ( $args['label'] && 'checkbox' !== $args['type'] ) {
 					$field_html .= '<label for="' . esc_attr( $label_id ) . '" class="' . esc_attr( implode( ' ', $args['label_class'] ) ) . '">' . $args['label'] . $required . '</label>';
 				}
 
@@ -370,8 +371,8 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		/**
 		 * Update Address Book Values
 		 *
-		 * @param int $user_id - User's ID
-		 * @param string $name - The name of the address being updated.
+		 * @param Int    $user_id - User's ID.
+		 * @param String $name - The name of the address being updated.
 		 * @since 1.0.0
 		 */
 		public function update_address_names( $user_id, $name ) {
@@ -381,7 +382,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			}
 
 			// Only save shipping addresses.
-			if ( "billing" === $name ) {
+			if ( 'billing' === $name ) {
 				return;
 			}
 
@@ -395,7 +396,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			}
 
 			// Add shipping name if not already in array.
-			if ( ! in_array( $name, $address_names ) ) {
+			if ( ! in_array( $name, $address_names, true ) ) {
 
 				array_push( $address_names, $name );
 				$this->save_address_names( $user_id, $address_names );
@@ -406,8 +407,8 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		/**
 		 * Redirect to the Edit Address page on save. Overrides the default redirect to /my-account/
 		 *
-		 * @param int $user_id - User's ID
-		 * @param string $name - The name of the address being updated.
+		 * @param Int    $user_id - User's ID.
+		 * @param String $name - The name of the address being updated.
 		 * @since 1.0.0
 		 */
 		public function redirect_on_save( $user_id, $name ) {
@@ -422,12 +423,12 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		/**
 		 * Returns an array of the customer's address names.
 		 *
-		 * @param int $user_id - User's ID
+		 * @param Int $user_id - User's ID.
 		 * @since 1.0.0
 		 */
 		public function get_address_names( $user_id = null ) {
 
-			$address_names = get_user_meta( $user_id, 'wc_address_book', true);
+			$address_names = get_user_meta( $user_id, 'wc_address_book', true );
 
 			return $address_names;
 
@@ -436,7 +437,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		/**
 		 * Returns an array of the customer's addresses with field values.
 		 *
-		 * @param int $user_id - User's ID
+		 * @param Int $user_id - User's ID.
 		 * @since 1.0.0
 		 */
 		public function get_address_book( $user_id = null ){
@@ -448,7 +449,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			}
 
 			if ( ! isset( $user_id ) ) {
-				$user = wp_get_current_user();
+				$user    = wp_get_current_user();
 				$user_id = $user->ID;
 			}
 
@@ -465,23 +466,23 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 
 				foreach ( $address_names as $name ) {
 
-					// Do not include the billing address
-					if ( $name == 'billing' ) {
+					// Do not include the billing address.
+					if ( 'billing' === $name ) {
 						continue;
 					}
 
-					unset($address);
+					unset( $address );
 
 					foreach ( $address_keys as $field ) {
 
 						// Remove the default name so the custom ones can be added.
 						$field = str_replace( 'shipping', '', $field );
 
-						$address[$name . $field] = get_user_meta( $user_id, $name . $field, true );
-				
+						$address[ $name . $field ] = get_user_meta( $user_id, $name . $field, true );
+
 					}
 
-					$address_book[$name] = $address;
+					$address_book[ $name ] = $address;
 
 				}
 			}
@@ -493,10 +494,10 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		/**
 		 * Returns an array of the users/customer additional address key value pairs.
 		 *
-		 * @param int $user_id - User's ID
+		 * @param Int $user_id - User's ID.
 		 * @since 1.0.0
 		 */
-		public function save_address_names( $user_id, $new_value ){
+		public function save_address_names( $user_id, $new_value ) {
 
 			// Make sure that is a new_value to save.
 			if ( ! isset( $new_value ) ) {
@@ -507,7 +508,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			$error_test = update_user_meta( $user_id, 'wc_address_book', $new_value );
 
 			// If update_user_meta returns false, throw an error.
-			if( !$error_test ) {
+			if ( ! $error_test ) {
 				// TODO: Add error notice.
 			}
 		}
@@ -521,27 +522,28 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		public function shipping_address_select_field( $fields ) {
 
 			$address_book = $this->get_address_book();
-			$customer_id = wp_get_current_user();
+			$customer_id  = wp_get_current_user();
 
 			$address_selector['address_book'] = array(
-				'type' => 'select',
-				'class' => array( 'form-row-wide', 'address_book' ),
-				'label' => __( 'Address Book', 'wc-address-book' ),
-				'order' => -1,
-				'priority' => -1
+				'type'     => 'select',
+				'class'    => array( 'form-row-wide', 'address_book' ),
+				'label'    => __( 'Address Book', 'wc-address-book' ),
+				'order'    => -1,
+				'priority' => -1,
 			);
 
 			if ( ! empty( $address_book ) && false !== $address_book ) {
 
-				foreach ( $address_book as $name => $address) {
+				foreach ( $address_book as $name => $address ) {
 
-					if ( ! empty( $address[$name . '_address_1'] ) ) {
-						$address_selector['address_book']['options'][$name] = $this->address_select_label( $address, $name );
+					if ( ! empty( $address[ $name . '_address_1' ] ) ) {
+						$address_selector['address_book']['options'][ $name ] = $this->address_select_label( $address, $name );
 					}
 				}
 			}
 
 			$address_selector['address_book']['options']['add_new'] = __( 'Add New Address', 'wc-address-book' );
+
 			$fields['shipping'] = $address_selector + $fields['shipping'];
 
 			return $fields;
@@ -553,14 +555,14 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		 * @param array $address - An array of WooCommerce Shipping Address data.
 		 * @since 1.0.0
 		 */
-		function address_select_label( $address, $name ) {
+		public function address_select_label( $address, $name ) {
 
-			$show_state = ( $address[$name . '_state'] ? true : false );
+			$show_state = ( $address[ $name . '_state' ] ? true : false );
 
-			$label = $address[$name . '_first_name'] . ' ' . $address[$name . '_last_name'];
-			$label .= ( $address[$name . '_address_1'] ? ', ' . $address[$name . '_address_1'] : '' );
-			$label .= ( $address[$name . '_city'] ? ', ' . $address[$name . '_city'] : '' );
-			$label .= ( $address[$name . '_state'] ? ', ' . $address[$name . '_state'] : '' );
+			$label  = $address[ $name . '_first_name' ] . ' ' . $address[ $name . '_last_name' ];
+			$label .= ( $address[ $name . '_address_1' ] ? ', ' . $address[ $name . '_address_1' ] : '' );
+			$label .= ( $address[ $name . '_city' ] ? ', ' . $address[ $name . '_city' ] : '' );
+			$label .= ( $address[ $name . '_state' ] ? ', ' . $address[ $name . '_state' ] : '' );
 
 			return apply_filters( 'wc_address_book_address_select_label', $label );
 		}
@@ -571,11 +573,11 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		 * @param string $address_name - The name of a specific address in the address book.
 		 * @since 1.0.0
 		 */
-		function wc_address_book_delete( $address_name ) {
+		public function wc_address_book_delete( $address_name ) {
 
-			$address_name = $_POST['name'];
-			$customer_id = get_current_user_id();
-			$address_book = $this->get_address_book( $customer_id );
+			$address_name  = $_POST['name'];
+			$customer_id   = get_current_user_id();
+			$address_book  = $this->get_address_book( $customer_id );
 			$address_names = $this->get_address_names( $customer_id );
 
 			foreach ( $address_book as $name => $address ) {
@@ -583,8 +585,9 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 				if ( $address_name === $name ) {
 
 					// Remove address from address book.
-					if ( ( $key = array_search( $name, $address_names ) ) !== false ) {
-						unset( $address_names[$key] );
+					$key = array_search( $name, $address_names, true );
+					if ( ( $key ) !== false ) {
+						unset( $address_names[ $key ] );
 					}
 
 					$this->save_address_names( $customer_id, $address_names );
@@ -609,25 +612,25 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		 *
 		 * @since 1.0.0
 		 */
-		function wc_address_book_make_primary() {
+		public function wc_address_book_make_primary() {
 
-			$customer_id = get_current_user_id();
+			$customer_id  = get_current_user_id();
 			$address_book = $this->get_address_book( $customer_id );
 
 			$primary_address_name = 'shipping';
-			$alt_address_name = $_POST['name'];
+			$alt_address_name     = $_POST['name'];
 
 			// Loop through and swap values between shipping names.
-			foreach ( $address_book[$primary_address_name] as $field => $value ) {
+			foreach ( $address_book[ $primary_address_name ] as $field => $value ) {
 
-				$alt_field = preg_replace('/^[^_]*_\s*/', $alt_address_name . '_', $field);
-				$resp = update_user_meta( $customer_id, $field, $address_book[$alt_address_name][$alt_field] );
+				$alt_field = preg_replace( '/^[^_]*_\s*/', $alt_address_name . '_', $field );
+				$resp      = update_user_meta( $customer_id, $field, $address_book[ $alt_address_name ][ $alt_field ] );
 			}
 
-			foreach ( $address_book[$alt_address_name] as $field => $value ) {
+			foreach ( $address_book[ $alt_address_name ] as $field => $value ) {
 
-				$primary_field = preg_replace('/^[^_]*_\s*/', $primary_address_name . '_', $field);
-				$resp = update_user_meta( $customer_id, $field, $address_book[$primary_address_name][$primary_field] );
+				$primary_field = preg_replace( '/^[^_]*_\s*/', $primary_address_name . '_', $field );
+				$resp = update_user_meta( $customer_id, $field, $address_book[ $primary_address_name ][ $primary_field ] );
 			}
 
 			die();
@@ -638,7 +641,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		 *
 		 * @since 1.0.0
 		 */
-		function wc_address_book_checkout_update() {
+		public function wc_address_book_checkout_update() {
 
 			global $woocommerce;
 
@@ -653,12 +656,12 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			// Get address field values.
 			if ( 'add_new' !== $name ) {
 
-				foreach ( $address_book[$name] as $field => $value ) {
+				foreach ( $address_book[ $name ] as $field => $value ) {
 
-					$field = preg_replace('/^[^_]*_\s*/', 'shipping_', $field);
-					$response[$field] = $value;
+					$field = preg_replace( '/^[^_]*_\s*/', 'shipping_', $field );
+
+					$response[ $field ] = $value;
 				}
-
 			} else {
 
 				// If only one country is available for shipping, include it in the blank form.
@@ -667,7 +670,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 				}
 			}
 
-			echo json_encode( $response );
+			echo wp_json_encode( $response );
 
 			die();
 		}
@@ -677,39 +680,40 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		 *
 		 * @param boolean $update_customer_data - Toggles whether Woo should update customer data on checkout. This plugin overrides that function entirely.
 		 *
-		 * @param Object $checkout_object - An object of the checkout fields and values.
+		 * @param Object  $checkout_object - An object of the checkout fields and values.
 		 *
 		 * @since 1.0.0
 		 */
 		public function woocommerce_checkout_update_customer_data( $update_customer_data, $checkout_object ) {
 
-			$name = $checkout_object->posted['address_book'];
-			$user = wp_get_current_user();
-			$address_book = $this->get_address_book( $user->ID );
-			$update_customer_data = false;
+			$name                    = $checkout_object->posted['address_book'];
+			$user                    = wp_get_current_user();
+			$address_book            = $this->get_address_book( $user->ID );
+			$update_customer_data    = false;
 			$ignore_shipping_address = false;
 
-			if ( $checkout_object->posted['ship_to_different_address'] != true ) {
+			if ( true !== $checkout_object->posted['ship_to_different_address'] ) {
 				$ignore_shipping_address = true;
 			}
 
 			// Name new address and update address book.
-			if  ( ( 'add_new' === $name || ! isset( $name ) ) && false === $ignore_shipping_address ) {
+			if ( ( 'add_new' === $name || ! isset( $name ) ) && false === $ignore_shipping_address ) {
 
 				$address_names = $this->get_address_names( $user->ID );
-				$name = $this->set_new_address_name( $address_names );
 
+				$name = $this->set_new_address_name( $address_names );
 			}
 
 			if ( false === $ignore_shipping_address ) {
 				$this->update_address_names( $user->ID, $name );
 			}
 
-			// Billing address
+			// Billing address.
 			$billing_address = array();
 			if ( $checkout_object->checkout_fields['billing'] ) {
 				foreach ( array_keys( $checkout_object->checkout_fields['billing'] ) as $field ) {
 					$field_name = str_replace( 'billing_', '', $field );
+
 					$billing_address[ $field_name ] = $checkout_object->get_posted_address_data( $field_name );
 				}
 			}
@@ -744,7 +748,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		/**
 		 * Standardize the address edit fields to match Woo's IDs.
 		 *
-		 * @param Array $args - The set of arguments being passed to the field.
+		 * @param Array  $args - The set of arguments being passed to the field.
 		 *
 		 * @param String $key - The name of the address being edited.
 		 *
@@ -752,9 +756,9 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		 *
 		 * @since 1.0.0
 		 */
-		function standardize_field_ids( $args, $key, $value ) {
+		public function standardize_field_ids( $args, $key, $value ) {
 
-			if ( 'address_book' != $key ) {
+			if ( 'address_book' !== $key ) {
 				$args['id'] = preg_replace( '/^shipping[^_]/', 'shipping', $args['id'] );
 			}
 
@@ -768,7 +772,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		 *
 		 * @since 1.1.0
 		 */
-		function replace_address_key( $address_fields ) {
+		public function replace_address_key( $address_fields ) {
 
 			if ( isset( $_GET['address-book'] ) ) {
 
@@ -776,8 +780,8 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 
 					$newkey = str_replace( 'shipping', esc_attr( $_GET['address-book'] ), $key );
 
-					$address_fields[$newkey] = $address_fields[$key];
-					unset( $address_fields[$key] );
+					$address_fields[ $newkey ] = $address_fields[ $key ];
+					unset( $address_fields[ $key ] );
 				}
 			}
 
@@ -786,7 +790,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 
 	} // end class
 
-	// Init Class
+	// Init Class.
 	$wc_address_book = new WC_Address_Book();
 
 }
