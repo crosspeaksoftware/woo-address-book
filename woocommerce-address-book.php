@@ -526,7 +526,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			$address_selector['address_book'] = array(
 				'type' => 'select',
 				'class' => array( 'form-row-wide', 'address_book' ),
-				'label' => __( 'Address Book', 'woocommerce' ),
+				'label' => __( 'Address Book', 'wc-address-book' ),
 				'order' => -1,
 				'priority' => -1
 			);
@@ -541,7 +541,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 				}
 			}
 
-			$address_selector['address_book']['options']['add_new'] = 'Add New Address';
+			$address_selector['address_book']['options']['add_new'] = __( 'Add New Address', 'wc-address-book' );
 			$fields['shipping'] = $address_selector + $fields['shipping'];
 
 			return $fields;
