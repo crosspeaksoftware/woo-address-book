@@ -122,6 +122,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 				return;
 			}
 
+			// Write a user's shipping address to the user_meta if they do not already have an address book saved.
 			$users = get_users();
 			foreach ( $users as $user ) {
 
