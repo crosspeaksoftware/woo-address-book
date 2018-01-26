@@ -9,6 +9,8 @@
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Domain Path: /languages
  * Text Domain: wc-address-book
+ *
+ * @package WooCommerce Address Book
  */
 
 // Prevent direct access data leaks.
