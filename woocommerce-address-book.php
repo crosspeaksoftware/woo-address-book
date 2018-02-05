@@ -43,6 +43,15 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 // Check if WooCommerce is active.
 if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ), true ) ) {
 
+	/**
+	 * WooCommerce Address Book.
+	 *
+	 * @class    WC_Address_Book
+	 * @version  1.3.3
+	 * @package  WooCommerce Address Book
+	 * @category Class
+	 * @author   Hall Internet Marketing
+	 */
 	class WC_Address_Book {
 
 		/**
@@ -210,7 +219,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			?>
 
 			<div class="add-new-address">
-				<a href="<?php echo wc_get_endpoint_url( 'edit-address', 'shipping/?address-book=' . $name ); ?>" class="add button"><?php _e( 'Add New Shipping Address', 'wc-address-book' ); ?></a>
+				<a href="<?php echo esc_url( wc_get_endpoint_url( 'edit-address', 'shipping/?address-book=' . $name ) ); ?>" class="add button"><?php echo esc_html_e( 'Add New Shipping Address', 'wc-address-book' ); ?></a>
 			</div>
 
 			<?php
@@ -277,6 +286,11 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		/**
 		 * Modify the shipping address field to allow for available countries to displayed correctly. Overides most of woocommerce_form_field().
 		 *
+		 * @param String $field Field.
+		 * @param String $key Key.
+		 * @param Mixed  $args Arguments.
+		 * @param String $value (default: null).
+		 *
 		 * @since 1.0.0
 		 */
 		public function shipping_address_country_select( $field, $key, $args, $value ) {
@@ -285,7 +299,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 				$args['class'][] = 'validate-required';
 				$required        = '<abbr class="required" title="' . esc_attr__( 'required', 'woocommerce' ) . '">*</abbr>';
 			} else {
-				$required        = '';
+				$required = '';
 			}
 
 			$args['maxlength'] = ( $args['maxlength'] ) ? 'maxlength="' . absint( $args['maxlength'] ) . '"' : '';
