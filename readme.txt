@@ -38,6 +38,10 @@ No, this plugin only allows for the storage of multiple shipping addresses. If a
 
 == Changelog ==
 
+= 1.3.4 =
+* Updated the filter wc_address_book_address_select_label to add $address and $name, which should open a lot of options for modifying the output.
+* Cleaned up the codebase to align with [WordPress-Coding-Standards](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards).
+
 = 1.3.3 =
 * Added text domain and updated AJAX's scope on my-account. Thanks to pabl0rg and nicolasmn for their contributions!
 
