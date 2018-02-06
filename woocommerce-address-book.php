@@ -581,7 +581,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			$label .= ( $address[ $name . '_city' ] ? ', ' . $address[ $name . '_city' ] : '' );
 			$label .= ( $address[ $name . '_state' ] ? ', ' . $address[ $name . '_state' ] : '' );
 
-			return apply_filters( 'wc_address_book_address_select_label', $label );
+			return apply_filters( 'wc_address_book_address_select_label', $label, $address, $name );
 		}
 
 		/**

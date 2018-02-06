@@ -50,15 +50,15 @@ if ( ! $type ) : ?>
 				}
 
 				$address = apply_filters( 'woocommerce_my_account_my_address_formatted_address', array(
-					'first_name'  => get_user_meta( $customer_id, $name . '_first_name', true ),
-					'last_name'   => get_user_meta( $customer_id, $name . '_last_name', true ),
-					'company'     => get_user_meta( $customer_id, $name . '_company', true ),
-					'address_1'   => get_user_meta( $customer_id, $name . '_address_1', true ),
-					'address_2'   => get_user_meta( $customer_id, $name . '_address_2', true ),
-					'city'        => get_user_meta( $customer_id, $name . '_city', true ),
-					'state'       => get_user_meta( $customer_id, $name . '_state', true ),
-					'postcode'    => get_user_meta( $customer_id, $name . '_postcode', true ),
-					'country'     => get_user_meta( $customer_id, $name . '_country', true ),
+					'first_name' => get_user_meta( $customer_id, $name . '_first_name', true ),
+					'last_name'  => get_user_meta( $customer_id, $name . '_last_name', true ),
+					'company'    => get_user_meta( $customer_id, $name . '_company', true ),
+					'address_1'  => get_user_meta( $customer_id, $name . '_address_1', true ),
+					'address_2'  => get_user_meta( $customer_id, $name . '_address_2', true ),
+					'city'       => get_user_meta( $customer_id, $name . '_city', true ),
+					'state'      => get_user_meta( $customer_id, $name . '_state', true ),
+					'postcode'   => get_user_meta( $customer_id, $name . '_postcode', true ),
+					'country'    => get_user_meta( $customer_id, $name . '_country', true ),
 				), $customer_id, $name );
 
 				$formatted_address = WC()->countries->get_formatted_address( $address );
@@ -68,12 +68,12 @@ if ( ! $type ) : ?>
 
 					<div class="wc-address-book-address">
 						<div class="wc-address-book-meta">
-							<a href="<?php echo wc_get_endpoint_url( 'edit-address', 'shipping/?address-book=' . $name ); ?>" class="wc-address-book-edit"><?php _e( 'Edit', 'woocommerce' ); ?></a>
-							<a id="<?php echo $name; ?>" class="wc-address-book-delete"><?php _e( 'Delete', 'woocommerce' ); ?></a>
-							<a id="<?php echo $name; ?>" class="wc-address-book-make-primary"><?php _e( 'Make Primary', 'woocommerce' ); ?></a>
+							<a href="<?php echo esc_url( wc_get_endpoint_url( 'edit-address', 'shipping/?address-book=' . $name ) ); ?>" class="wc-address-book-edit"><?php echo esc_attr__( 'Edit', 'wc-address-book' ); ?></a>
+							<a id="<?php echo esc_attr( $name ); ?>" class="wc-address-book-delete"><?php echo esc_attr__( 'Delete', 'wc-address-book' ); ?></a>
+							<a id="<?php echo esc_attr( $name ); ?>" class="wc-address-book-make-primary"><?php echo esc_attr__( 'Make Primary', 'wc-address-book' ); ?></a>
 						</div>
 						<address>
-							<?php echo $formatted_address; ?>
+							<?php echo wp_kses( $formatted_address, array( 'br' => array() ) ); ?>
 						</address>
 					</div>
 
