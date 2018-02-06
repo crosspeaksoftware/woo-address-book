@@ -262,7 +262,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			foreach ( $items as $key => $value ) {
 
 				if ( 'edit-address' === $key ) {
-					$new_items[ $key ] = 'Address Book';
+					$new_items[ $key ] = __( 'Address Book', 'wc-address-book' );
 				} else {
 					$new_items[ $key ] = $value;
 				}
