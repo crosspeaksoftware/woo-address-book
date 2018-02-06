@@ -2,7 +2,7 @@
 /*
  * Plugin Name: WooCommerce Address Book
  * Description: Gives your customers the option to store multiple shipping addresses and retrieve them on checkout..
- * Version: 1.3.2
+ * Version: 1.3.3
  * Author: Hall Internet Marketing
  * Author URI: https://hallme.com
  * License: GPL2
@@ -130,13 +130,13 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 				if ( empty( $address_book ) ) {
 
 					$shipping_address = get_user_meta( $user->ID, 'shipping_address_1', true );
-					
+
 					if ( ! empty( $shipping_address ) ) {
 						$this->save_address_names( $user->ID, array( 'shipping' ) );
 					}
 				}
 			}
-		
+
 			flush_rewrite_rules();
 		}
 
@@ -478,7 +478,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 						$field = str_replace( 'shipping', '', $field );
 
 						$address[$name . $field] = get_user_meta( $user_id, $name . $field, true );
-				
+
 					}
 
 					$address_book[$name] = $address;
