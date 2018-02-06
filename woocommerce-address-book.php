@@ -32,7 +32,7 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 	 */
 	function woocommerce_notice__error() {
 		$class   = 'notice notice-error';
-		$message = __( 'WoooCommerce Address Book requires WooCommerce and has been deactivated.', 'wc-address-book' );
+		$message = __( 'WooCommerce Address Book requires WooCommerce and has been deactivated.', 'wc-address-book' );
 
 		printf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $class ), esc_attr( $message ) );
 	}
