@@ -31,7 +31,8 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 	 * @since    1.0.0
 	 */
 	function woocommerce_notice__error() {
-		$class   = 'notice notice-error';
+
+    $class   = 'notice notice-error';
 		$message = __( 'WooCommerce Address Book requires WooCommerce and has been deactivated.', 'wc-address-book' );
 
 		printf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $class ), esc_attr( $message ) );
@@ -236,8 +237,13 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			// Check the address book entries and add a new one.
 			if ( isset( $address_names ) && ! empty( $address_names ) ) {
 
-				$new  = str_replace( 'shipping', '', end( $address_names ) );
-				$name = 'shipping' . intval( $new + 1, 10 );
+				$new = str_replace('shipping', '', end( $address_names ));
+
+					if ( empty( $new ) ) {
+						$name = 'shipping2';
+					} else {
+						$name = 'shipping' . intval ( $new  + 1, 10 );
+					}
 
 			} else { // Start the address book.
 
