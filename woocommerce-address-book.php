@@ -225,7 +225,12 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			if ( isset( $address_names ) && ! empty( $address_names ) ) {
 
 				$new = str_replace('shipping', '', end( $address_names ));
-				$name = 'shipping' . intval ( $new  + 1, 10 );
+
+					if ( empty( $new ) ) {
+						$name = 'shipping2';
+					} else {
+						$name = 'shipping' . intval ( $new  + 1, 10 );
+					}
 
 			} else { // Start the address book.
 
