@@ -26,7 +26,7 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 	deactivate_plugins( plugin_basename( __FILE__ ) );
 
 	/**
-	 * Deactivate the plugin if Google Analytics by Yoast is not active.
+	 * Deactivate the plugin if WooCommerce is not active.
 	 *
 	 * @since    1.0.0
 	 */
@@ -39,10 +39,8 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 	}
 	add_action( 'admin_notices', 'woocommerce_notice__error' );
 	add_action( 'network_admin_notices', 'woocommerce_notice__error' );
-}
 
-// Check if WooCommerce is active.
-if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ), true ) ) {
+} else {
 
 	/**
 	 * WooCommerce Address Book.
