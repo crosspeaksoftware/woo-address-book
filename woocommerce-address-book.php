@@ -578,12 +578,12 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		 */
 		public function address_select_label( $address, $name ) {
 
-			$show_state = ( $address[ $name . '_state' ] ? true : false );
+			$show_state = ( isset( $address[ $name . '_state' ] ) ? true : false );
 
 			$label  = $address[ $name . '_first_name' ] . ' ' . $address[ $name . '_last_name' ];
-			$label .= ( $address[ $name . '_address_1' ] ? ', ' . $address[ $name . '_address_1' ] : '' );
-			$label .= ( $address[ $name . '_city' ] ? ', ' . $address[ $name . '_city' ] : '' );
-			$label .= ( $address[ $name . '_state' ] ? ', ' . $address[ $name . '_state' ] : '' );
+			$label .= ( isset( $address[ $name . '_address_1' ] ) ? ', ' . $address[ $name . '_address_1' ] : '' );
+			$label .= ( isset( $address[ $name . '_city' ] ) ? ', ' . $address[ $name . '_city' ] : '' );
+			$label .= ( isset( $address[ $name . '_state' ] ) ? ', ' . $address[ $name . '_state' ] : '' );
 
 			return apply_filters( 'wc_address_book_address_select_label', $label, $address, $name );
 		}
