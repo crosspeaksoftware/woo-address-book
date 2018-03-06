@@ -38,6 +38,10 @@ No, this plugin only allows for the storage of multiple shipping addresses. If a
 
 == Changelog ==
 
+= 1.3.5 =
+* Added languages folder with .pot file for i18n.
+* Added `isset()` conditions for `address_select_label()` in case fields have been removed.
+
 = 1.3.4 =
 * Updated the filter wc_address_book_address_select_label to add $address and $name, which should open a lot of options for modifying the output.
 * Cleaned up the codebase to align with [WordPress-Coding-Standards](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards).
