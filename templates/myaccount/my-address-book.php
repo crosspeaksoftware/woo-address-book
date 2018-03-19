@@ -86,7 +86,7 @@ if ( ! $type ) : ?>
 
 <?php
 // Add link/button to the my accounts page for adding addresses.
-if ( null !== get_user_meta( $customer_id, 'shipping_address_1' ) ) {
+if ( ! empty( get_user_meta( $customer_id, 'shipping_address_1' ) ) {
 	$wc_address_book->add_additional_address_button();
 }
 ?>
