@@ -508,7 +508,7 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 				}
 			}
 
-			return $address_book;
+			return apply_filters( 'wc_address_book_addresses', $address_book );
 
 		}
 
