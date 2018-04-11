@@ -38,6 +38,10 @@ No, this plugin only allows for the storage of multiple shipping addresses. If a
 
 == Changelog ==
 
+= 1.3.6 =
+* Added `wc_address_book_addresses` filter to allow for modification of Address Book addresses.
+* JS improvments of address book dropdown on Checkout. Thanks to ebelrose for their contributions!
+
 = 1.3.5 =
 * Added languages folder with .pot file for i18n.
 * Added `isset()` conditions for `address_select_label()` in case fields have been removed.
