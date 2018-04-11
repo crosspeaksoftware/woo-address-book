@@ -118,7 +118,7 @@
 
 							// Loop through all fields incase there are custom ones.
 							Object.keys(response).forEach( function(key) {
-								$('#' + key).val(response[key]);
+								$('#' + key).val(response[key]).change();
 							});
 
 							// Set Country Dropdown.
