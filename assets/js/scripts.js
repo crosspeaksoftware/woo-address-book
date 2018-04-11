@@ -118,7 +118,6 @@
 
 							// Loop through all fields incase there are custom ones.
 							Object.keys(response).forEach( function(key) {
-								$('#shipping_address_1').val(response.shipping_address_1);
 								$('#' + key).val(response[key]);
 							});
 
