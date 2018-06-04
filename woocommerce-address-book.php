@@ -797,9 +797,11 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 
 			if ( isset( $_GET['address-book'] ) ) {
 
+				$name = trim($_GET['address-book'], '/');
+
 				foreach ( $address_fields as $key => $value ) {
 
-					$newkey = str_replace( 'shipping', esc_attr( $_GET['address-book'] ), $key );
+					$newkey = str_replace( 'shipping', esc_attr( $name ), $key );
 
 					$address_fields[ $newkey ] = $address_fields[ $key ];
 					unset( $address_fields[ $key ] );
