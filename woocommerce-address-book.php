@@ -399,7 +399,7 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		public function update_address_names( $user_id, $name ) {
 
 			if ( isset( $_GET['address-book'] ) ) {
-				$name = $_GET['address-book'];
+				$name = trim($_GET['address-book'], '/');
 			}
 
 			// Only save shipping addresses.
