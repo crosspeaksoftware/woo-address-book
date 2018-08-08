@@ -561,11 +561,11 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 						$address_selector['address_book']['options'][ $name ] = $this->address_select_label( $address, $name );
 					}
 				}
+
+				$address_selector['address_book']['options']['add_new'] = __( 'Add New Address', 'wc-address-book' );
+
+				$fields['shipping'] = $address_selector + $fields['shipping'];
 			}
-
-			$address_selector['address_book']['options']['add_new'] = __( 'Add New Address', 'wc-address-book' );
-
-			$fields['shipping'] = $address_selector + $fields['shipping'];
 
 			return $fields;
 		}
