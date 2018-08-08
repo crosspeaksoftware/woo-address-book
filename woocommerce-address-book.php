@@ -245,7 +245,7 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 
 			} else { // Start the address book.
 
-				$name = 'shipping2';
+				$name = 'shipping';
 
 			}
 
