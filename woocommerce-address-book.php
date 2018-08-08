@@ -565,6 +565,7 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 				$address_selector['address_book']['options']['add_new'] = __( 'Add New Address', 'wc-address-book' );
 
 				$fields['shipping'] = $address_selector + $fields['shipping'];
+			
 			}
 
 			return $fields;
@@ -707,14 +708,14 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		 */
 		public function woocommerce_checkout_update_customer_data( $update_customer_data, $checkout_object ) {
 
-			$name                    = $checkout_object->posted['address_book'];
+			$name                    = $_POST['address_book'];
 			$user                    = wp_get_current_user();
 			$address_book            = $this->get_address_book( $user->ID );
 			$update_customer_data    = false;
-			$ignore_shipping_address = false;
+			$ignore_shipping_address = true;
 
-			if ( true !== $checkout_object->posted['ship_to_different_address'] ) {
-				$ignore_shipping_address = true;
+			if ( $_POST['ship_to_different_address'] ) {
+				$ignore_shipping_address = false;
 			}
 
 			// Name new address and update address book.
