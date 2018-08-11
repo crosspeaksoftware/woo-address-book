@@ -2,7 +2,7 @@
 /**
  * Plugin Name: WooCommerce Address Book
  * Description: Gives your customers the option to store multiple shipping addresses and retrieve them on checkout..
- * Version: 1.3.6
+ * Version: 1.4.0
  * Author: Hall Internet Marketing
  * Author URI: https://hallme.com
  * License: GPL2
@@ -61,7 +61,7 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		public function __construct() {
 
 			// Version Number.
-			$this->version = '1.3.6';
+			$this->version = '1.4.0';
 
 			// Load plugin text domain.
 			add_action( 'init', array( $this, 'plugin_textdomain' ) );
@@ -245,7 +245,7 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 
 			} else { // Start the address book.
 
-				$name = 'shipping2';
+				$name = 'shipping';
 
 			}
 
@@ -399,7 +399,7 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		public function update_address_names( $user_id, $name ) {
 
 			if ( isset( $_GET['address-book'] ) ) {
-				$name = $_GET['address-book'];
+				$name = trim($_GET['address-book'], '/');
 			}
 
 			// Only save shipping addresses.
@@ -561,11 +561,12 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 						$address_selector['address_book']['options'][ $name ] = $this->address_select_label( $address, $name );
 					}
 				}
+
+				$address_selector['address_book']['options']['add_new'] = __( 'Add New Address', 'wc-address-book' );
+
+				$fields['shipping'] = $address_selector + $fields['shipping'];
+			
 			}
-
-			$address_selector['address_book']['options']['add_new'] = __( 'Add New Address', 'wc-address-book' );
-
-			$fields['shipping'] = $address_selector + $fields['shipping'];
 
 			return $fields;
 		}
@@ -707,14 +708,14 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		 */
 		public function woocommerce_checkout_update_customer_data( $update_customer_data, $checkout_object ) {
 
-			$name                    = $checkout_object->posted['address_book'];
+			$name                    = $_POST['address_book'];
 			$user                    = wp_get_current_user();
 			$address_book            = $this->get_address_book( $user->ID );
 			$update_customer_data    = false;
-			$ignore_shipping_address = false;
+			$ignore_shipping_address = true;
 
-			if ( true !== $checkout_object->posted['ship_to_different_address'] ) {
-				$ignore_shipping_address = true;
+			if ( $_POST['ship_to_different_address'] ) {
+				$ignore_shipping_address = false;
 			}
 
 			// Name new address and update address book.
@@ -797,9 +798,22 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 
 			if ( isset( $_GET['address-book'] ) ) {
 
+				$user_id       = get_current_user_id();
+				$address_names = $this->get_address_names( $user_id );
+
+				// If a version of the address name exists with a slash, use it. Otherwise, trim the slash.
+				// Previous versions of this plugin was including the slash in the address name. 
+				// While not causing problems, it should not have happened in the first place.
+				// This enables backward compatibility.
+				if ( in_array( $_GET['address-book'], $address_names ) ) {
+					$name = $_GET['address-book'];
+				} else {
+					$name = trim($_GET['address-book'], '/');
+				}
+				
 				foreach ( $address_fields as $key => $value ) {
 
-					$newkey = str_replace( 'shipping', esc_attr( $_GET['address-book'] ), $key );
+					$newkey = str_replace( 'shipping', esc_attr( $name ), $key );
 
 					$address_fields[ $newkey ] = $address_fields[ $key ];
 					unset( $address_fields[ $key ] );
