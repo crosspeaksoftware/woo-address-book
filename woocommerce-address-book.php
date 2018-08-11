@@ -798,8 +798,19 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 
 			if ( isset( $_GET['address-book'] ) ) {
 
-				$name = trim($_GET['address-book'], '/');
+				$user_id       = get_current_user_id();
+				$address_names = $this->get_address_names( $user_id );
 
+				// If a version of the address name exists with a slash, use it. Otherwise, trim the slash.
+				// Previous versions of this plugin was including the slash in the address name. 
+				// While not causing problems, it should not have happened in the first place.
+				// This enables backward compatibility.
+				if ( in_array( $_GET['address-book'], $address_names ) ) {
+					$name = $_GET['address-book'];
+				} else {
+					$name = trim($_GET['address-book'], '/');
+				}
+				
 				foreach ( $address_fields as $key => $value ) {
 
 					$newkey = str_replace( 'shipping', esc_attr( $name ), $key );
