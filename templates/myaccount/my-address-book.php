@@ -1,10 +1,10 @@
 <?php
 /**
- * My Address Book
+ * Woo Address Book
  *
  * @author  Hall Internet Marketing
  * @package WooCommerce Address Book/Templates
- * @version 1.1.0
+ * @version 1.4.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
