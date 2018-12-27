@@ -49,22 +49,27 @@ if ( ! $type ) : ?>
 					continue;
 				}
 
-				$address = apply_filters( 'woocommerce_my_account_my_address_formatted_address', array(
-					'first_name' => get_user_meta( $customer_id, $name . '_first_name', true ),
-					'last_name'  => get_user_meta( $customer_id, $name . '_last_name', true ),
-					'company'    => get_user_meta( $customer_id, $name . '_company', true ),
-					'address_1'  => get_user_meta( $customer_id, $name . '_address_1', true ),
-					'address_2'  => get_user_meta( $customer_id, $name . '_address_2', true ),
-					'city'       => get_user_meta( $customer_id, $name . '_city', true ),
-					'state'      => get_user_meta( $customer_id, $name . '_state', true ),
-					'postcode'   => get_user_meta( $customer_id, $name . '_postcode', true ),
-					'country'    => get_user_meta( $customer_id, $name . '_country', true ),
-				), $customer_id, $name );
+				$address = apply_filters(
+					'woocommerce_my_account_my_address_formatted_address',
+					array(
+						'first_name' => get_user_meta( $customer_id, $name . '_first_name', true ),
+						'last_name'  => get_user_meta( $customer_id, $name . '_last_name', true ),
+						'company'    => get_user_meta( $customer_id, $name . '_company', true ),
+						'address_1'  => get_user_meta( $customer_id, $name . '_address_1', true ),
+						'address_2'  => get_user_meta( $customer_id, $name . '_address_2', true ),
+						'city'       => get_user_meta( $customer_id, $name . '_city', true ),
+						'state'      => get_user_meta( $customer_id, $name . '_state', true ),
+						'postcode'   => get_user_meta( $customer_id, $name . '_postcode', true ),
+						'country'    => get_user_meta( $customer_id, $name . '_country', true ),
+					),
+					$customer_id,
+					$name
+				);
 
 				$formatted_address = WC()->countries->get_formatted_address( $address );
 
 				if ( $formatted_address ) :
-				?>
+					?>
 
 					<div class="wc-address-book-address">
 						<div class="wc-address-book-meta">
@@ -84,11 +89,11 @@ if ( ! $type ) : ?>
 		</div>
 	<?php endif; ?>
 
-<?php
-// Add link/button to the my accounts page for adding addresses.
-if ( ! empty( get_user_meta( $customer_id, 'shipping_address_1' ) ) ) {
-	$wc_address_book->add_additional_address_button();
-}
-?>
+	<?php
+	// Add link/button to the my accounts page for adding addresses.
+	if ( ! empty( get_user_meta( $customer_id, 'shipping_address_1' ) ) ) {
+		$wc_address_book->add_additional_address_button();
+	}
+	?>
 
 <?php endif; ?>

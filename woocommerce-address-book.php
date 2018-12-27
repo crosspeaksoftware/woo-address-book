@@ -4,7 +4,7 @@
  * Description: Gives your customers the option to store multiple shipping addresses and retrieve them on checkout..
  * Version: 1.4.0
  * Author: Hall Internet Marketing
- * Author URI: https://hallme.com
+ * Author URI: https://www.hallme.com/
  * License: GPL2
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Domain Path: /languages
@@ -30,15 +30,15 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 	 *
 	 * @since    1.0.0
 	 */
-	function woocommerce_notice__error() {
+	function wc_address_book_woocommerce_notice_error() {
 
-    $class   = 'notice notice-error';
+		$class   = 'notice notice-error';
 		$message = __( 'WooCommerce Address Book requires WooCommerce and has been deactivated.', 'wc-address-book' );
 
 		printf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $class ), esc_attr( $message ) );
 	}
-	add_action( 'admin_notices', 'woocommerce_notice__error' );
-	add_action( 'network_admin_notices', 'woocommerce_notice__error' );
+	add_action( 'admin_notices', 'wc_address_book_woocommerce_notice_error' );
+	add_action( 'network_admin_notices', 'wc_address_book_woocommerce_notice_error' );
 
 } else {
 
@@ -133,7 +133,7 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 			}
 
 			// Write a user's shipping address to the user_meta if they do not already have an address book saved.
-			$users = get_users( array ('fields' => 'ID') );
+			$users = get_users( array( 'fields' => 'ID' ) );
 			foreach ( $users as $user_id ) {
 
 				$address_book = $this->get_address_names( $user_id );
@@ -197,9 +197,13 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 				wp_enqueue_style( 'wc-address-book', plugins_url( '/assets/css/style.css', __FILE__ ), array(), $this->version );
 				wp_enqueue_script( 'wc-address-book', plugins_url( '/assets/js/scripts.js', __FILE__ ), array( 'jquery' ), $this->version, true );
 
-				wp_localize_script( 'wc-address-book', 'wc_address_book', array(
-					'ajax_url' => admin_url( 'admin-ajax.php' ),
-				));
+				wp_localize_script(
+					'wc-address-book',
+					'wc_address_book',
+					array(
+						'ajax_url' => admin_url( 'admin-ajax.php' ),
+					)
+				);
 			}
 		}
 
@@ -235,14 +239,13 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 			// Check the address book entries and add a new one.
 			if ( isset( $address_names ) && ! empty( $address_names ) ) {
 
-				$new = str_replace('shipping', '', end( $address_names ));
+				$new = str_replace( 'shipping', '', end( $address_names ) );
 
-					if ( empty( $new ) ) {
-						$name = 'shipping2';
-					} else {
-						$name = 'shipping' . intval ( $new  + 1, 10 );
-					}
-
+				if ( empty( $new ) ) {
+					$name = 'shipping2';
+				} else {
+					$name = 'shipping' . intval( $new + 1, 10 );
+				}
 			} else { // Start the address book.
 
 				$name = 'shipping';
@@ -382,11 +385,7 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 				$field           = sprintf( $field_container, $container_class, $container_id, $field_html );
 			}
 
-			if ( $args['return'] ) {
-				return $field;
-			} else {
-				echo $field;
-			}
+			return $field;
 		}
 
 		/**
@@ -399,7 +398,7 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		public function update_address_names( $user_id, $name ) {
 
 			if ( isset( $_GET['address-book'] ) ) {
-				$name = trim($_GET['address-book'], '/');
+				$name = trim( $_GET['address-book'], '/' );
 			}
 
 			// Only save shipping addresses.
@@ -461,7 +460,7 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		 * @param Int $user_id - User's ID.
 		 * @since 1.0.0
 		 */
-		public function get_address_book( $user_id = null ){
+		public function get_address_book( $user_id = null ) {
 
 			$countries = new WC_Countries();
 
@@ -515,7 +514,8 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		/**
 		 * Returns an array of the users/customer additional address key value pairs.
 		 *
-		 * @param Int $user_id - User's ID.
+		 * @param int   $user_id User's ID.
+		 * @param array $new_value Address book names.
 		 * @since 1.0.0
 		 */
 		public function save_address_names( $user_id, $new_value ) {
@@ -537,7 +537,7 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		/**
 		 * Adds the address book select to the checkout page.
 		 *
-		 * @param array $fields - An array of WooCommerce Shipping Address fields.
+		 * @param array $fields An array of WooCommerce Shipping Address fields.
 		 * @since 1.0.0
 		 */
 		public function shipping_address_select_field( $fields ) {
@@ -565,7 +565,7 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 				$address_selector['address_book']['options']['add_new'] = __( 'Add New Address', 'wc-address-book' );
 
 				$fields['shipping'] = $address_selector + $fields['shipping'];
-			
+
 			}
 
 			return $fields;
@@ -574,7 +574,8 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		/**
 		 * Adds the address book select to the checkout page.
 		 *
-		 * @param array $address - An array of WooCommerce Shipping Address data.
+		 * @param array  $address An array of WooCommerce Shipping Address data.
+		 * @param string $name Name of the address field to use.
 		 * @since 1.0.0
 		 */
 		public function address_select_label( $address, $name ) {
@@ -592,7 +593,7 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		/**
 		 * Used for deleting addresses from the my-account page.
 		 *
-		 * @param string $address_name - The name of a specific address in the address book.
+		 * @param string $address_name The name of a specific address in the address book.
 		 * @since 1.0.0
 		 */
 		public function wc_address_book_delete( $address_name ) {
@@ -652,7 +653,7 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 			foreach ( $address_book[ $alt_address_name ] as $field => $value ) {
 
 				$primary_field = preg_replace( '/^[^_]*_\s*/', $primary_address_name . '_', $field );
-				$resp = update_user_meta( $customer_id, $field, $address_book[ $primary_address_name ][ $primary_field ] );
+				$resp          = update_user_meta( $customer_id, $field, $address_book[ $primary_address_name ][ $primary_field ] );
 			}
 
 			die();
@@ -667,10 +668,10 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 
 			global $woocommerce;
 
-			$name = $_POST['name'];
+			$name         = $_POST['name'];
 			$address_book = $this->get_address_book();
 
-			$customer_id = get_current_user_id();
+			$customer_id        = get_current_user_id();
 			$shipping_countries = $woocommerce->countries->get_shipping_countries();
 
 			$response = array();
@@ -802,15 +803,15 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 				$address_names = $this->get_address_names( $user_id );
 
 				// If a version of the address name exists with a slash, use it. Otherwise, trim the slash.
-				// Previous versions of this plugin was including the slash in the address name. 
+				// Previous versions of this plugin was including the slash in the address name.
 				// While not causing problems, it should not have happened in the first place.
 				// This enables backward compatibility.
 				if ( in_array( $_GET['address-book'], $address_names ) ) {
 					$name = $_GET['address-book'];
 				} else {
-					$name = trim($_GET['address-book'], '/');
+					$name = trim( $_GET['address-book'], '/' );
 				}
-				
+
 				foreach ( $address_fields as $key => $value ) {
 
 					$newkey = str_replace( 'shipping', esc_attr( $name ), $key );
