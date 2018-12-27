@@ -2,7 +2,8 @@
 Contributors: hallme, doomwaxer, timbhowe
 Tags: WooCommerce, address book, multiple addresses, address
 Requires at least: 4.0
-Tested up to: 4.9
+Tested up to: 5.0.2
+Stable tag: 1.4.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -36,6 +37,10 @@ No, this plugin only allows for the storage of multiple shipping addresses. If a
 2. Easily select your shipping address on checkout.
 
 == Changelog ==
+
+= 1.4.1 =
+* Limit get_users to just returning IDs. Significantly decreases the amount of memory needed on activation on a site with many users. ([thanks pjv](https://github.com/hallme/woo-address-book/pull/40))
+* PHP and JS formatting cleanup
 
 = 1.4.0 =
 * Trim any trailing slashes when getting the address name from the URL
