@@ -31,7 +31,7 @@ if ( ! $type ) : ?>
 
 		<div class="address_book">
 
-			<h2><?php echo __( 'Shipping Address Book', 'woo-address-book' ); ?></h2>
+			<h3><?php echo __( 'Shipping Address Book', 'woo-address-book' ); ?></h3>
 
 			<p class="myaccount_address">
 				<?php echo apply_filters( 'woocommerce_my_account_my_address_book_description', __( 'The following addresses are available during the checkout process.', 'woo-address-book' ) ); ?>
