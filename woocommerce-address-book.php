@@ -106,7 +106,7 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 			// Standardize the address edit fields to match Woo's IDs.
 			add_action( 'woocommerce_form_field_args', array( $this, 'standardize_field_ids' ), 20, 3 );
 
-			add_action( 'woocommerce_shipping_fields', array( $this, 'replace_address_key' ), 1001, 2 );
+			add_filter( 'woocommerce_shipping_fields', array( $this, 'replace_address_key' ), 1001, 2 );
 
 		} // end constructor
 
