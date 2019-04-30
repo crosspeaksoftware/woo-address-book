@@ -4,7 +4,7 @@
  *
  * @author  Hall Internet Marketing
  * @package WooCommerce Address Book/Templates
- * @version 1.4.0
+ * @version 1.5.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
