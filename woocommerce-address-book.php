@@ -453,8 +453,16 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 
 			$address_names = get_user_meta( $user_id, 'wc_address_book', true );
 
+			if ( empty( $address_names ) ) {
+				$shipping_address = get_user_meta( $user_id, 'shipping_address_1', true );
+				// Return just a default shipping address if no other addresses are saved.
+				if ( empty( $shipping_address ) ) {
+					return array( 'shipping' );
+				}
+				// If we don't have a shipping address, just return an empty array.
+				return array();
+			}
 			return $address_names;
-
 		}
 
 		/**
