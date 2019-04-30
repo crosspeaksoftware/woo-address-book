@@ -38,8 +38,11 @@ No, this plugin only allows for the storage of multiple shipping addresses. If a
 
 == Changelog ==
 
+= 1.5.2 =
+* Update country field with updates from WooCommerce 3.6.x. Fixes inconsistencies with updated stock version.
+
 = 1.5.1 =
-* Update address book links so they don't have a trailing slash on them
+* Update address book links so they don't have a trailing slash on them.
 
 = 1.5.0 =
 * Fix address saving for new addresses in the address book for WooCommerce 3.6.x due to a change in the save address process.
