@@ -104,7 +104,7 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 			add_filter( 'woocommerce_form_field_country', array( $this, 'shipping_address_country_select' ), 20, 4 );
 
 			// Standardize the address edit fields to match Woo's IDs.
-			add_action( 'woocommerce_form_field_args', array( $this, 'standardize_field_ids' ), 20, 3 );
+			add_filter( 'woocommerce_form_field_args', array( $this, 'standardize_field_ids' ), 20, 3 );
 
 			add_filter( 'woocommerce_shipping_fields', array( $this, 'replace_address_key' ), 1001, 2 );
 
@@ -772,7 +772,7 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		public function standardize_field_ids( $args, $key, $value ) {
 
 			if ( 'address_book' !== $key ) {
-				$args['id'] = preg_replace( '/^shipping[^_]/', 'shipping', $args['id'] );
+				$args['id'] = preg_replace( '/^shipping[^_]+/', 'shipping', $args['id'] );
 			}
 
 			return $args;
