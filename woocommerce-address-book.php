@@ -130,27 +130,6 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		 */
 		public function activate( $network_wide ) {
 
-			// Make sure only admins can wipe the date.
-			if ( ! current_user_can( 'activate_plugins' ) ) {
-				return;
-			}
-
-			// Write a user's shipping address to the user_meta if they do not already have an address book saved.
-			$users = get_users( array( 'fields' => 'ID' ) );
-			foreach ( $users as $user_id ) {
-
-				$address_book = $this->get_address_names( $user_id );
-
-				if ( empty( $address_book ) ) {
-
-					$shipping_address = get_user_meta( $user_id, 'shipping_address_1', true );
-
-					if ( ! empty( $shipping_address ) ) {
-						$this->save_address_names( $user_id, array( 'shipping' ) );
-					}
-				}
-			}
-
 			flush_rewrite_rules();
 		}
 
