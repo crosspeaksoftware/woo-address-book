@@ -7,7 +7,6 @@
  * Author URI: https://www.hallme.com/
  * License: GPL2
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
- * Domain Path: /languages
  * Text Domain: wc-address-book
  *
  * @package WooCommerce Address Book
@@ -62,9 +61,6 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 
 			// Version Number.
 			$this->version = '1.4.1';
-
-			// Load plugin text domain.
-			add_action( 'init', array( $this, 'plugin_textdomain' ) );
 
 			// Register hooks that are fired when the plugin is activated, deactivated, and uninstalled, respectively.
 			register_activation_hook( __FILE__, array( $this, 'activate' ) );
@@ -154,17 +150,6 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		public function uninstall( $network_wide ) {
 
 			flush_rewrite_rules();
-		}
-
-		/**
-		 * Loads the plugin text domain for translation
-		 *
-		 * @since 1.0.0
-		 */
-		public function plugin_textdomain() {
-
-			load_plugin_textdomain( 'wc-address-book', false, dirname( plugin_basename( __FILE__ ) ) . '/lang' );
-
 		}
 
 		/**
