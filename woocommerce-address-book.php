@@ -108,6 +108,9 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 
 			add_filter( 'woocommerce_shipping_fields', array( $this, 'replace_address_key' ), 1001, 2 );
 
+			// Hook in before address save.
+			add_action( 'template_redirect', array( $this, 'before_save_address' ), 9 );
+
 		} // end constructor
 
 		/**
@@ -786,6 +789,30 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 			}
 
 			return $args;
+		}
+
+		/**
+		 * Actions before save_address is called.
+		 *
+		 * Update the country field to get around the validation check in save_address
+		 * in woocommerce/includes/class-wc-form-handler.php
+		 *
+		 * @since 1.5.0
+		 */
+		public function before_save_address() {
+
+			if ( empty( $_REQUEST['woocommerce-edit-address-nonce'] ) || empty( $_POST['action'] ) || 'edit_address' !== $_POST['action'] ) { // phpcs:ignore WordPress.Security.NonceVerification.NoNonceVerification
+				return;
+			}
+
+			if ( isset( $_GET['address-book'] ) ) {
+				$name = trim( $_GET['address-book'], '/' );
+				if ( isset( $_POST[ $name . '_country' ] ) ) {
+					// Copy to shipping_country to bypass the check in save address.
+					$_POST['shipping_country'] = $_POST[ $name . '_country' ];
+				}
+			}
+
 		}
 
 		/**
