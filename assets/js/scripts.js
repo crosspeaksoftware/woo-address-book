@@ -25,7 +25,7 @@
 			var name = $(this).attr('id');
 
 			$.ajax({
-				url: wc_address_book.ajax_url,
+				url: woo_address_book.ajax_url,
 				type: 'post',
 				data: {
 					action: 'wc_address_book_delete',
@@ -107,7 +107,7 @@
 					$(that).closest('.shipping_address').addClass('blockUI blockOverlay wc-updating');
 
 					$.ajax({
-						url: wc_address_book.ajax_url,
+						url: woo_address_book.ajax_url,
 						type: 'post',
 						data: {
 							action: 'wc_address_book_checkout_update',
