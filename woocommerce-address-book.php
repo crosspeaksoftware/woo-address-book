@@ -190,7 +190,7 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 			?>
 
 			<div class="add-new-address">
-				<a href="<?php echo esc_url( wc_get_endpoint_url( 'edit-address', 'shipping/?address-book=' . $name ) ); ?>" class="add button"><?php echo esc_html_e( 'Add New Shipping Address', 'woo-address-book' ); ?></a>
+				<a href="<?php echo esc_url( wc_get_endpoint_url( 'edit-address', 'shipping', get_permalink() . '?address-book=' . $name ) ); ?>" class="add button"><?php echo esc_html_e( 'Add New Shipping Address', 'woo-address-book' ); ?></a>
 			</div>
 
 			<?php
