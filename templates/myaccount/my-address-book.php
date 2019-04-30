@@ -73,7 +73,7 @@ if ( ! $type ) : ?>
 
 					<div class="wc-address-book-address">
 						<div class="wc-address-book-meta">
-							<a href="<?php echo esc_url( wc_get_endpoint_url( 'edit-address', 'shipping/?address-book=' . $name ) ); ?>" class="wc-address-book-edit"><?php echo esc_attr__( 'Edit', 'woo-address-book' ); ?></a>
+							<a href="<?php echo esc_url( wc_get_endpoint_url( 'edit-address', 'shipping', get_permalink() . '?address-book=' . $name ) ); ?>" class="wc-address-book-edit"><?php echo esc_attr__( 'Edit', 'woo-address-book' ); ?></a>
 							<a id="<?php echo esc_attr( $name ); ?>" class="wc-address-book-delete"><?php echo esc_attr__( 'Delete', 'woo-address-book' ); ?></a>
 							<a id="<?php echo esc_attr( $name ); ?>" class="wc-address-book-make-primary"><?php echo esc_attr__( 'Make Primary', 'woo-address-book' ); ?></a>
 						</div>
