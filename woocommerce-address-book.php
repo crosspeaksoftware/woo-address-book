@@ -259,7 +259,8 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		}
 
 		/**
-		 * Modify the shipping address field to allow for available countries to displayed correctly. Overides most of woocommerce_form_field().
+		 * Modify the shipping address field to allow for available countries to displayed correctly. Overrides most of woocommerce_form_field().
+		 * TODO: Figure out how to override the countries here without copying the entire function.
 		 *
 		 * @param String $field Field.
 		 * @param String $key Key.
@@ -270,16 +271,12 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		 */
 		public function shipping_address_country_select( $field, $key, $args, $value ) {
 
-			if ( $args['required'] && ! in_array( 'validate-required', $args['class'], true ) ) {
+			if ( $args['required'] ) {
 				$args['class'][] = 'validate-required';
-				$required        = '<abbr class="required" title="' . esc_attr__( 'required', 'woocommerce' ) . '">*</abbr>';
+				$required        = '&nbsp;<abbr class="required" title="' . esc_attr__( 'required', 'woocommerce' ) . '">*</abbr>';
 			} else {
-				$required = '';
+				$required = '&nbsp;<span class="optional">(' . esc_html__( 'optional', 'woocommerce' ) . ')</span>';
 			}
-
-			$args['maxlength'] = ( $args['maxlength'] ) ? 'maxlength="' . absint( $args['maxlength'] ) . '"' : '';
-
-			$args['autocomplete'] = ( $args['autocomplete'] ) ? 'autocomplete="' . esc_attr( $args['autocomplete'] ) . '"' : '';
 
 			if ( is_string( $args['label_class'] ) ) {
 				$args['label_class'] = array( $args['label_class'] );
@@ -290,7 +287,24 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 			}
 
 			// Custom attribute handling.
-			$custom_attributes = array();
+			$custom_attributes         = array();
+			$args['custom_attributes'] = array_filter( (array) $args['custom_attributes'], 'strlen' );
+
+			if ( $args['maxlength'] ) {
+				$args['custom_attributes']['maxlength'] = absint( $args['maxlength'] );
+			}
+
+			if ( ! empty( $args['autocomplete'] ) ) {
+				$args['custom_attributes']['autocomplete'] = $args['autocomplete'];
+			}
+
+			if ( true === $args['autofocus'] ) {
+				$args['custom_attributes']['autofocus'] = 'autofocus';
+			}
+
+			if ( $args['description'] ) {
+				$args['custom_attributes']['aria-describedby'] = $args['id'] . '-description';
+			}
 
 			if ( ! empty( $args['custom_attributes'] ) && is_array( $args['custom_attributes'] ) ) {
 				foreach ( $args['custom_attributes'] as $attribute => $attribute_value ) {
@@ -331,7 +345,7 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 
 				$field .= '</select>';
 
-				$field .= '<noscript><input type="submit" name="woocommerce_checkout_update_totals" value="' . esc_attr__( 'Update country', 'woocommerce' ) . '" /></noscript>';
+				$field .= '<noscript><button type="submit" name="woocommerce_checkout_update_totals" value="' . esc_attr__( 'Update country', 'woocommerce' ) . '">' . esc_html__( 'Update country', 'woocommerce' ) . '</button></noscript>';
 
 			}
 
@@ -342,11 +356,13 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 					$field_html .= '<label for="' . esc_attr( $label_id ) . '" class="' . esc_attr( implode( ' ', $args['label_class'] ) ) . '">' . $args['label'] . $required . '</label>';
 				}
 
-				$field_html .= $field;
+				$field_html .= '<span class="woocommerce-input-wrapper">' . $field;
 
 				if ( $args['description'] ) {
-					$field_html .= '<span class="description">' . esc_html( $args['description'] ) . '</span>';
+					$field_html .= '<span class="description" id="' . esc_attr( $args['id'] ) . '-description" aria-hidden="true">' . wp_kses_post( $args['description'] ) . '</span>';
 				}
+
+				$field_html .= '</span>';
 
 				$container_class = esc_attr( implode( ' ', $args['class'] ) );
 				$container_id    = esc_attr( $args['id'] ) . '_field';
