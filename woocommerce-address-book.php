@@ -7,7 +7,7 @@
  * Author URI: https://www.hallme.com/
  * License: GPL2
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain: wc-address-book
+ * Text Domain: woo-address-book
  *
  * @package WooCommerce Address Book
  */
@@ -32,7 +32,7 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 	function wc_address_book_woocommerce_notice_error() {
 
 		$class   = 'notice notice-error';
-		$message = __( 'WooCommerce Address Book requires WooCommerce and has been deactivated.', 'wc-address-book' );
+		$message = __( 'WooCommerce Address Book requires WooCommerce and has been deactivated.', 'woo-address-book' );
 
 		printf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $class ), esc_attr( $message ) );
 	}
@@ -161,12 +161,12 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 			if ( ! is_admin() ) {
 				wp_enqueue_script( 'jquery' );
 
-				wp_enqueue_style( 'wc-address-book', plugins_url( '/assets/css/style.css', __FILE__ ), array(), $this->version );
-				wp_enqueue_script( 'wc-address-book', plugins_url( '/assets/js/scripts.js', __FILE__ ), array( 'jquery' ), $this->version, true );
+				wp_enqueue_style( 'woo-address-book', plugins_url( '/assets/css/style.css', __FILE__ ), array(), $this->version );
+				wp_enqueue_script( 'woo-address-book', plugins_url( '/assets/js/scripts.js', __FILE__ ), array( 'jquery' ), $this->version, true );
 
 				wp_localize_script(
-					'wc-address-book',
-					'wc_address_book',
+					'woo-address-book',
+					'woo_address_book',
 					array(
 						'ajax_url' => admin_url( 'admin-ajax.php' ),
 					)
@@ -189,7 +189,7 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 			?>
 
 			<div class="add-new-address">
-				<a href="<?php echo esc_url( wc_get_endpoint_url( 'edit-address', 'shipping/?address-book=' . $name ) ); ?>" class="add button"><?php echo esc_html_e( 'Add New Shipping Address', 'wc-address-book' ); ?></a>
+				<a href="<?php echo esc_url( wc_get_endpoint_url( 'edit-address', 'shipping/?address-book=' . $name ) ); ?>" class="add button"><?php echo esc_html_e( 'Add New Shipping Address', 'woo-address-book' ); ?></a>
 			</div>
 
 			<?php
@@ -236,7 +236,7 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 			foreach ( $items as $key => $value ) {
 
 				if ( 'edit-address' === $key ) {
-					$new_items[ $key ] = __( 'Address Book', 'wc-address-book' );
+					$new_items[ $key ] = __( 'Address Book', 'woo-address-book' );
 				} else {
 					$new_items[ $key ] = $value;
 				}
@@ -523,7 +523,7 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 			$address_selector['address_book'] = array(
 				'type'     => 'select',
 				'class'    => array( 'form-row-wide', 'address_book' ),
-				'label'    => __( 'Address Book', 'wc-address-book' ),
+				'label'    => __( 'Address Book', 'woo-address-book' ),
 				'order'    => -1,
 				'priority' => -1,
 			);
@@ -537,7 +537,7 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 					}
 				}
 
-				$address_selector['address_book']['options']['add_new'] = __( 'Add New Address', 'wc-address-book' );
+				$address_selector['address_book']['options']['add_new'] = __( 'Add New Address', 'woo-address-book' );
 
 				$fields['shipping'] = $address_selector + $fields['shipping'];
 
