@@ -40,6 +40,7 @@ No, this plugin only allows for the storage of multiple shipping addresses. If a
 
 = 1.5.2 =
 * Update country field with updates from WooCommerce 3.6.x. Fixes inconsistencies with updated stock version.
+* Support SelectWoo in addition to select2 for checkout address book selector
 
 = 1.5.1 =
 * Update address book links so they don't have a trailing slash on them.
