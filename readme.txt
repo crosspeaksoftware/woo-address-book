@@ -1,7 +1,7 @@
 === WooCommerce Address Book ===
 Contributors: hallme, doomwaxer, timbhowe
 Tags: WooCommerce, address book, multiple addresses, address
-Requires at least: 4.0
+Requires at least: 4.6
 Tested up to: 5.2
 Stable tag: 1.5.1
 License: GPLv2 or later
