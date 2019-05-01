@@ -2,15 +2,15 @@
 
 	$(document).ready(function () {
 
-		// Select2 Enhancement if it exists
-		if ($().select2) {
-			var wc_address_book_select_select2 = function () {
-				$('select#shipping_address:visible, select#address_book:visible').each(function () {
-					$(this).select2();
-				});
-			};
-
-			wc_address_book_select_select2();
+		// SelectWoo / Select2 Enhancement if it exists
+		if ($.fn.selectWoo) {
+			$('select#shipping_address:visible, select#address_book:visible').each(function () {
+				$(this).selectWoo();
+			});
+		} else if ($.fn.select2) {
+			$('select#shipping_address:visible, select#address_book:visible').each(function () {
+				$(this).select2();
+			});
 		}
 
 		/*
