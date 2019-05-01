@@ -227,7 +227,7 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		/**
 		 * Replace My Address with the Address Book to My Account Menu.
 		 *
-		 * @param Array $items - An array of menu items.
+		 * @param array $items - An array of menu items.
 		 * @since 1.0.0
 		 */
 		public function wc_address_book_add_to_menu( $items ) {
@@ -249,7 +249,7 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		/**
 		 * Adds Address Book Content.
 		 *
-		 * @param String $type - The type of address.
+		 * @param string $type - The type of address.
 		 * @since 1.0.0
 		 */
 		public function wc_address_book_page( $type ) {
@@ -262,12 +262,13 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		 * Modify the shipping address field to allow for available countries to displayed correctly. Overrides most of woocommerce_form_field().
 		 * TODO: Figure out how to override the countries here without copying the entire function.
 		 *
-		 * @param String $field Field.
-		 * @param String $key Key.
-		 * @param Mixed  $args Arguments.
-		 * @param String $value (default: null).
-		 *
 		 * @since 1.0.0
+		 *
+		 * @param string $field Field.
+		 * @param string $key Key.
+		 * @param mixed  $args Arguments.
+		 * @param string $value (default: null).
+		 * @return string
 		 */
 		public function shipping_address_country_select( $field, $key, $args, $value ) {
 
@@ -375,9 +376,10 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		/**
 		 * Update Address Book Values
 		 *
-		 * @param Int    $user_id - User's ID.
-		 * @param String $name - The name of the address being updated.
 		 * @since 1.0.0
+		 *
+		 * @param int    $user_id - User's ID.
+		 * @param string $name - The name of the address being updated.
 		 */
 		public function update_address_names( $user_id, $name ) {
 
@@ -411,9 +413,10 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		/**
 		 * Redirect to the Edit Address page on save. Overrides the default redirect to /my-account/
 		 *
-		 * @param Int    $user_id - User's ID.
-		 * @param String $name - The name of the address being updated.
 		 * @since 1.0.0
+		 *
+		 * @param int    $user_id - User's ID.
+		 * @param string $name - The name of the address being updated.
 		 */
 		public function redirect_on_save( $user_id, $name ) {
 
@@ -427,8 +430,10 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		/**
 		 * Returns an array of the customer's address names.
 		 *
-		 * @param Int $user_id - User's ID.
 		 * @since 1.0.0
+		 *
+		 * @param int $user_id - User's ID.
+		 * @return array
 		 */
 		public function get_address_names( $user_id = null ) {
 
@@ -449,8 +454,10 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		/**
 		 * Returns an array of the customer's addresses with field values.
 		 *
-		 * @param Int $user_id - User's ID.
 		 * @since 1.0.0
+		 *
+		 * @param int $user_id - User's ID.
+		 * @return array
 		 */
 		public function get_address_book( $user_id = null ) {
 
@@ -506,9 +513,10 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		/**
 		 * Returns an array of the users/customer additional address key value pairs.
 		 *
+		 * @since 1.0.0
+		 *
 		 * @param int   $user_id User's ID.
 		 * @param array $new_value Address book names.
-		 * @since 1.0.0
 		 */
 		public function save_address_names( $user_id, $new_value ) {
 
@@ -529,8 +537,10 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		/**
 		 * Adds the address book select to the checkout page.
 		 *
-		 * @param array $fields An array of WooCommerce Shipping Address fields.
 		 * @since 1.0.0
+		 *
+		 * @param array $fields An array of WooCommerce Shipping Address fields.
+		 * @return array
 		 */
 		public function shipping_address_select_field( $fields ) {
 
@@ -566,9 +576,11 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		/**
 		 * Adds the address book select to the checkout page.
 		 *
+		 * @since 1.0.0
+		 *
 		 * @param array  $address An array of WooCommerce Shipping Address data.
 		 * @param string $name Name of the address field to use.
-		 * @since 1.0.0
+		 * @return string
 		 */
 		public function address_select_label( $address, $name ) {
 
@@ -585,8 +597,9 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		/**
 		 * Used for deleting addresses from the my-account page.
 		 *
-		 * @param string $address_name The name of a specific address in the address book.
 		 * @since 1.0.0
+		 *
+		 * @param string $address_name The name of a specific address in the address book.
 		 */
 		public function wc_address_book_delete( $address_name ) {
 
@@ -693,11 +706,11 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		/**
 		 * Update the customer data with the information entered on checkout.
 		 *
-		 * @param boolean $update_customer_data - Toggles whether Woo should update customer data on checkout. This plugin overrides that function entirely.
-		 *
-		 * @param Object  $checkout_object - An object of the checkout fields and values.
-		 *
 		 * @since 1.0.0
+		 *
+		 * @param boolean $update_customer_data - Toggles whether Woo should update customer data on checkout. This plugin overrides that function entirely.
+		 * @param object  $checkout_object - An object of the checkout fields and values.
+		 * @return boolean
 		 */
 		public function woocommerce_checkout_update_customer_data( $update_customer_data, $checkout_object ) {
 
@@ -763,13 +776,12 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		/**
 		 * Standardize the address edit fields to match Woo's IDs.
 		 *
-		 * @param Array  $args - The set of arguments being passed to the field.
-		 *
-		 * @param String $key - The name of the address being edited.
-		 *
-		 * @param String $value - The value a field will be prepopulated with.
-		 *
 		 * @since 1.0.0
+		 *
+		 * @param array  $args - The set of arguments being passed to the field.
+		 * @param string $key - The name of the address being edited.
+		 * @param string $value - The value a field will be prepopulated with.
+		 * @return array
 		 */
 		public function standardize_field_ids( $args, $key, $value ) {
 
@@ -807,9 +819,10 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		/**
 		 * Replace the standard 'Shipping' address key with address book key.
 		 *
-		 * @param Array $address_fields - The set of WooCommerce Address Fields.
-		 *
 		 * @since 1.1.0
+		 *
+		 * @param array $address_fields - The set of WooCommerce Address Fields.
+		 * @return array
 		 */
 		public function replace_address_key( $address_fields ) {
 
