@@ -38,6 +38,9 @@ No, this plugin only allows for the storage of multiple shipping addresses. If a
 
 == Changelog ==
 
+= 1.5.3 =
+* Fix regression from 1.5.0 which broke switching primary address. Thanks [ThomasK0lasa](https://github.com/ThomasK0lasa) - [#53](https://github.com/hallme/woo-address-book/issues/53)
+
 = 1.5.2 =
 * Update country field with updates from WooCommerce 3.6.x. Fixes inconsistencies with updated stock version.
 * Support SelectWoo in addition to select2 for checkout address book selector
