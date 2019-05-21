@@ -14,6 +14,8 @@ if [[ ! $version ]]; then
 	exit 1
 fi
 
+./build.sh
+
 echo "Releasing version ${version}"
 
 echo "Setting version number in readme.txt and php files"
@@ -38,7 +40,15 @@ echo "Checking out current version on Wordpress SVN"
 svn co https://plugins.svn.wordpress.org/${package}/trunk /tmp/release-${package}
 
 echo "Copying in updated files"
-rsync -rv --delete --exclude=".git" --exclude=".svn" --exclude="release.sh" --exclude="deploy-readme.sh" --exclude="README.md" . /tmp/release-${package}/.
+rsync -rv --delete \
+	--exclude=".git" \
+	--exclude=".gitignore" \
+	--exclude=".svn" \
+	--exclude="build.sh" \
+	--exclude="release.sh" \
+	--exclude="deploy-readme.sh" \
+	--exclude="README.md" \
+	. /tmp/release-${package}/.
 
 cd /tmp/release-${package}/
 # Add and delete new/old files.
