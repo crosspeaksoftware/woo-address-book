@@ -1,9 +1,15 @@
+/**
+ * Handles logic for the WooCommerce Address Book plugin.
+ *
+ * @package woo-address-book
+ */
+
 (function (window, $, undefined) {
 
 	$( document ).ready(
 		function () {
 
-			// SelectWoo / Select2 Enhancement if it exists
+			// SelectWoo / Select2 Enhancement if it exists.
 			if ($.fn.selectWoo) {
 				$( 'select#shipping_address:visible, select#address_book:visible' ).each(
 					function () {
@@ -58,7 +64,7 @@
 					var primary_address = $( '.woocommerce-Addresses .u-column2.woocommerce-Address address' );
 					var alt_address     = $( this ).parent().siblings( 'address' );
 
-					// Swap HTML values for address and label
+					// Swap HTML values for address and label.
 					var pa_html = primary_address.html();
 					var aa_html = alt_address.html();
 

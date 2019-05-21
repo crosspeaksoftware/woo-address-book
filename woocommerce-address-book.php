@@ -125,7 +125,7 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		 * @param boolean $network_wide - True if WPMU superadmin uses "Network Activate" action, false if WPMU is disabled or plugin is activated on an individual blog.
 		 * @since 1.0.0
 		 */
-		public function activate( $network_wide ) {
+		public function activate( $network_wide ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found
 
 			flush_rewrite_rules();
 		}
@@ -136,7 +136,7 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		 * @param boolean $network_wide - True if WPMU superadmin uses "Network Activate" action, false if WPMU is disabled or plugin is activated on an individual blog.
 		 * @since 1.0.0
 		 */
-		public function deactivate( $network_wide ) {
+		public function deactivate( $network_wide ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found
 
 			flush_rewrite_rules();
 
@@ -148,7 +148,7 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		 * @param boolean $network_wide - True if WPMU superadmin uses "Network Activate" action, false if WPMU is disabled or plugin is activated on an individual blog.
 		 * @since 1.0.0
 		 */
-		public function uninstall( $network_wide ) {
+		public function uninstall( $network_wide ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found
 
 			flush_rewrite_rules();
 		}
@@ -418,7 +418,7 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		 * @param int    $user_id - User's ID.
 		 * @param string $name - The name of the address being updated.
 		 */
-		public function redirect_on_save( $user_id, $name ) {
+		public function redirect_on_save( $user_id, $name ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed
 
 			if ( ! is_admin() && ! defined( 'DOING_AJAX' ) ) {
 
@@ -783,7 +783,7 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		 * @param string $value - The value a field will be prepopulated with.
 		 * @return array
 		 */
-		public function standardize_field_ids( $args, $key, $value ) {
+		public function standardize_field_ids( $args, $key, $value ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed
 
 			if ( 'address_book' !== $key ) {
 				$args['id'] = preg_replace( '/^shipping[^_]+/', 'shipping', $args['id'] );
@@ -835,7 +835,7 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 				// Previous versions of this plugin was including the slash in the address name.
 				// While not causing problems, it should not have happened in the first place.
 				// This enables backward compatibility.
-				if ( in_array( $_GET['address-book'], $address_names ) ) {
+				if ( in_array( $_GET['address-book'], $address_names, true ) ) {
 					$name = $_GET['address-book'];
 				} else {
 					$name = trim( $_GET['address-book'], '/' );
@@ -843,9 +843,9 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 
 				foreach ( $address_fields as $key => $value ) {
 
-					$newkey = str_replace( 'shipping', esc_attr( $name ), $key );
+					$new_key = str_replace( 'shipping', esc_attr( $name ), $key );
 
-					$address_fields[ $newkey ] = $address_fields[ $key ];
+					$address_fields[ $new_key ] = $address_fields[ $key ];
 					unset( $address_fields[ $key ] );
 				}
 			}

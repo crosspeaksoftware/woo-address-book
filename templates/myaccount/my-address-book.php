@@ -31,10 +31,10 @@ if ( ! $type ) : ?>
 
 		<div class="address_book">
 
-			<h3><?php echo __( 'Shipping Address Book', 'woo-address-book' ); ?></h3>
+			<h3><?php esc_html_e( 'Shipping Address Book', 'woo-address-book' ); ?></h3>
 
 			<p class="myaccount_address">
-				<?php echo apply_filters( 'woocommerce_my_account_my_address_book_description', __( 'The following addresses are available during the checkout process.', 'woo-address-book' ) ); ?>
+				<?php echo esc_html( apply_filters( 'woocommerce_my_account_my_address_book_description', __( 'The following addresses are available during the checkout process.', 'woo-address-book' ) ) ); ?>
 			</p>
 
 			<?php
@@ -85,7 +85,7 @@ if ( ! $type ) : ?>
 				<?php endif; ?>
 
 			<?php endforeach; ?>
-			
+
 			<?php
 			if ( ! wc_ship_to_billing_address_only() && get_option( 'woocommerce_calc_shipping' ) !== 'no' ) {
 				echo '</div>';
