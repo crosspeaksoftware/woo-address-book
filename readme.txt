@@ -38,6 +38,10 @@ No, this plugin only allows for the storage of multiple shipping addresses. If a
 
 == Changelog ==
 
+= 1.5.4 =
+* Fix missing close div in address book form. Thanks [ThomasK0lasa](https://github.com/ThomasK0lasa) - [#54](https://github.com/hallme/woo-address-book/pull/54)
+* Use a minified version of scripts.js
+
 = 1.5.3 =
 * Fix regression from 1.5.0 which broke switching primary address. Thanks [ThomasK0lasa](https://github.com/ThomasK0lasa) - [#53](https://github.com/hallme/woo-address-book/issues/53)
 
