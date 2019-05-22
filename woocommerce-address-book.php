@@ -229,22 +229,18 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		 * Replace My Address with the Address Book to My Account Menu.
 		 *
 		 * @param array $items - An array of menu items.
+		 * @return array
 		 * @since 1.0.0
 		 */
 		public function wc_address_book_add_to_menu( $items ) {
 
-			$new_items = array();
-
 			foreach ( $items as $key => $value ) {
-
 				if ( 'edit-address' === $key ) {
-					$new_items[ $key ] = __( 'Address Book', 'woo-address-book' );
-				} else {
-					$new_items[ $key ] = $value;
+					$items[ $key ] = __( 'Address Book', 'woo-address-book' );
 				}
 			}
 
-			return $new_items;
+			return $items;
 		}
 
 		/**
