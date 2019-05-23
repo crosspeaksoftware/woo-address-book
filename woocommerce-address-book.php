@@ -206,15 +206,13 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		public function set_new_address_name( $address_names ) {
 
 			// Check the address book entries and add a new one.
-			if ( isset( $address_names ) && ! empty( $address_names ) ) {
-
-				$new = str_replace( 'shipping', '', end( $address_names ) );
-
-				if ( empty( $new ) ) {
-					$name = 'shipping2';
-				} else {
-					$name = 'shipping' . intval( $new + 1, 10 );
-				}
+			if ( ! empty( $address_names ) && is_array( $address_names ) ) {
+				// Find the first address name that doesn't exist.
+				$counter = 2;
+				do {
+					$name = 'shipping' . $counter;
+					$counter++;
+				} while ( in_array( $name, $address_names, true ) );
 			} else { // Start the address book.
 
 				$name = 'shipping';
