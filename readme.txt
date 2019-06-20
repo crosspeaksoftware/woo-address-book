@@ -3,7 +3,7 @@ Contributors: hallme, doomwaxer, timbhowe, matt-h-1
 Tags: WooCommerce, address book, multiple addresses, address
 Requires at least: 4.6
 Tested up to: 5.2
-Stable tag: 1.5.3
+Stable tag: 1.5.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -41,6 +41,9 @@ No, this plugin only allows for the storage of multiple shipping addresses. If a
 = 1.5.4 =
 * Fix missing close div in address book form. Thanks [ThomasK0lasa](https://github.com/ThomasK0lasa) - [#54](https://github.com/hallme/woo-address-book/pull/54)
 * Use a minified version of scripts.js
+* Improve address saving for determining what address name to use next.
+* Fix first address creation on checkout from being set to shipping2 [#55](https://github.com/hallme/woo-address-book/issues/55)
+* Don't show address picker for new users that don't have addreses yet.
 
 = 1.5.3 =
 * Fix regression from 1.5.0 which broke switching primary address. Thanks [ThomasK0lasa](https://github.com/ThomasK0lasa) - [#53](https://github.com/hallme/woo-address-book/issues/53)
