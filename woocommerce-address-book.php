@@ -437,7 +437,7 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 			if ( empty( $address_names ) ) {
 				$shipping_address = get_user_meta( $user_id, 'shipping_address_1', true );
 				// Return just a default shipping address if no other addresses are saved.
-				if ( empty( $shipping_address ) ) {
+				if ( ! empty( $shipping_address ) ) {
 					return array( 'shipping' );
 				}
 				// If we don't have a shipping address, just return an empty array.
@@ -539,30 +539,32 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		 */
 		public function shipping_address_select_field( $fields ) {
 
-			$address_book = $this->get_address_book();
-			$customer_id  = wp_get_current_user();
+			if ( is_user_logged_in() ) {
 
-			$address_selector['address_book'] = array(
-				'type'     => 'select',
-				'class'    => array( 'form-row-wide', 'address_book' ),
-				'label'    => __( 'Address Book', 'woo-address-book' ),
-				'order'    => -1,
-				'priority' => -1,
-			);
+				$address_book = $this->get_address_book();
 
-			if ( ! empty( $address_book ) && false !== $address_book ) {
+				$address_selector['address_book'] = array(
+					'type'     => 'select',
+					'class'    => array( 'form-row-wide', 'address_book' ),
+					'label'    => __( 'Address Book', 'woo-address-book' ),
+					'order'    => -1,
+					'priority' => -1,
+				);
 
-				foreach ( $address_book as $name => $address ) {
+				if ( ! empty( $address_book ) && false !== $address_book ) {
 
-					if ( ! empty( $address[ $name . '_address_1' ] ) ) {
-						$address_selector['address_book']['options'][ $name ] = $this->address_select_label( $address, $name );
+					foreach ( $address_book as $name => $address ) {
+
+						if ( ! empty( $address[ $name . '_address_1' ] ) ) {
+							$address_selector['address_book']['options'][ $name ] = $this->address_select_label( $address, $name );
+						}
 					}
+
+					$address_selector['address_book']['options']['add_new'] = __( 'Add New Address', 'woo-address-book' );
+
+					$fields['shipping'] = $address_selector + $fields['shipping'];
+
 				}
-
-				$address_selector['address_book']['options']['add_new'] = __( 'Add New Address', 'woo-address-book' );
-
-				$fields['shipping'] = $address_selector + $fields['shipping'];
-
 			}
 
 			return $fields;
@@ -732,18 +734,18 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		 */
 		public function woocommerce_checkout_update_customer_data( $update_customer_data, $checkout_object ) {
 
-			$name                    = $_POST['address_book'];
+			$name                    = isset( $_POST['address_book'] ) ? $_POST['address_book'] : false;
 			$user                    = wp_get_current_user();
 			$address_book            = $this->get_address_book( $user->ID );
 			$update_customer_data    = false;
 			$ignore_shipping_address = true;
 
-			if ( $_POST['ship_to_different_address'] ) {
+			if ( isset( $_POST['ship_to_different_address'] ) && $_POST['ship_to_different_address'] ) {
 				$ignore_shipping_address = false;
 			}
 
 			// Name new address and update address book.
-			if ( ( 'add_new' === $name || ! isset( $name ) ) && false === $ignore_shipping_address ) {
+			if ( ( 'add_new' === $name || false === $name ) && false === $ignore_shipping_address ) {
 
 				$address_names = $this->get_address_names( $user->ID );
 
