@@ -3,7 +3,7 @@ Contributors: hallme, doomwaxer, timbhowe, matt-h-1
 Tags: WooCommerce, address book, multiple addresses, address
 Requires at least: 4.6
 Tested up to: 5.2
-Stable tag: 1.5.4
+Stable tag: 1.5.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -37,6 +37,9 @@ No, this plugin only allows for the storage of multiple shipping addresses. If a
 2. Easily select your shipping address on checkout.
 
 == Changelog ==
+
+= 1.5.5 =
+* Fix changing country if the field is set to Read Only. Do not change any fields that are set to Read Only.
 
 = 1.5.4 =
 * Fix missing close div in address book form. Thanks [ThomasK0lasa](https://github.com/ThomasK0lasa) - [#54](https://github.com/hallme/woo-address-book/pull/54)
