@@ -111,14 +111,18 @@
 
 						// Set Country Dropdown.
 						// Don't reset the value if only one country is available to choose.
-						if (typeof $( '#shipping_country' ).attr( 'readonly' ) == 'undefined') {
-							$( '#shipping_country' ).val( '' ).change();
+						var country_input = $( '#shipping_country' );
+						if (country_input.length > 0 && country_input.attr("readonly") !== "readonly") {
+							country_input.val( '' ).change();
 							$( "#shipping_country_chosen" ).find( 'span' ).html( '' );
 						}
 
 						// Set state dropdown.
-						$( '#shipping_state' ).val( '' ).change();
-						$( "#shipping_state_chosen" ).find( 'span' ).html( '' );
+						var state_input = $( '#shipping_state' );
+						if (state_input.length > 0 && state_input.attr("readonly") !== "readonly") {
+							state_input.val( '' ).change();
+							$( "#shipping_state_chosen" ).find( 'span' ).html( '' );
+						}
 
 						return;
 					}
@@ -141,18 +145,27 @@
 									// Loop through all fields incase there are custom ones.
 									Object.keys( response ).forEach(
 										function (key) {
-											$( '#' + key ).val( response[key] ).change();
+											var input = $( '#' + key );
+											if (input.length > 0 && input.attr("readonly") !== "readonly") {
+												input.val( response[key] ).change();
+											}
 										}
 									);
 
 									// Set Country Dropdown.
-									$( '#shipping_country' ).val( response.shipping_country ).change();
-									$( "#shipping_country_chosen" ).find( 'span' ).html( response.shipping_country_text );
+									var country_input = $( '#shipping_country' );
+									if (country_input.length > 0 && country_input.attr("readonly") !== "readonly") {
+										country_input.val( response.shipping_country ).change();
+										$( "#shipping_country_chosen" ).find( 'span' ).html( response.shipping_country_text );
+									}
 
 									// Set state dropdown.
-									$( '#shipping_state' ).val( response.shipping_state );
-									var stateName = $( '#shipping_state option[value="' + response.shipping_state + '"]' ).text();
-									$( "#s2id_shipping_state" ).find( '.select2-chosen' ).html( stateName ).parent().removeClass( 'select2-default' );
+									var state_input = $( '#shipping_state' );
+									if (state_input.length > 0 && state_input.attr("readonly") !== "readonly") {
+										state_input.val( response.shipping_state );
+										var stateName = $( '#shipping_state option[value="' + response.shipping_state + '"]' ).text();
+										$( "#s2id_shipping_state" ).find( '.select2-chosen' ).html( stateName ).parent().removeClass( 'select2-default' );
+									}
 
 									// Remove loading screen.
 									$( '.shipping_address' ).removeClass( 'blockUI blockOverlay wc-updating' );
