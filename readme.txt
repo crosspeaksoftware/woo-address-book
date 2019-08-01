@@ -38,6 +38,9 @@ No, this plugin only allows for the storage of multiple shipping addresses. If a
 
 == Changelog ==
 
+= 1.5.6 =
+* Stop enqueuing the plugin styles and scripts on every page. Only enqueue them when needed. Thanks [titodevera](https://github.com/titodevera) - [#58](https://github.com/hallme/woo-address-book/pull/58) [#59](https://github.com/hallme/woo-address-book/pull/59)
+
 = 1.5.5 =
 * Fix changing country if the field is set to Read Only. Do not change any fields that are set to Read Only.
 
