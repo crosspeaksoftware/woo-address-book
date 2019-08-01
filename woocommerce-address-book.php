@@ -159,20 +159,25 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		 * @since 1.0.0
 		 */
 		public function scripts_styles() {
-			if ( ! is_admin() ) {
-				wp_enqueue_script( 'jquery' );
 
-				$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
-				wp_enqueue_style( 'woo-address-book', plugins_url( '/assets/css/style.css', __FILE__ ), array(), $this->version );
-				wp_enqueue_script( 'woo-address-book', plugins_url( "/assets/js/scripts$min.js", __FILE__ ), array( 'jquery' ), $this->version, true );
+			$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+			wp_register_style( 'woo-address-book', plugins_url( '/assets/css/style.css', __FILE__ ), array(), $this->version );
+			wp_register_script( 'woo-address-book', plugins_url( "/assets/js/scripts$min.js", __FILE__ ), array( 'jquery' ), $this->version, true );
 
-				wp_localize_script(
-					'woo-address-book',
-					'woo_address_book',
-					array(
-						'ajax_url' => admin_url( 'admin-ajax.php' ),
-					)
-				);
+			wp_localize_script(
+				'woo-address-book',
+				'woo_address_book',
+				array(
+					'ajax_url' => admin_url( 'admin-ajax.php' ),
+				)
+			);
+
+			if ( is_account_page() ) {
+				wp_enqueue_style( 'woo-address-book' );
+			}
+
+			if ( is_account_page() || is_checkout() ) {
+				wp_enqueue_script( 'woo-address-book' );
 			}
 		}
 
