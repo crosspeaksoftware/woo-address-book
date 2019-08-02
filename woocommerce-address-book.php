@@ -108,6 +108,14 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 			// Hook in before address save.
 			add_action( 'template_redirect', array( $this, 'before_save_address' ), 9 );
 
+			// Adds support for address nicknames
+			add_filter( 'woocommerce_shipping_fields', array( $this, 'add_address_nickname_field' ), 10, 1 );
+			add_action( 'wp', array( $this, 'validate_address_nickname_filter' ) );
+			add_filter( 'woocommerce_formatted_address_replacements', array( $this, 'address_nickname_field_replacement' ), 10, 2 );
+			add_filter( 'woocommerce_localisation_address_formats', array( $this, 'address_nickname_localization_format' ), -10 );
+			add_filter( 'woocommerce_my_account_my_address_formatted_address', array( $this, 'formatted_address_nickname' ), 10, 3 );
+			add_filter( 'woocommerce_checkout_fields', array( $this, 'remove_nickname_field_from_checkout' ) );
+
 		} // end constructor
 
 		/**
@@ -588,6 +596,11 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 
 			$label = '';
 
+			$address_nickname = get_user_meta( get_current_user_id(), $name.'_address_nickname', true );
+			if ( $address_nickname ){
+				$label .= $address_nickname . ': ';
+			}
+
 			if ( ! empty( $address[ $name . '_first_name' ] ) ) {
 				$label .= $address[ $name . '_first_name' ];
 			}
@@ -876,6 +889,106 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 			}
 
 			return $address_fields;
+		}
+
+		public function add_address_nickname_field( $address_fields ) {
+
+			if ( !isset( $address_fields['shipping_address_nickname'] ) ){
+
+				$address_fields['shipping_address_nickname'] = array(
+					'label' 	 		 => __( 'Address nickname','woo-address-book' ),
+					'required' 		 => false,
+					'class'		 		 => array('form-row-wide'),
+					'autocomplete' => 'given-name',
+					'priority' 		 => -1,
+					'value'		 		 => '',
+					'description'	 => __( 'Will help you identify your addresses easily. Suggested nicknames: Home, Work...', 'woo-address-book' ),
+					'validate'		 => array('address-nickname')
+				);
+
+			}
+
+			return $address_fields;
+
+		}
+
+		public function validate_address_nickname_filter() {
+
+			if ( is_wc_endpoint_url( 'edit-address' ) ){
+
+				$address_name	= 'shipping';//default
+
+				if ( !empty( $_GET['address-book'] ) ){
+					$address_name = sanitize_text_field( $_GET['address-book'] );
+				}
+
+				if ( preg_match( '/shipping\d*$/', $address_name ) ){
+					add_filter( 'woocommerce_process_myaccount_field_'.$address_name.'_address_nickname', array( $this, 'validate_address_nickname' ), 10, 1 );
+				}
+
+			}
+
+		}
+
+		public function validate_address_nickname( $new_nickname ) {
+
+			$address_names = get_user_meta( get_current_user_id(), 'wc_address_book', true );
+
+			if ( is_array( $address_names ) ){
+
+				foreach ( $address_names as $address_name ){
+
+					$address_nickname = get_user_meta( get_current_user_id(), $address_name.'_address_nickname', true );
+
+					if( !empty( $new_nickname ) && sanitize_title( $address_nickname ) == sanitize_title( $new_nickname ) ){
+						//address nickname should be unique
+						wc_add_notice( __( 'Address nickname should be unique, another address is using the nickname.', 'woo-address-book' ), 'error' );
+						$new_nickname = false;
+						break;
+					}
+
+				}
+
+			}
+
+			return mb_strtoupper( $new_nickname );
+
+		}
+
+		public function address_nickname_field_replacement( $address, $args ) {
+			$address['{address_nickname}'] = '';
+
+			if ( !empty( $args['address_nickname'] ) ) {
+				$address['{address_nickname}'] = $args['address_nickname'];
+			}
+
+			return $address;
+		}
+
+		public function address_nickname_localization_format( $formats ) {
+
+			foreach ( $formats as $iso_code => $format ) {
+				$formats[$iso_code] = "{address_nickname}\n" . $formats[$iso_code];
+			}
+
+			return $formats;
+		}
+
+		public function formatted_address_nickname( $fields, $customer_id, $type ) {
+
+			if ( substr( $type, 0, 8 ) === "shipping" ) {
+				$fields['address_nickname'] = get_user_meta( $customer_id, $type . '_address_nickname', true );
+			}
+
+			return $fields;
+		}
+
+		public function remove_nickname_field_from_checkout( $fields ) {
+
+			unset( $fields['shipping']['shipping_address_nickname'] );
+
+			return $fields;
+
 		}
 
 	} // end class
