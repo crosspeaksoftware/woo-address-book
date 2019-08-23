@@ -42,7 +42,8 @@
 							type: 'post',
 							data: {
 								action: 'wc_address_book_delete',
-								name: name
+								name: name,
+								nonce: woo_address_book.delete_security,
 							},
 							success: function (response) {
 								$( '.wc-updating' ).remove();
@@ -80,7 +81,8 @@
 							type: 'post',
 							data: {
 								action: 'wc_address_book_make_primary',
-								name: name
+								name: name,
+								nonce: woo_address_book.primary_security,
 							},
 							success: function (response) {
 								$( '.wc-updating' ).removeClass( 'blockUI blockOverlay wc-updating' );
@@ -112,14 +114,14 @@
 						// Set Country Dropdown.
 						// Don't reset the value if only one country is available to choose.
 						var country_input = $( '#shipping_country' );
-						if (country_input.length > 0 && country_input.attr("readonly") !== "readonly") {
+						if (country_input.length > 0 && country_input.attr( "readonly" ) !== "readonly") {
 							country_input.val( '' ).change();
 							$( "#shipping_country_chosen" ).find( 'span' ).html( '' );
 						}
 
 						// Set state dropdown.
 						var state_input = $( '#shipping_state' );
-						if (state_input.length > 0 && state_input.attr("readonly") !== "readonly") {
+						if (state_input.length > 0 && state_input.attr( "readonly" ) !== "readonly") {
 							state_input.val( '' ).change();
 							$( "#shipping_state_chosen" ).find( 'span' ).html( '' );
 						}
@@ -137,7 +139,8 @@
 								type: 'post',
 								data: {
 									action: 'wc_address_book_checkout_update',
-									name: name
+									name: name,
+									nonce: woo_address_book.checkout_security,
 								},
 								dataType: 'json',
 								success: function (response) {
@@ -146,7 +149,7 @@
 									Object.keys( response ).forEach(
 										function (key) {
 											var input = $( '#' + key );
-											if (input.length > 0 && input.attr("readonly") !== "readonly") {
+											if (input.length > 0 && input.attr( "readonly" ) !== "readonly") {
 												input.val( response[key] ).change();
 											}
 										}
@@ -154,14 +157,14 @@
 
 									// Set Country Dropdown.
 									var country_input = $( '#shipping_country' );
-									if (country_input.length > 0 && country_input.attr("readonly") !== "readonly") {
+									if (country_input.length > 0 && country_input.attr( "readonly" ) !== "readonly") {
 										country_input.val( response.shipping_country ).change();
 										$( "#shipping_country_chosen" ).find( 'span' ).html( response.shipping_country_text );
 									}
 
 									// Set state dropdown.
 									var state_input = $( '#shipping_state' );
-									if (state_input.length > 0 && state_input.attr("readonly") !== "readonly") {
+									if (state_input.length > 0 && state_input.attr( "readonly" ) !== "readonly") {
 										state_input.val( response.shipping_state );
 										var stateName = $( '#shipping_state option[value="' + response.shipping_state + '"]' ).text();
 										$( "#s2id_shipping_state" ).find( '.select2-chosen' ).html( stateName ).parent().removeClass( 'select2-default' );

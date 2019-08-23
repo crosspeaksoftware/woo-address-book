@@ -176,7 +176,10 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 				'woo-address-book',
 				'woo_address_book',
 				array(
-					'ajax_url' => admin_url( 'admin-ajax.php' ),
+					'ajax_url'          => admin_url( 'admin-ajax.php' ),
+					'delete_security'   => wp_create_nonce( 'woo-address-book-delete' ),
+					'primary_security'  => wp_create_nonce( 'woo-address-book-primary' ),
+					'checkout_security' => wp_create_nonce( 'woo-address-book-checkout' ),
 				)
 			);
 
@@ -391,6 +394,11 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		 */
 		public function update_address_names( $user_id, $name ) {
 
+			// Pulled nonce check from class WC_Form_Handler function save_address.
+			if ( ! wp_verify_nonce( $_REQUEST['woocommerce-edit-address-nonce'], 'woocommerce-edit_address' ) ) {
+				return;
+			}
+
 			if ( isset( $_GET['address-book'] ) ) {
 				$name = trim( $_GET['address-book'], '/' );
 			}
@@ -534,12 +542,8 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 			}
 
 			// Update the value.
-			$error_test = update_user_meta( $user_id, 'wc_address_book', $new_value );
+			update_user_meta( $user_id, 'wc_address_book', $new_value );
 
-			// If update_user_meta returns false, throw an error.
-			if ( ! $error_test ) {
-				// TODO: Add error notice.
-			}
 		}
 
 		/**
@@ -641,6 +645,8 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		 */
 		public function wc_address_book_delete( $address_name ) {
 
+			check_ajax_referer( 'woo-address-book-delete', 'nonce' );
+
 			$address_name  = $_POST['name'];
 			$customer_id   = get_current_user_id();
 			$address_book  = $this->get_address_book( $customer_id );
@@ -668,9 +674,7 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 				}
 			}
 
-			if ( is_ajax() ) {
-				die();
-			}
+			die();
 		}
 
 		/**
@@ -679,6 +683,8 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		 * @since 1.0.0
 		 */
 		public function wc_address_book_make_primary() {
+
+			check_ajax_referer( 'woo-address-book-primary', 'nonce' );
 
 			$customer_id  = get_current_user_id();
 			$address_book = $this->get_address_book( $customer_id );
@@ -709,12 +715,13 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		 */
 		public function wc_address_book_checkout_update() {
 
+			check_ajax_referer( 'woo-address-book-checkout', 'nonce' );
+
 			global $woocommerce;
 
 			$name         = $_POST['name'];
 			$address_book = $this->get_address_book();
 
-			$customer_id        = get_current_user_id();
 			$shipping_countries = $woocommerce->countries->get_shipping_countries();
 
 			$response = array();
@@ -748,13 +755,18 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		 *
 		 * @param boolean $update_customer_data - Toggles whether Woo should update customer data on checkout. This plugin overrides that function entirely.
 		 * @param object  $checkout_object - An object of the checkout fields and values.
+		 * @throws Exception If nonce check fails.
 		 * @return boolean
 		 */
 		public function woocommerce_checkout_update_customer_data( $update_customer_data, $checkout_object ) {
 
+			// Pulled nonce check from woocommerce/includes/class-wc-checkout.php function process_checkout().
+			if ( ! wp_verify_nonce( $_REQUEST['woocommerce-process-checkout-nonce'], 'woocommerce-process_checkout' ) ) {
+				throw new Exception( __( 'We were unable to process your order, please try again.', 'woocommerce' ) );
+			}
+
 			$name                    = isset( $_POST['address_book'] ) ? $_POST['address_book'] : false;
 			$user                    = wp_get_current_user();
-			$address_book            = $this->get_address_book( $user->ID );
 			$update_customer_data    = false;
 			$ignore_shipping_address = true;
 
@@ -840,7 +852,12 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		 */
 		public function before_save_address() {
 
-			if ( empty( $_REQUEST['woocommerce-edit-address-nonce'] ) || empty( $_POST['action'] ) || 'edit_address' !== $_POST['action'] ) { // phpcs:ignore WordPress.Security.NonceVerification.NoNonceVerification
+			// Pulled nonce check from class WC_Form_Handler function save_address.
+			if ( ! isset( $_REQUEST['woocommerce-edit-address-nonce'] ) || ! wp_verify_nonce( $_REQUEST['woocommerce-edit-address-nonce'], 'woocommerce-edit_address' ) ) {
+				return;
+			}
+
+			if ( empty( $_POST['action'] ) || 'edit_address' !== $_POST['action'] ) {
 				return;
 			}
 
@@ -864,7 +881,8 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		 */
 		public function replace_address_key( $address_fields ) {
 
-			if ( isset( $_GET['address-book'] ) ) {
+			if ( isset( $_GET['address-book'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+				$address_book = sanitize_text_field( wp_unslash( $_GET['address-book'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
 				$user_id       = get_current_user_id();
 				$address_names = $this->get_address_names( $user_id );
@@ -873,17 +891,17 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 				// Previous versions of this plugin was including the slash in the address name.
 				// While not causing problems, it should not have happened in the first place.
 				// This enables backward compatibility.
-				if ( in_array( $_GET['address-book'], $address_names, true ) ) {
-					$name = $_GET['address-book'];
+				if ( in_array( $address_book, $address_names, true ) ) {
+					$name = $address_book;
 				} else {
-					$name = trim( $_GET['address-book'], '/' );
+					$name = trim( $address_book, '/' );
 				}
 
 				foreach ( $address_fields as $key => $value ) {
 
 					$new_key = str_replace( 'shipping', esc_attr( $name ), $key );
 
-					$address_fields[ $new_key ] = $address_fields[ $key ];
+					$address_fields[ $new_key ] = $value;
 					unset( $address_fields[ $key ] );
 				}
 			}
@@ -927,6 +945,15 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 
 			if ( is_wc_endpoint_url( 'edit-address' ) ) {
 
+				if ( ! isset( $_REQUEST['woocommerce-edit-address-nonce'] ) ) {
+					return;
+				}
+
+				// Pulled nonce check from class WC_Form_Handler function save_address.
+				if ( ! wp_verify_nonce( $_REQUEST['woocommerce-edit-address-nonce'], 'woocommerce-edit_address' ) ) {
+					return;
+				}
+
 				$address_name = 'shipping'; // default.
 
 				if ( ! empty( $_GET['address-book'] ) ) {
@@ -947,6 +974,11 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		 * @return string|bool
 		 */
 		public function validate_address_nickname( $new_nickname ) {
+
+			// Pulled nonce check from class WC_Form_Handler function save_address.
+			if ( ! wp_verify_nonce( $_REQUEST['woocommerce-edit-address-nonce'], 'woocommerce-edit_address' ) ) {
+				return;
+			}
 
 			$address_names = get_user_meta( get_current_user_id(), 'wc_address_book', true );
 
