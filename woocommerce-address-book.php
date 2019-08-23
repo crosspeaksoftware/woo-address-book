@@ -965,7 +965,7 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		public function address_nickname_localization_format( $formats ) {
 
 			foreach ( $formats as $iso_code => $format ) {
-				$formats[ $iso_code ] = "{address_nickname}\n" . $formats[ $iso_code ];
+				$formats[ $iso_code ] = "{address_nickname}\n" . $format;
 			}
 
 			return $formats;
