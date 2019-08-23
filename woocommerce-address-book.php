@@ -919,7 +919,7 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		}
 
 		/**
-		 * Sanitize the Address Nickname.
+		 * Add address validation filter to the nickname that is dynamic based on address name.
 		 *
 		 * @return void
 		 */
@@ -950,17 +950,25 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 
 			$address_names = get_user_meta( get_current_user_id(), 'wc_address_book', true );
 
+			$current_address_name = 'shipping'; // default.
+
+			if ( ! empty( $_GET['address-book'] ) ) {
+				$current_address_name = sanitize_text_field( $_GET['address-book'] );
+			}
+
 			if ( is_array( $address_names ) ) {
 
 				foreach ( $address_names as $address_name ) {
+					if ( $current_address_name !== $address_name ) {
 
-					$address_nickname = get_user_meta( get_current_user_id(), $address_name . '_address_nickname', true );
+						$address_nickname = get_user_meta( get_current_user_id(), $address_name . '_address_nickname', true );
 
-					if ( ! empty( $new_nickname ) && sanitize_title( $address_nickname ) == sanitize_title( $new_nickname ) ) {
-						// address nickname should be unique.
-						wc_add_notice( __( 'Address nickname should be unique, another address is using the nickname.', 'woo-address-book' ), 'error' );
-						$new_nickname = false;
-						break;
+						if ( ! empty( $new_nickname ) && sanitize_title( $address_nickname ) == sanitize_title( $new_nickname ) ) {
+							// address nickname should be unique.
+							wc_add_notice( __( 'Address nickname should be unique, another address is using the nickname.', 'woo-address-book' ), 'error' );
+							$new_nickname = false;
+							break;
+						}
 					}
 				}
 			}
