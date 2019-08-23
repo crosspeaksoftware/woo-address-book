@@ -522,8 +522,7 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 			}
 
 			if ( ! isset( $user_id ) ) {
-				$user    = wp_get_current_user();
-				$user_id = $user->ID;
+				$user_id = get_current_user_id();
 			}
 
 			$address_names = $this->get_address_names( $user_id );
@@ -804,7 +803,7 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 			}
 
 			$name                    = isset( $_POST['address_book'] ) ? $_POST['address_book'] : false;
-			$user                    = wp_get_current_user();
+			$user_id                 = get_current_user_id();
 			$update_customer_data    = false;
 			$ignore_shipping_address = true;
 
@@ -815,13 +814,13 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 			// Name new address and update address book.
 			if ( ( 'add_new' === $name || false === $name ) && false === $ignore_shipping_address ) {
 
-				$address_names = $this->get_address_names( $user->ID );
+				$address_names = $this->get_address_names( $user_id );
 
 				$name = $this->set_new_address_name( $address_names );
 			}
 
 			if ( false === $ignore_shipping_address ) {
-				$this->update_address_names( $user->ID, $name );
+				$this->update_address_names( $user_id, $name );
 			}
 
 			// Billing address.
@@ -850,11 +849,11 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 			}
 
 			foreach ( $billing_address as $key => $value ) {
-				update_user_meta( $user->ID, 'billing_' . $key, $value );
+				update_user_meta( $user_id, 'billing_' . $key, $value );
 			}
 			if ( WC()->cart->needs_shipping() && false === $ignore_shipping_address ) {
 				foreach ( $shipping_address as $key => $value ) {
-					update_user_meta( $user->ID, $name . '_' . $key, $value );
+					update_user_meta( $user_id, $name . '_' . $key, $value );
 				}
 			}
 
