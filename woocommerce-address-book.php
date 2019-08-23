@@ -233,10 +233,22 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 			?>
 
 			<div class="add-new-address">
-				<a href="<?php echo esc_url( wc_get_endpoint_url( 'edit-address', 'shipping', get_permalink() . '?address-book=' . $name ) ); ?>" class="add button"><?php echo esc_html_e( 'Add New Shipping Address', 'woo-address-book' ); ?></a>
+				<a href="<?php echo esc_url( $this->get_address_book_endpoint_url( $name ) ); ?>" class="add button"><?php echo esc_html_e( 'Add New Shipping Address', 'woo-address-book' ); ?></a>
 			</div>
 
 			<?php
+		}
+
+		/**
+		 * Get the address book edit endpoint URL.
+		 *
+		 * @param  string $address_book Address book name.
+		 *
+		 * @return string
+		 */
+		public function get_address_book_endpoint_url( $address_book ) {
+			$url = wc_get_endpoint_url( 'edit-address', 'shipping', get_permalink() );
+			return add_query_arg( 'address-book', $address_book, $url );
 		}
 
 		/**
