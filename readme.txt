@@ -38,6 +38,11 @@ No, this plugin only allows for the storage of multiple shipping addresses. If a
 
 == Changelog ==
 
+= 1.6.0 =
+* Added support for address nicknames. Thanks [titodevera](https://github.com/titodevera) - [#60](https://github.com/hallme/woo-address-book/pull/58) [#59](https://github.com/hallme/woo-address-book/pull/60)
+* Security: Updated all save calls to do nonce verification checks.
+* Update endpoint url generation to prevent the query parameter from being filtered out. Fixes conflict with [WPML plugin](https://wordpress.org/support/topic/issue-with-woocommerce-multilingual-plugin/).
+
 = 1.5.6 =
 * Stop enqueuing the plugin styles and scripts on every page. Only enqueue them when needed. Thanks [titodevera](https://github.com/titodevera) - [#58](https://github.com/hallme/woo-address-book/pull/58) [#59](https://github.com/hallme/woo-address-book/pull/59)
 
