@@ -108,7 +108,7 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 			// Hook in before address save.
 			add_action( 'template_redirect', array( $this, 'before_save_address' ), 9 );
 
-			// Adds support for address nicknames
+			// Adds support for address nicknames.
 			add_filter( 'woocommerce_shipping_fields', array( $this, 'add_address_nickname_field' ), 10, 1 );
 			add_action( 'wp', array( $this, 'validate_address_nickname_filter' ) );
 			add_filter( 'woocommerce_formatted_address_replacements', array( $this, 'address_nickname_field_replacement' ), 10, 2 );
@@ -963,7 +963,7 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 
 						$address_nickname = get_user_meta( get_current_user_id(), $address_name . '_address_nickname', true );
 
-						if ( ! empty( $new_nickname ) && sanitize_title( $address_nickname ) == sanitize_title( $new_nickname ) ) {
+						if ( ! empty( $new_nickname ) && sanitize_title( $address_nickname ) === sanitize_title( $new_nickname ) ) {
 							// address nickname should be unique.
 							wc_add_notice( __( 'Address nickname should be unique, another address is using the nickname.', 'woo-address-book' ), 'error' );
 							$new_nickname = false;
@@ -1012,8 +1012,8 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		/**
 		 * Get the address nickname to add it to the formatted address data.
 		 *
-		 * @param array $fields Address fields.
-		 * @param int $customer_id Customer to get address for.
+		 * @param array  $fields Address fields.
+		 * @param int    $customer_id Customer to get address for.
 		 * @param string $type Which address to get.
 		 * @return array
 		 */
