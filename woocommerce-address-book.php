@@ -54,6 +54,24 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 	class WC_Address_Book {
 
 		/**
+		 * Instance of this class.
+		 *
+		 * @since    1.6.0
+		 *
+		 * @var     object
+		 */
+		protected static $instance = null;
+
+		/**
+		 * Version
+		 *
+		 * @since 1.0.0
+		 *
+		 * @var string
+		 */
+		public $version;
+
+		/**
 		 * Initializes the plugin by setting localization, filters, and administration functions.
 		 *
 		 * @since 1.0.0
@@ -119,13 +137,21 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		} // end constructor
 
 		/**
-		 * Version
+		 * Return an instance of this class.
 		 *
-		 * @since 1.0.0
+		 * @since     1.6.0
 		 *
-		 * @var string
+		 * @return   object  A single instance of this class.
 		 */
-		public $version;
+		public static function get_instance() {
+
+			// If the single instance hasn't been set, set it now.
+			if ( null === self::$instance ) {
+				self::$instance = new self();
+			}
+
+			return self::$instance;
+		}
 
 		/**
 		 * Fired when the plugin is activated.
@@ -1077,6 +1103,6 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 	} // end class
 
 	// Init Class.
-	$wc_address_book = new WC_Address_Book();
+	WC_Address_Book::get_instance();
 
 }

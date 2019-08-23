@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
-$wc_address_book = new WC_Address_Book();
+$wc_address_book = WC_Address_Book::get_instance();
 
 $customer_id  = get_current_user_id();
 $address_book = $wc_address_book->get_address_book( $customer_id );
