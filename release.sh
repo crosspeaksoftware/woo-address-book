@@ -21,6 +21,7 @@ echo "Releasing version ${version}"
 echo "Setting version number in readme.txt and php files"
 perl -pi -e "s/Stable tag: .*/Stable tag: ${version}/g" readme.txt
 perl -pi -e "s/Version: .*/Version: ${version}/g" woocommerce-address-book.php
+perl -pi -e "s/\@version .*/\@version  ${version}/g" woocommerce-address-book.php
 perl -pi -e "s/this->version = '.*';/this->version = '${version}';/g" woocommerce-address-book.php
 
 if ([[ $(git status | grep readme.txt) ]] || [[ $(git status | grep woocommerce-address-book.php) ]]); then
