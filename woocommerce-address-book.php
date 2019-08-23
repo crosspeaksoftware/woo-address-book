@@ -916,7 +916,7 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 
 			if ( is_wc_endpoint_url( 'edit-address' ) ) {
 
-				$address_name = 'shipping';// default
+				$address_name = 'shipping'; // default
 
 				if ( ! empty( $_GET['address-book'] ) ) {
 					$address_name = sanitize_text_field( $_GET['address-book'] );
@@ -982,7 +982,9 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 
 		public function remove_nickname_field_from_checkout( $fields ) {
 
-			unset( $fields['shipping']['shipping_address_nickname'] );
+			if ( isset( $fields['shipping']['shipping_address_nickname'] ) ) {
+				unset( $fields['shipping']['shipping_address_nickname'] );
+			}
 
 			return $fields;
 
