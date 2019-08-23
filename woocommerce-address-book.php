@@ -113,7 +113,7 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 			add_action( 'wp', array( $this, 'validate_address_nickname_filter' ) );
 			add_filter( 'woocommerce_formatted_address_replacements', array( $this, 'address_nickname_field_replacement' ), 10, 2 );
 			add_filter( 'woocommerce_localisation_address_formats', array( $this, 'address_nickname_localization_format' ), -10 );
-			add_filter( 'woocommerce_my_account_my_address_formatted_address', array( $this, 'formatted_address_nickname' ), 10, 3 );
+			add_filter( 'woocommerce_my_account_my_address_formatted_address', array( $this, 'get_address_nickname' ), 10, 3 );
 			add_filter( 'woocommerce_checkout_fields', array( $this, 'remove_nickname_field_from_checkout' ) );
 
 		} // end constructor
@@ -891,6 +891,12 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 			return $address_fields;
 		}
 
+		/**
+		 * Add Address Nickname fields to address fields.
+		 *
+		 * @param array $address_fields Current Address fields.
+		 * @return array
+		 */
 		public function add_address_nickname_field( $address_fields ) {
 
 			if ( ! isset( $address_fields['shipping_address_nickname'] ) ) {
@@ -912,11 +918,16 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 
 		}
 
+		/**
+		 * Sanitize the Address Nickname.
+		 *
+		 * @return void
+		 */
 		public function validate_address_nickname_filter() {
 
 			if ( is_wc_endpoint_url( 'edit-address' ) ) {
 
-				$address_name = 'shipping'; // default
+				$address_name = 'shipping'; // default.
 
 				if ( ! empty( $_GET['address-book'] ) ) {
 					$address_name = sanitize_text_field( $_GET['address-book'] );
@@ -929,6 +940,12 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 
 		}
 
+		/**
+		 * Perform validation on the Address Nickname field.
+		 *
+		 * @param string $new_nickname The nickname the user input.
+		 * @return string|bool
+		 */
 		public function validate_address_nickname( $new_nickname ) {
 
 			$address_names = get_user_meta( get_current_user_id(), 'wc_address_book', true );
@@ -940,7 +957,7 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 					$address_nickname = get_user_meta( get_current_user_id(), $address_name . '_address_nickname', true );
 
 					if ( ! empty( $new_nickname ) && sanitize_title( $address_nickname ) == sanitize_title( $new_nickname ) ) {
-						// address nickname should be unique
+						// address nickname should be unique.
 						wc_add_notice( __( 'Address nickname should be unique, another address is using the nickname.', 'woo-address-book' ), 'error' );
 						$new_nickname = false;
 						break;
@@ -952,6 +969,13 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 
 		}
 
+		/**
+		 * Perform the replacement of the localized format with the data.
+		 *
+		 * @param array $address Address Formats.
+		 * @param array $args Address Data.
+		 * @return array
+		 */
 		public function address_nickname_field_replacement( $address, $args ) {
 			$address['{address_nickname}'] = '';
 
@@ -962,6 +986,12 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 			return $address;
 		}
 
+		/**
+		 * Prefix address formats with the address nickname.
+		 *
+		 * @param array $formats All of the country formats.
+		 * @return array
+		 */
 		public function address_nickname_localization_format( $formats ) {
 
 			foreach ( $formats as $iso_code => $format ) {
@@ -971,7 +1001,15 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 			return $formats;
 		}
 
-		public function formatted_address_nickname( $fields, $customer_id, $type ) {
+		/**
+		 * Get the address nickname to add it to the formatted address data.
+		 *
+		 * @param array $fields Address fields.
+		 * @param int $customer_id Customer to get address for.
+		 * @param string $type Which address to get.
+		 * @return array
+		 */
+		public function get_address_nickname( $fields, $customer_id, $type ) {
 
 			if ( substr( $type, 0, 8 ) === 'shipping' ) {
 				$fields['address_nickname'] = get_user_meta( $customer_id, $type . '_address_nickname', true );
@@ -980,6 +1018,12 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 			return $fields;
 		}
 
+		/**
+		 * Don't show Address Nickname field on the checkout. This is only for Edit/Add address.
+		 *
+		 * @param array $fields Checkout fields.
+		 * @return array
+		 */
 		public function remove_nickname_field_from_checkout( $fields ) {
 
 			if ( isset( $fields['shipping']['shipping_address_nickname'] ) ) {
