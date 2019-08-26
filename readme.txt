@@ -38,6 +38,9 @@ No, this plugin only allows for the storage of multiple shipping addresses. If a
 
 == Changelog ==
 
+= 1.6.1 =
+* Remove unneeded nopriv ajax actions. [#60](https://github.com/hallme/woo-address-book/pull/58) [#61](https://github.com/hallme/woo-address-book/issues/61)
+
 = 1.6.0 =
 * Added support for address nicknames. Thanks [titodevera](https://github.com/titodevera) - [#60](https://github.com/hallme/woo-address-book/pull/58) [#59](https://github.com/hallme/woo-address-book/pull/60)
 * Security: Updated all save calls to do nonce verification checks.
