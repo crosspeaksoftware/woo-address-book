@@ -97,15 +97,12 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 			add_filter( 'woocommerce_checkout_fields', array( $this, 'shipping_address_select_field' ), 9999, 1 );
 
 			// AJAX action to delete an address.
-			add_action( 'wp_ajax_nopriv_wc_address_book_delete', array( $this, 'wc_address_book_delete' ) );
 			add_action( 'wp_ajax_wc_address_book_delete', array( $this, 'wc_address_book_delete' ) );
 
 			// AJAX action to set a primary address.
-			add_action( 'wp_ajax_nopriv_wc_address_book_make_primary', array( $this, 'wc_address_book_make_primary' ) );
 			add_action( 'wp_ajax_wc_address_book_make_primary', array( $this, 'wc_address_book_make_primary' ) );
 
 			// AJAX action to refresh the address at checkout.
-			add_action( 'wp_ajax_nopriv_wc_address_book_checkout_update', array( $this, 'wc_address_book_checkout_update' ) );
 			add_action( 'wp_ajax_wc_address_book_checkout_update', array( $this, 'wc_address_book_checkout_update' ) );
 
 			// Update the customer data with the information entered on checkout.
