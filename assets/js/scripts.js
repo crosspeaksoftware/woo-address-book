@@ -9,8 +9,14 @@
 	$( document ).ready(
 		function () {
 
-			// SelectWoo / Select2 Enhancement if it exists.
-			if ($.fn.selectWoo) {
+			// Selectize / SelectWoo / Select2 Enhancement if it exists.
+			if ($.fn.selectize) {
+				$( 'select#shipping_address:visible, select#address_book:visible' ).each(
+					function () {
+						$( this ).selectize();
+					}
+				);
+			} else if ($.fn.selectWoo) {
 				$( 'select#shipping_address:visible, select#address_book:visible' ).each(
 					function () {
 						$( this ).selectWoo();
@@ -158,16 +164,24 @@
 									// Set Country Dropdown.
 									var country_input = $( '#shipping_country' );
 									if (country_input.length > 0 && country_input.attr( "readonly" ) !== "readonly") {
-										country_input.val( response.shipping_country ).change();
-										$( "#shipping_country_chosen" ).find( 'span' ).html( response.shipping_country_text );
+										if (country_input.hasClass("selectized") && country_input[0] && country_input[0].selectize ) {
+											country_input[0].selectize.setValue(response.shipping_country);
+										} else {
+											country_input.val( response.shipping_country ).change();
+											$( "#shipping_country_chosen" ).find( 'span' ).html( response.shipping_country_text );
+										}
 									}
 
 									// Set state dropdown.
 									var state_input = $( '#shipping_state' );
 									if (state_input.length > 0 && state_input.attr( "readonly" ) !== "readonly") {
-										state_input.val( response.shipping_state );
-										var stateName = $( '#shipping_state option[value="' + response.shipping_state + '"]' ).text();
-										$( "#s2id_shipping_state" ).find( '.select2-chosen' ).html( stateName ).parent().removeClass( 'select2-default' );
+										if (state_input.hasClass("selectized") && state_input[0] && state_input[0].selectize ) {
+											state_input[0].selectize.setValue(response.shipping_state);
+										} else {
+											state_input.val( response.shipping_state ).change();
+											var stateName = $( '#shipping_state option[value="' + response.shipping_state + '"]' ).text();
+											$( "#s2id_shipping_state" ).find( '.select2-chosen' ).html( stateName ).parent().removeClass( 'select2-default' );
+										}
 									}
 
 									// Remove loading screen.
