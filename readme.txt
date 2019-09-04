@@ -39,7 +39,8 @@ No, this plugin only allows for the storage of multiple shipping addresses. If a
 == Changelog ==
 
 = 1.7.0 =
-* Fixed issue with SelectWoo not loading if "Ship to a different address?" was not enabled by default. Thanks [titodevera](https://github.com/titodevera) - [#62](https://github.com/hallme/woo-address-book/pull/62)
+* Fixed issue with selectWoo not loadingon checkout if "Ship to a different address?" was not enabled by default. Thanks [titodevera](https://github.com/titodevera) - [#62](https://github.com/hallme/woo-address-book/pull/62)
+* Add support for [selectize.js](https://selectize.github.io/selectize.js/) if used over selectWoo for your select boxes.
 
 = 1.6.1 =
 * Remove unneeded nopriv ajax actions. [#60](https://github.com/hallme/woo-address-book/pull/58) [#61](https://github.com/hallme/woo-address-book/issues/61)
