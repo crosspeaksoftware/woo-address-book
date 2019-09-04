@@ -87,7 +87,7 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 			register_uninstall_hook( __FILE__, array( 'WC_Address_Book', 'uninstall' ) );
 
 			// Enqueue Styles and Scripts.
-			add_action( 'wp_enqueue_scripts', array( $this, 'scripts_styles' ), 20 );
+			add_action( 'wp_enqueue_scripts', array( $this, 'scripts_styles' ) );
 
 			// Save an address to the address book.
 			add_action( 'woocommerce_customer_save_address', array( $this, 'update_address_names' ), 10, 2 );
