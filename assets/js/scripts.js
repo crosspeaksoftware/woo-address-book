@@ -9,25 +9,23 @@
 	$( document ).ready(
 		function () {
 
-			// Selectize / SelectWoo / Select2 Enhancement if it exists.
+			var load_selectWoo = true;
+			var address_book = $( 'select#shipping_address:visible, select#address_book:visible' );
+
+			// Check for Selectize being used.
 			if ($.fn.selectize) {
-				$( 'select#shipping_address:visible, select#address_book:visible' ).each(
-					function () {
-						$( this ).selectize();
-					}
-				);
-			} else if ($.fn.selectWoo) {
-				$( 'select#shipping_address:visible, select#address_book:visible' ).each(
-					function () {
-						$( this ).selectWoo();
-					}
-				);
-			} else if ($.fn.select2) {
-				$( 'select#shipping_address:visible, select#address_book:visible' ).each(
-					function () {
-						$( this ).select2();
-					}
-				);
+				if (address_book.hasClass("selectized") && address_book[0] && address_book[0].selectize ) {
+					load_selectWoo = false;
+				}
+			}
+
+			// SelectWoo / Select2 Enhancement if it exists.
+			if (load_selectWoo) {
+				if ($.fn.selectWoo) {
+					address_book.selectWoo();
+				} else if ($.fn.select2) {
+					address_book.select2();
+				}
 			}
 
 			/*
