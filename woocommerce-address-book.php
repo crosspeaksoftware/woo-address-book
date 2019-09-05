@@ -2,7 +2,7 @@
 /**
  * Plugin Name: WooCommerce Address Book
  * Description: Gives your customers the option to store multiple shipping addresses and retrieve them on checkout..
- * Version: 1.7.0
+ * Version: 1.7.1
  * Author: Hall Internet Marketing
  * Author URI: https://www.hallme.com/
  * License: GPL2
@@ -46,7 +46,7 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 	 * WooCommerce Address Book.
 	 *
 	 * @class    WC_Address_Book
-	 * @version  1.7.0
+	 * @version  1.7.1
 	 * @package  WooCommerce Address Book
 	 * @category Class
 	 * @author   Hall Internet Marketing
@@ -79,7 +79,7 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		public function __construct() {
 
 			// Version Number.
-			$this->version = '1.7.0';
+			$this->version = '1.7.1';
 
 			// Register hooks that are fired when the plugin is activated, deactivated, and uninstalled, respectively.
 			register_activation_hook( __FILE__, array( $this, 'activate' ) );
