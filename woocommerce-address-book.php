@@ -131,6 +131,13 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 			add_filter( 'woocommerce_my_account_my_address_formatted_address', array( $this, 'get_address_nickname' ), 10, 3 );
 			add_filter( 'woocommerce_checkout_fields', array( $this, 'remove_nickname_field_from_checkout' ) );
 
+			// Adds shipping phone field
+			add_filter( 'woocommerce_shipping_fields', array( $this, 'add_shipping_phone_field' ), 10, 1 );
+			add_filter( 'woocommerce_my_account_my_address_formatted_address', array( $this, 'get_shipping_phone' ), 10, 3 );
+			add_filter( 'woocommerce_formatted_address_replacements', array( $this, 'shipping_phone_field_replacement' ), 10, 2 );
+			add_filter( 'woocommerce_localisation_address_formats', array( $this, 'shipping_phone_localization_format' ), -10 );
+			add_action( 'woocommerce_admin_order_data_after_shipping_address', array( $this, 'add_shipping_phone_to_order_details' ), 10, 1 );
+
 		} // end constructor
 
 		/**
@@ -1105,6 +1112,96 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 			}
 
 			return $fields;
+
+		}
+
+		/**
+		 * Add Shipping Phone field to address fields.
+		 *
+		 * @param array $address_fields Current Address fields.
+		 * @return array
+		 */
+		public function add_shipping_phone_field( $address_fields ) {
+
+			if ( ! isset( $address_fields['shipping_address_phone'] ) ) {
+
+				$address_fields['shipping_address_phone'] = array(
+					'label'        => __( 'Shipping phone', 'woo-address-book' ),
+					'required'     => false,
+					'class'        => array( 'form-row-wide' ),
+					'autocomplete' => 'given-name',
+					'priority'     => 80,
+					'value'        => '',
+					'type'				 => 'tel'
+				);
+
+			}
+
+			return $address_fields;
+
+		}
+
+		/**
+		 * Get the address phone to add it to the formatted address data.
+		 *
+		 * @param array  $fields Address fields.
+		 * @param int    $customer_id Customer to get address for.
+		 * @param string $type Which address to get.
+		 * @return array
+		 */
+		public function get_shipping_phone( $fields, $customer_id, $type ) {
+
+			if ( substr( $type, 0, 8 ) === 'shipping' ) {
+				$fields['shipping_address_phone'] = get_user_meta( $customer_id, $type . '_address_phone', true );
+			}
+
+			return $fields;
+		}
+
+		/**
+		 * Prefix address formats with the shipping phone.
+		 *
+		 * @param array $formats All of the country formats.
+		 * @return array
+		 */
+		public function shipping_phone_localization_format( $formats ) {
+
+			foreach ( $formats as $iso_code => $format ) {
+				$formats[ $iso_code ] = "{shipping_address_phone}\n" . $format;
+			}
+
+			return $formats;
+		}
+
+		/**
+		 * Perform the replacement of the localized format with the data.
+		 *
+		 * @param array $address Address Formats.
+		 * @param array $args Address Data.
+		 * @return array
+		 */
+		public function shipping_phone_field_replacement( $address, $args ) {
+
+			$address['{shipping_address_phone}'] = '';
+
+			if ( ! empty( $args['shipping_address_phone'] ) ) {
+				$address['{shipping_address_phone}'] = $args['shipping_address_phone'];
+			}
+
+			return $address;
+		}
+
+		public function add_shipping_phone_to_order_details( $order ) {
+
+			$phone = get_post_meta( $order->get_id(), '_shipping_address_phone', true );
+
+			if( !empty( $phone ) ){
+				$output = '<p>';
+				$output.= '<strong style="display:block;">'.__( 'Shipping phone', 'woo-address-book' ).':</strong>';
+				$output.= '<a href="tel:'.$phone.'">' . $phone . '</a>';
+				$output.= '</p>';
+				echo $output;
+			}
 
 		}
 
