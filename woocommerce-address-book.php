@@ -19,9 +19,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 require_once ABSPATH . 'wp-admin/includes/plugin.php';
-$woo_path = 'woocommerce/woocommerce.php';
 
-if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_path ) ) {
+if ( ! is_plugin_active( 'woocommerce/woocommerce.php' ) && ! is_plugin_active_for_network( 'woocommerce/woocommerce.php' ) ) {
 	deactivate_plugins( plugin_basename( __FILE__ ) );
 
 	/**
@@ -38,7 +37,6 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 	add_action( 'admin_notices', 'wc_address_book_woocommerce_notice_error' );
 	add_action( 'network_admin_notices', 'wc_address_book_woocommerce_notice_error' );
 } else {
-
 	require plugin_dir_path( __FILE__ ) . 'includes/class-wc-address-book.php';
 
 	// Init Class.

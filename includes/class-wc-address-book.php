@@ -11,28 +11,28 @@
 class WC_Address_Book {
 
 	/**
-		* Instance of this class.
-		*
-		* @since    1.6.0
-		*
-		* @var     object
-		*/
+	 * Instance of this class.
+	 *
+	 * @since    1.6.0
+	 *
+	 * @var     object
+	 */
 	protected static $instance = null;
 
 	/**
-		* Version
-		*
-		* @since 1.0.0
-		*
-		* @var string
-		*/
+	 * Version
+	 *
+	 * @since 1.0.0
+	 *
+	 * @var string
+	 */
 	public $version;
 
 	/**
-		* Initializes the plugin by setting localization, filters, and administration functions.
-		*
-		* @since 1.0.0
-		*/
+	 * Initializes the plugin by setting localization, filters, and administration functions.
+	 *
+	 * @since 1.0.0
+	 */
 	public function __construct() {
 
 		// Version Number.
@@ -90,12 +90,12 @@ class WC_Address_Book {
 	} // end constructor
 
 	/**
-		* Return an instance of this class.
-		*
-		* @since     1.6.0
-		*
-		* @return   object  A single instance of this class.
-		*/
+	 * Return an instance of this class.
+	 *
+	 * @since     1.6.0
+	 *
+	 * @return   object  A single instance of this class.
+	 */
 	public static function get_instance() {
 
 		// If the single instance hasn't been set, set it now.
@@ -107,43 +107,43 @@ class WC_Address_Book {
 	}
 
 	/**
-		* Fired when the plugin is activated.
-		*
-		* @param boolean $network_wide - True if WPMU superadmin uses "Network Activate" action, false if WPMU is disabled or plugin is activated on an individual blog.
-		* @since 1.0.0
-		*/
+	 * Fired when the plugin is activated.
+	 *
+	 * @param boolean $network_wide - True if WPMU superadmin uses "Network Activate" action, false if WPMU is disabled or plugin is activated on an individual blog.
+	 * @since 1.0.0
+	 */
 	public function activate( $network_wide ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found
 
 		flush_rewrite_rules();
 	}
 
 	/**
-		* Fired when the plugin is deactivated.
-		*
-		* @param boolean $network_wide - True if WPMU superadmin uses "Network Activate" action, false if WPMU is disabled or plugin is activated on an individual blog.
-		* @since 1.0.0
-		*/
+	 * Fired when the plugin is deactivated.
+	 *
+	 * @param boolean $network_wide - True if WPMU superadmin uses "Network Activate" action, false if WPMU is disabled or plugin is activated on an individual blog.
+	 * @since 1.0.0
+	 */
 	public function deactivate( $network_wide ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found
 
 		flush_rewrite_rules();
 	}
 
 	/**
-		* Fired when the plugin is uninstalled.
-		*
-		* @param boolean $network_wide - True if WPMU superadmin uses "Network Activate" action, false if WPMU is disabled or plugin is activated on an individual blog.
-		* @since 1.0.0
-		*/
+	 * Fired when the plugin is uninstalled.
+	 *
+	 * @param boolean $network_wide - True if WPMU superadmin uses "Network Activate" action, false if WPMU is disabled or plugin is activated on an individual blog.
+	 * @since 1.0.0
+	 */
 	public function uninstall( $network_wide ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found
 
 		flush_rewrite_rules();
 	}
 
 	/**
-		* Enqueue scripts and styles
-		*
-		* @since 1.0.0
-		*/
+	 * Enqueue scripts and styles
+	 *
+	 * @since 1.0.0
+	 */
 	public function scripts_styles() {
 		$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 		wp_register_style( 'woo-address-book', plugins_url( "/assets/css/style$min.css", dirname( __FILE__ ) ), array(), $this->version );
@@ -170,10 +170,10 @@ class WC_Address_Book {
 	}
 
 	/**
-		* Adds a link/button to the my account page under the addresses for adding additional addresses to their account.
-		*
-		* @since 1.0.0
-		*/
+	 * Adds a link/button to the my account page under the addresses for adding additional addresses to their account.
+	 *
+	 * @since 1.0.0
+	 */
 	public function add_additional_address_button() {
 		$user_id       = get_current_user_id();
 		$address_names = $this->get_address_names( $user_id );
@@ -371,14 +371,12 @@ class WC_Address_Book {
 	 * @param string $name - The name of the address being updated.
 	 */
 	public function update_address_names( $user_id, $name ) {
-
-		// Pulled nonce check from class WC_Form_Handler function save_address.
-		if ( ! wp_verify_nonce( $_REQUEST['woocommerce-edit-address-nonce'], 'woocommerce-edit_address' ) ) {
+		if ( ! wp_verify_nonce( $this->nonce_value( 'woocommerce-edit-address-nonce' ), 'woocommerce-edit_address' ) ) {
 			return;
 		}
 
 		if ( isset( $_GET['address-book'] ) ) {
-			$name = trim( $_GET['address-book'], '/' );
+			$name = trim( sanitize_text_field( wp_unslash( $_GET['address-book'] ) ), '/' );
 		}
 
 		// Only save shipping addresses.
@@ -606,7 +604,11 @@ class WC_Address_Book {
 	public function wc_address_book_delete( $address_name ) {
 		check_ajax_referer( 'woo-address-book-delete', 'nonce' );
 
-		$address_name  = $_POST['name'];
+		if ( ! isset( $_POST['name'] ) ) {
+			die( 'no address passed' );
+		}
+
+		$address_name  = sanitize_text_field( wp_unslash( $_POST['name'] ) );
 		$customer_id   = get_current_user_id();
 		$address_book  = $this->get_address_book( $customer_id );
 		$address_names = $this->get_address_names( $customer_id );
@@ -646,17 +648,21 @@ class WC_Address_Book {
 		$address_book = $this->get_address_book( $customer_id );
 
 		$primary_address_name = 'shipping';
-		$alt_address_name     = $_POST['name'];
+		if ( ! isset( $_POST['name'] ) ) {
+			die( 'no address passed' );
+		}
+
+		$alt_address_name = sanitize_text_field( wp_unslash( $_POST['name'] ) );
 
 		// Loop through and swap values between shipping names.
 		foreach ( $address_book[ $primary_address_name ] as $field => $value ) {
 			$alt_field = preg_replace( '/^[^_]*_\s*/', $alt_address_name . '_', $field );
-			$resp      = update_user_meta( $customer_id, $field, $address_book[ $alt_address_name ][ $alt_field ] );
+			update_user_meta( $customer_id, $field, $address_book[ $alt_address_name ][ $alt_field ] );
 		}
 
 		foreach ( $address_book[ $alt_address_name ] as $field => $value ) {
 			$primary_field = preg_replace( '/^[^_]*_\s*/', $primary_address_name . '_', $field );
-			$resp          = update_user_meta( $customer_id, $field, $address_book[ $primary_address_name ][ $primary_field ] );
+			update_user_meta( $customer_id, $field, $address_book[ $primary_address_name ][ $primary_field ] );
 		}
 
 		die();
@@ -672,7 +678,11 @@ class WC_Address_Book {
 
 		global $woocommerce;
 
-		$name         = $_POST['name'];
+		if ( isset( $_POST['name'] ) ) {
+			$name = sanitize_text_field( wp_unslash( $_POST['name'] ) );
+		} else {
+			$name = 'add_new';
+		}
 		$address_book = $this->get_address_book();
 
 		$shipping_countries = $woocommerce->countries->get_shipping_countries();
@@ -710,18 +720,16 @@ class WC_Address_Book {
 	 * @return boolean
 	 */
 	public function woocommerce_checkout_update_customer_data( $update_customer_data, $checkout_object ) {
-
-		// Pulled nonce check from woocommerce/includes/class-wc-checkout.php function process_checkout().
-		if ( ! wp_verify_nonce( $_REQUEST['woocommerce-process-checkout-nonce'], 'woocommerce-process_checkout' ) ) {
+		if ( ! wp_verify_nonce( $this->nonce_value( 'woocommerce-process-checkout-nonce' ), 'woocommerce-process_checkout' ) ) {
 			throw new Exception( __( 'We were unable to process your order, please try again.', 'woocommerce' ) );
 		}
 
-		$name                    = isset( $_POST['address_book'] ) ? $_POST['address_book'] : false;
+		$name                    = isset( $_POST['address_book'] ) ? sanitize_text_field( wp_unslash( $_POST['address_book'] ) ) : false;
 		$user_id                 = get_current_user_id();
 		$update_customer_data    = false;
 		$ignore_shipping_address = true;
 
-		if ( isset( $_POST['ship_to_different_address'] ) && $_POST['ship_to_different_address'] ) {
+		if ( isset( $_POST['ship_to_different_address'] ) ) {
 			$ignore_shipping_address = false;
 		}
 
@@ -801,9 +809,7 @@ class WC_Address_Book {
 	 * @since 1.5.0
 	 */
 	public function before_save_address() {
-
-		// Pulled nonce check from class WC_Form_Handler function save_address.
-		if ( ! isset( $_REQUEST['woocommerce-edit-address-nonce'] ) || ! wp_verify_nonce( $_REQUEST['woocommerce-edit-address-nonce'], 'woocommerce-edit_address' ) ) {
+		if ( ! wp_verify_nonce( $this->nonce_value( 'woocommerce-edit-address-nonce' ), 'woocommerce-edit_address' ) ) {
 			return;
 		}
 
@@ -812,10 +818,10 @@ class WC_Address_Book {
 		}
 
 		if ( isset( $_GET['address-book'] ) ) {
-			$name = trim( $_GET['address-book'], '/' );
+			$name = trim( sanitize_text_field( wp_unslash( $_GET['address-book'] ) ), '/' );
 			if ( isset( $_POST[ $name . '_country' ] ) ) {
 				// Copy to shipping_country to bypass the check in save address.
-				$_POST['shipping_country'] = $_POST[ $name . '_country' ];
+				$_POST['shipping_country'] = sanitize_text_field( wp_unslash( $_POST[ $name . '_country' ] ) );
 			}
 		}
 	}
@@ -886,19 +892,14 @@ class WC_Address_Book {
 	 */
 	public function validate_address_nickname_filter() {
 		if ( is_wc_endpoint_url( 'edit-address' ) ) {
-			if ( ! isset( $_REQUEST['woocommerce-edit-address-nonce'] ) ) {
-				return;
-			}
-
-			// Pulled nonce check from class WC_Form_Handler function save_address.
-			if ( ! wp_verify_nonce( $_REQUEST['woocommerce-edit-address-nonce'], 'woocommerce-edit_address' ) ) {
+			if ( ! wp_verify_nonce( $this->nonce_value( 'woocommerce-edit-address-nonce' ), 'woocommerce-edit_address' ) ) {
 				return;
 			}
 
 			$address_name = 'shipping'; // default.
 
 			if ( ! empty( $_GET['address-book'] ) ) {
-				$address_name = sanitize_text_field( $_GET['address-book'] );
+				$address_name = sanitize_text_field( wp_unslash( $_GET['address-book'] ) );
 			}
 
 			if ( preg_match( '/shipping\d*$/', $address_name ) ) {
@@ -914,9 +915,7 @@ class WC_Address_Book {
 	 * @return string|bool
 	 */
 	public function validate_address_nickname( $new_nickname ) {
-
-		// Pulled nonce check from class WC_Form_Handler function save_address.
-		if ( ! wp_verify_nonce( $_REQUEST['woocommerce-edit-address-nonce'], 'woocommerce-edit_address' ) ) {
+		if ( ! wp_verify_nonce( $this->nonce_value( 'woocommerce-edit-address-nonce' ), 'woocommerce-edit_address' ) ) {
 			return;
 		}
 
@@ -925,7 +924,7 @@ class WC_Address_Book {
 		$current_address_name = 'shipping'; // default.
 
 		if ( ! empty( $_GET['address-book'] ) ) {
-			$current_address_name = sanitize_text_field( $_GET['address-book'] );
+			$current_address_name = sanitize_text_field( wp_unslash( $_GET['address-book'] ) );
 		}
 
 		if ( is_array( $address_names ) ) {
@@ -943,7 +942,7 @@ class WC_Address_Book {
 			}
 		}
 
-		return mb_strtoupper( $new_nickname );
+		return mb_strtoupper( $new_nickname, 'UTF-8' );
 	}
 
 	/**
@@ -1005,6 +1004,19 @@ class WC_Address_Book {
 		}
 
 		return $fields;
+	}
+
+	/**
+	 * Get the nonce value from the request for the given name.
+	 *
+	 * @param string $name Request name of nonce.
+	 * @return string
+	 */
+	private function nonce_value( $name ) {
+		if ( ! isset( $_REQUEST[ $name ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			return '';
+		}
+		return $_REQUEST[ $name ]; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized,WordPress.Security.NonceVerification.Recommended
 	}
 
 }
