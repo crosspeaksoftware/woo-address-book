@@ -34,7 +34,7 @@ class WC_Address_Book {
 	public function __construct() {
 
 		// Version Number.
-		$this->version = '1.7.1';
+		$this->version = '1.7.2';
 
 		// Register hooks that are fired when the plugin is activated, deactivated, and uninstalled, respectively.
 		register_activation_hook( __FILE__, array( $this, 'activate' ) );
