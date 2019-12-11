@@ -5,8 +5,6 @@
  * @class    WC_Address_Book
  * @version  1.7.1
  * @package  WooCommerce Address Book
- * @category Class
- * @author   Hall Internet Marketing
  */
 class WC_Address_Book {
 
