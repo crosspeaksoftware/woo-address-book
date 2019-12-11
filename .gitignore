@@ -1,2 +1,10 @@
+.DS_Store
+Thumbs.db
 assets/js/scripts.min.js
 assets/css/style.min.css
+wp-cli.local.yml
+vendor/
+node_modules/
+*.sql
+*.tar.gz
+*.zip
