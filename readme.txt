@@ -38,6 +38,10 @@ No, this plugin only allows for the storage of multiple shipping addresses. If a
 
 == Changelog ==
 
+= 1.7.2 =
+* Fix regression from security update in 1.6.0 which broke saving new addresses on checkout.
+* Code cleanup.
+
 = 1.7.1 =
 * Fixed if you had [selectize.js](https://selectize.github.io/selectize.js/) installed on the site but still using selectWoo for checkout. You must now manually apply selectize to the Address Book selector if you wish to use selectize on checkout.
 
