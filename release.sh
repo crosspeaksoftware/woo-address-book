@@ -43,8 +43,17 @@ svn co https://plugins.svn.wordpress.org/${package}/trunk /tmp/release-${package
 echo "Copying in updated files"
 rsync -rv --delete \
 	--exclude=".git" \
+	--exclude=".distignore" \
+	--exclude=".travis.yml" \
 	--exclude=".gitignore" \
 	--exclude=".svn" \
+	--exclude="bin" \
+	--exclude="vendor" \
+	--exclude="tests" \
+	--exclude="composeer.json" \
+	--exclude="composeer.lock" \
+	--exclude="phpcs.xml.dist" \
+	--exclude="phpunit.xml.dist" \
 	--exclude="build.sh" \
 	--exclude="release.sh" \
 	--exclude="deploy-readme.sh" \
