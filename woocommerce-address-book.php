@@ -22,7 +22,6 @@ require_once ABSPATH . 'wp-admin/includes/plugin.php';
 $woo_path = 'woocommerce/woocommerce.php';
 
 if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_path ) ) {
-
 	deactivate_plugins( plugin_basename( __FILE__ ) );
 
 	/**
@@ -31,7 +30,6 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 	 * @since    1.0.0
 	 */
 	function wc_address_book_woocommerce_notice_error() {
-
 		$class   = 'notice notice-error';
 		$message = __( 'WooCommerce Address Book requires WooCommerce and has been deactivated.', 'woo-address-book' );
 
@@ -39,7 +37,6 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 	}
 	add_action( 'admin_notices', 'wc_address_book_woocommerce_notice_error' );
 	add_action( 'network_admin_notices', 'wc_address_book_woocommerce_notice_error' );
-
 } else {
 
 	/**
@@ -130,7 +127,6 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 			add_filter( 'woocommerce_localisation_address_formats', array( $this, 'address_nickname_localization_format' ), -10 );
 			add_filter( 'woocommerce_my_account_my_address_formatted_address', array( $this, 'get_address_nickname' ), 10, 3 );
 			add_filter( 'woocommerce_checkout_fields', array( $this, 'remove_nickname_field_from_checkout' ) );
-
 		} // end constructor
 
 		/**
@@ -170,7 +166,6 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		public function deactivate( $network_wide ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found
 
 			flush_rewrite_rules();
-
 		}
 
 		/**
@@ -190,7 +185,6 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		 * @since 1.0.0
 		 */
 		public function scripts_styles() {
-
 			$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 			wp_register_style( 'woo-address-book', plugins_url( "/assets/css/style$min.css", __FILE__ ), array(), $this->version );
 			wp_register_script( 'woo-address-book', plugins_url( "/assets/js/scripts$min.js", __FILE__ ), array( 'jquery' ), $this->version, true );
@@ -221,7 +215,6 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		 * @since 1.0.0
 		 */
 		public function add_additional_address_button() {
-
 			$user_id       = get_current_user_id();
 			$address_names = $this->get_address_names( $user_id );
 
@@ -267,11 +260,9 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 			} else { // Start the address book.
 
 				$name = 'shipping';
-
 			}
 
 			return $name;
-
 		}
 
 		/**
@@ -282,7 +273,6 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		 * @since 1.0.0
 		 */
 		public function wc_address_book_add_to_menu( $items ) {
-
 			foreach ( $items as $key => $value ) {
 				if ( 'edit-address' === $key ) {
 					$items[ $key ] = __( 'Address Book', 'woo-address-book' );
@@ -299,9 +289,7 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		 * @since 1.0.0
 		 */
 		public function wc_address_book_page( $type ) {
-
 			wc_get_template( 'myaccount/my-address-book.php', array( 'type' => $type ), '', plugin_dir_path( __FILE__ ) . 'templates/' );
-
 		}
 
 		/**
@@ -317,7 +305,6 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		 * @return string
 		 */
 		public function shipping_address_country_select( $field, $key, $args, $value ) {
-
 			if ( $args['required'] ) {
 				$args['class'][] = 'validate-required';
 				$required        = '&nbsp;<abbr class="required" title="' . esc_attr__( 'required', 'woocommerce' ) . '">*</abbr>';
@@ -377,13 +364,10 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 			$countries = 'billing_country' === $key ? WC()->countries->get_allowed_countries() : WC()->countries->get_shipping_countries();
 
 			if ( 1 === count( $countries ) ) {
-
 				$field .= '<strong>' . current( array_values( $countries ) ) . '</strong>';
 
 				$field .= '<input type="hidden" name="' . esc_attr( $key ) . '" id="' . esc_attr( $args['id'] ) . '" value="' . current( array_keys( $countries ) ) . '" ' . implode( ' ', $custom_attributes ) . ' class="country_to_state" readonly="readonly" />';
-
 			} else {
-
 				$field = '<select name="' . esc_attr( $key ) . '" id="' . esc_attr( $args['id'] ) . '" class="country_to_state country_select ' . esc_attr( implode( ' ', $args['input_class'] ) ) . '" ' . implode( ' ', $custom_attributes ) . '><option value="">' . esc_html__( 'Select a country&hellip;', 'woocommerce' ) . '</option>';
 
 				foreach ( $countries as $ckey => $cvalue ) {
@@ -393,7 +377,6 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 				$field .= '</select>';
 
 				$field .= '<noscript><button type="submit" name="woocommerce_checkout_update_totals" value="' . esc_attr__( 'Update country', 'woocommerce' ) . '">' . esc_html__( 'Update country', 'woocommerce' ) . '</button></noscript>';
-
 			}
 
 			if ( ! empty( $field ) ) {
@@ -448,17 +431,14 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 
 			// Build new array if one does not exist.
 			if ( ! is_array( $address_names ) || empty( $address_names ) ) {
-
 				$address_names = array();
 			}
 
 			// Add shipping name if not already in array.
 			if ( ! in_array( $name, $address_names, true ) ) {
-
 				array_push( $address_names, $name );
 				$this->save_address_names( $user_id, $address_names );
 			}
-
 		}
 
 		/**
@@ -472,7 +452,6 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		public function redirect_on_save( $user_id, $name ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed
 
 			if ( ! is_admin() && ! defined( 'DOING_AJAX' ) ) {
-
 				wp_safe_redirect( wc_get_account_endpoint_url( 'edit-address' ) );
 				exit;
 			}
@@ -487,7 +466,6 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		 * @return array
 		 */
 		public function get_address_names( $user_id = null ) {
-
 			$address_names = get_user_meta( $user_id, 'wc_address_book', true );
 
 			if ( empty( $address_names ) ) {
@@ -511,7 +489,6 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		 * @return array
 		 */
 		public function get_address_book( $user_id = null ) {
-
 			$countries = new WC_Countries();
 
 			if ( ! isset( $country ) ) {
@@ -532,7 +509,6 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 			$address_book = array();
 
 			if ( ! empty( $address_names ) ) {
-
 				foreach ( $address_names as $name ) {
 
 					// Do not include the billing address.
@@ -548,16 +524,13 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 						$field = str_replace( 'shipping', '', $field );
 
 						$address[ $name . $field ] = get_user_meta( $user_id, $name . $field, true );
-
 					}
 
 					$address_book[ $name ] = $address;
-
 				}
 			}
 
 			return apply_filters( 'wc_address_book_addresses', $address_book );
-
 		}
 
 		/**
@@ -577,7 +550,6 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 
 			// Update the value.
 			update_user_meta( $user_id, 'wc_address_book', $new_value );
-
 		}
 
 		/**
@@ -589,9 +561,7 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		 * @return array
 		 */
 		public function shipping_address_select_field( $fields ) {
-
 			if ( is_user_logged_in() ) {
-
 				$address_book = $this->get_address_book();
 
 				$address_selector['address_book'] = array(
@@ -603,9 +573,7 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 				);
 
 				if ( ! empty( $address_book ) && false !== $address_book ) {
-
 					foreach ( $address_book as $name => $address ) {
-
 						if ( ! empty( $address[ $name . '_address_1' ] ) ) {
 							$address_selector['address_book']['options'][ $name ] = $this->address_select_label( $address, $name );
 						}
@@ -614,7 +582,6 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 					$address_selector['address_book']['options']['add_new'] = __( 'Add New Address', 'woo-address-book' );
 
 					$fields['shipping'] = $address_selector + $fields['shipping'];
-
 				}
 			}
 
@@ -631,7 +598,6 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		 * @return string
 		 */
 		public function address_select_label( $address, $name ) {
-
 			$label = '';
 
 			$address_nickname = get_user_meta( get_current_user_id(), $name . '_address_nickname', true );
@@ -678,7 +644,6 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		 * @param string $address_name The name of a specific address in the address book.
 		 */
 		public function wc_address_book_delete( $address_name ) {
-
 			check_ajax_referer( 'woo-address-book-delete', 'nonce' );
 
 			$address_name  = $_POST['name'];
@@ -687,7 +652,6 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 			$address_names = $this->get_address_names( $customer_id );
 
 			foreach ( $address_book as $name => $address ) {
-
 				if ( $address_name === $name ) {
 
 					// Remove address from address book.
@@ -700,7 +664,6 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 
 					// Remove specific address values.
 					foreach ( $address as $field => $value ) {
-
 						delete_user_meta( $customer_id, $field );
 					}
 
@@ -717,7 +680,6 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		 * @since 1.0.0
 		 */
 		public function wc_address_book_make_primary() {
-
 			check_ajax_referer( 'woo-address-book-primary', 'nonce' );
 
 			$customer_id  = get_current_user_id();
@@ -728,13 +690,11 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 
 			// Loop through and swap values between shipping names.
 			foreach ( $address_book[ $primary_address_name ] as $field => $value ) {
-
 				$alt_field = preg_replace( '/^[^_]*_\s*/', $alt_address_name . '_', $field );
 				$resp      = update_user_meta( $customer_id, $field, $address_book[ $alt_address_name ][ $alt_field ] );
 			}
 
 			foreach ( $address_book[ $alt_address_name ] as $field => $value ) {
-
 				$primary_field = preg_replace( '/^[^_]*_\s*/', $primary_address_name . '_', $field );
 				$resp          = update_user_meta( $customer_id, $field, $address_book[ $primary_address_name ][ $primary_field ] );
 			}
@@ -748,7 +708,6 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		 * @since 1.0.0
 		 */
 		public function wc_address_book_checkout_update() {
-
 			check_ajax_referer( 'woo-address-book-checkout', 'nonce' );
 
 			global $woocommerce;
@@ -762,9 +721,7 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 
 			// Get address field values.
 			if ( 'add_new' !== $name ) {
-
 				foreach ( $address_book[ $name ] as $field => $value ) {
-
 					$field = preg_replace( '/^[^_]*_\s*/', 'shipping_', $field );
 
 					$response[ $field ] = $value;
@@ -810,7 +767,6 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 
 			// Name new address and update address book.
 			if ( ( 'add_new' === $name || false === $name ) && false === $ignore_shipping_address ) {
-
 				$address_names = $this->get_address_names( $user_id );
 
 				$name = $this->set_new_address_name( $address_names );
@@ -902,7 +858,6 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 					$_POST['shipping_country'] = $_POST[ $name . '_country' ];
 				}
 			}
-
 		}
 
 		/**
@@ -914,7 +869,6 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		 * @return array
 		 */
 		public function replace_address_key( $address_fields ) {
-
 			if ( isset( $_GET['address-book'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 				$address_book = sanitize_text_field( wp_unslash( $_GET['address-book'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
@@ -932,7 +886,6 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 				}
 
 				foreach ( $address_fields as $key => $value ) {
-
 					$new_key = str_replace( 'shipping', esc_attr( $name ), $key );
 
 					$address_fields[ $new_key ] = $value;
@@ -950,9 +903,7 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		 * @return array
 		 */
 		public function add_address_nickname_field( $address_fields ) {
-
 			if ( ! isset( $address_fields['shipping_address_nickname'] ) ) {
-
 				$address_fields['shipping_address_nickname'] = array(
 					'label'        => __( 'Address nickname', 'woo-address-book' ),
 					'required'     => false,
@@ -963,11 +914,9 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 					'description'  => __( 'Will help you identify your addresses easily. Suggested nicknames: Home, Work...', 'woo-address-book' ),
 					'validate'     => array( 'address-nickname' ),
 				);
-
 			}
 
 			return $address_fields;
-
 		}
 
 		/**
@@ -976,9 +925,7 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		 * @return void
 		 */
 		public function validate_address_nickname_filter() {
-
 			if ( is_wc_endpoint_url( 'edit-address' ) ) {
-
 				if ( ! isset( $_REQUEST['woocommerce-edit-address-nonce'] ) ) {
 					return;
 				}
@@ -998,7 +945,6 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 					add_filter( 'woocommerce_process_myaccount_field_' . $address_name . '_address_nickname', array( $this, 'validate_address_nickname' ), 10, 1 );
 				}
 			}
-
 		}
 
 		/**
@@ -1023,10 +969,8 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 			}
 
 			if ( is_array( $address_names ) ) {
-
 				foreach ( $address_names as $address_name ) {
 					if ( $current_address_name !== $address_name ) {
-
 						$address_nickname = get_user_meta( get_current_user_id(), $address_name . '_address_nickname', true );
 
 						if ( ! empty( $new_nickname ) && sanitize_title( $address_nickname ) === sanitize_title( $new_nickname ) ) {
@@ -1040,7 +984,6 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 			}
 
 			return mb_strtoupper( $new_nickname );
-
 		}
 
 		/**
@@ -1067,7 +1010,6 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		 * @return array
 		 */
 		public function address_nickname_localization_format( $formats ) {
-
 			foreach ( $formats as $iso_code => $format ) {
 				$formats[ $iso_code ] = "{address_nickname}\n" . $format;
 			}
@@ -1084,7 +1026,6 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		 * @return array
 		 */
 		public function get_address_nickname( $fields, $customer_id, $type ) {
-
 			if ( substr( $type, 0, 8 ) === 'shipping' ) {
 				$fields['address_nickname'] = get_user_meta( $customer_id, $type . '_address_nickname', true );
 			}
@@ -1099,18 +1040,15 @@ if ( ! is_plugin_active( $woo_path ) && ! is_plugin_active_for_network( $woo_pat
 		 * @return array
 		 */
 		public function remove_nickname_field_from_checkout( $fields ) {
-
 			if ( isset( $fields['shipping']['shipping_address_nickname'] ) ) {
 				unset( $fields['shipping']['shipping_address_nickname'] );
 			}
 
 			return $fields;
-
 		}
 
 	} // end class
 
 	// Init Class.
 	WC_Address_Book::get_instance();
-
 }
