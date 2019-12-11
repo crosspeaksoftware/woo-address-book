@@ -5,7 +5,7 @@ Requires at least: 4.6
 Tested up to: 5.2.2
 Stable tag: 1.7.1
 License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 Gives your customers the option to store multiple shipping addresses and retrieve them on checkout.
 
