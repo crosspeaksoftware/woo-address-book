@@ -361,7 +361,7 @@ class WC_Address_Book {
 	}
 
 	/**
-	 * Update Address Book Values
+	 * Process the saving to the address book on Address Save in My Account.
 	 *
 	 * @since 1.0.0
 	 *
@@ -377,6 +377,18 @@ class WC_Address_Book {
 			$name = trim( sanitize_text_field( wp_unslash( $_GET['address-book'] ) ), '/' );
 		}
 
+		$this->add_address_name( $user_id, $name );
+	}
+
+	/**
+	 * Add new Address to Address Book if it doesn't exist.
+	 *
+	 * @since 1.7.2
+	 *
+	 * @param int    $user_id - User's ID.
+	 * @param string $name - The name of the address being updated.
+	 */
+	private function add_address_name( $user_id, $name ) {
 		// Only save shipping addresses.
 		if ( 'billing' === $name ) {
 			return;
@@ -739,7 +751,7 @@ class WC_Address_Book {
 		}
 
 		if ( false === $ignore_shipping_address ) {
-			$this->update_address_names( $user_id, $name );
+			$this->add_address_name( $user_id, $name );
 		}
 
 		// Billing address.
