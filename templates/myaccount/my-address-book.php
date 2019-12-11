@@ -2,7 +2,6 @@
 /**
  * Woo Address Book
  *
- * @author  Hall Internet Marketing
  * @package WooCommerce Address Book/Templates
  * @version 1.5.0
  */
