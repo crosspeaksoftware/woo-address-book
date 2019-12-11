@@ -47,7 +47,6 @@ rsync -rv --delete \
 	--exclude=".travis.yml" \
 	--exclude=".gitignore" \
 	--exclude=".svn" \
-	--exclude="bin" \
 	--exclude="vendor" \
 	--exclude="tests" \
 	--exclude="composeer.json" \
