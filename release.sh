@@ -22,12 +22,13 @@ echo "Setting version number in readme.txt and php files"
 perl -pi -e "s/Stable tag: .*/Stable tag: ${version}/g" readme.txt
 perl -pi -e "s/Version: .*/Version: ${version}/g" woocommerce-address-book.php
 perl -pi -e "s/\@version .*/\@version  ${version}/g" woocommerce-address-book.php
-perl -pi -e "s/this->version = '.*';/this->version = '${version}';/g" woocommerce-address-book.php
+perl -pi -e "s/this->version = '.*';/this->version = '${version}';/g" includes/class-wc-address-book.php
 
 if ([[ $(git status | grep readme.txt) ]] || [[ $(git status | grep woocommerce-address-book.php) ]]); then
 	echo "Committing changes"
 	git add readme.txt
 	git add woocommerce-address-book.php
+	git add includes/class-wc-address-book.php
 	git commit -m"Update readme with new stable tag $version"
 fi
 
@@ -48,6 +49,7 @@ rsync -rv --delete \
 	--exclude=".gitignore" \
 	--exclude=".svn" \
 	--exclude="vendor" \
+	--exclude="node_modules" \
 	--exclude="tests" \
 	--exclude="composeer.json" \
 	--exclude="composeer.lock" \
