@@ -730,10 +730,6 @@ class WC_Address_Book {
 	 * @return boolean
 	 */
 	public function woocommerce_checkout_update_customer_data( $update_customer_data, $checkout_object ) {
-		if ( ! wp_verify_nonce( $this->nonce_value( 'woocommerce-process-checkout-nonce' ), 'woocommerce-process_checkout' ) ) {
-			throw new Exception( __( 'We were unable to process your order, please try again.', 'woocommerce' ) );
-		}
-
 		$name                    = isset( $_POST['address_book'] ) ? sanitize_text_field( wp_unslash( $_POST['address_book'] ) ) : false;
 		$user_id                 = get_current_user_id();
 		$update_customer_data    = false;

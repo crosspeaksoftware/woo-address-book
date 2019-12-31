@@ -38,6 +38,9 @@ No, this plugin only allows for the storage of multiple shipping addresses. If a
 
 == Changelog ==
 
+= 1.7.3 =
+* Fix regression which caused an error when creating a new user during checkout.
+
 = 1.7.2 =
 * Fix regression from security update in 1.6.0 which broke saving new addresses on checkout.
 * Code cleanup.
