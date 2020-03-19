@@ -34,7 +34,7 @@ class WC_Address_Book {
 	public function __construct() {
 
 		// Version Number.
-		$this->version = '1.7.3';
+		$this->version = '1.7.4';
 
 		// Register hooks that are fired when the plugin is activated, deactivated, and uninstalled, respectively.
 		register_activation_hook( __FILE__, array( $this, 'activate' ) );
@@ -726,12 +726,12 @@ class WC_Address_Book {
 	 *
 	 * @param boolean $update_customer_data - Toggles whether Woo should update customer data on checkout. This plugin overrides that function entirely.
 	 * @param object  $checkout_object - An object of the checkout fields and values.
-	 * @throws Exception If nonce check fails.
+	 *
 	 * @return boolean
 	 */
 	public function woocommerce_checkout_update_customer_data( $update_customer_data, $checkout_object ) {
 		$name                    = isset( $_POST['address_book'] ) ? sanitize_text_field( wp_unslash( $_POST['address_book'] ) ) : false;
-		$user_id                 = get_current_user_id();
+		$customer_id             = apply_filters( 'woocommerce_checkout_customer_id', get_current_user_id() );
 		$update_customer_data    = false;
 		$ignore_shipping_address = true;
 
@@ -741,48 +741,60 @@ class WC_Address_Book {
 
 		// Name new address and update address book.
 		if ( ( 'add_new' === $name || false === $name ) && false === $ignore_shipping_address ) {
-			$address_names = $this->get_address_names( $user_id );
+			$address_names = $this->get_address_names( $customer_id );
 
 			$name = $this->set_new_address_name( $address_names );
 		}
 
 		if ( false === $ignore_shipping_address ) {
-			$this->add_address_name( $user_id, $name );
+			$this->add_address_name( $customer_id, $name );
 		}
 
-		// Billing address.
-		$billing_address = array();
-		if ( $checkout_object->checkout_fields['billing'] ) {
-			foreach ( array_keys( $checkout_object->checkout_fields['billing'] ) as $field ) {
-				$field_name = str_replace( 'billing_', '', $field );
+		$data = $checkout_object->get_posted_data();
 
-				$billing_address[ $field_name ] = $checkout_object->get_posted_address_data( $field_name );
+		$customer = new WC_Customer( $customer_id );
+
+		if ( ! empty( $data['billing_first_name'] ) && '' === $customer->get_first_name() ) {
+			$customer->set_first_name( $data['billing_first_name'] );
+		}
+
+		if ( ! empty( $data['billing_last_name'] ) && '' === $customer->get_last_name() ) {
+			$customer->set_last_name( $data['billing_last_name'] );
+		}
+
+		// If the display name is an email, update to the user's full name.
+		if ( is_email( $customer->get_display_name() ) ) {
+			$customer->set_display_name( $customer->get_first_name() . ' ' . $customer->get_last_name() );
+		}
+
+		foreach ( $data as $key => $value ) {
+			// Prevent address book and label fields from being written to the DB.
+			if ( in_array( $key, array( 'address_book', 'address_label', 'shipping_address_book', 'shipping_address_label' ) ) ) {
+				continue;
+			}
+
+			// Store custom shipping meta.
+			if ( 'shipping' !== $name && 0 === stripos( $key, 'shipping_' ) ) {
+				$key = str_replace( 'shipping_', $name . '_', $key );
+				$customer->update_meta_data( $key, $value );
+			} elseif ( is_callable( array( $customer, "set_{$key}" ) ) ) {
+				// Use setters where available.
+				$customer->{"set_{$key}"}( $value );
+
+				// Store custom fields prefixed with wither shipping_ or billing_.
+			} elseif ( 0 === stripos( $key, 'billing_' ) || 0 === stripos( $key, 'shipping_' ) ) {
+				$customer->update_meta_data( $key, $value );
 			}
 		}
 
-		// Shipping address.
-		$shipping_address = array();
-		if ( $checkout_object->checkout_fields['shipping'] ) {
-			foreach ( array_keys( $checkout_object->checkout_fields['shipping'] ) as $field ) {
-				$field_name = str_replace( 'shipping_', '', $field );
+		/**
+		 * Action hook to adjust customer before save.
+		 *
+		 * @since 3.0.0
+		 */
+		do_action( 'woocommerce_checkout_update_customer', $customer, $data );
 
-				// Prevent address book and label fields from being written to the DB.
-				if ( 'address_book' === $field_name || 'address_label' === $field_name ) {
-					continue;
-				}
-
-				$shipping_address[ $field_name ] = $checkout_object->get_posted_address_data( $field_name, 'shipping' );
-			}
-		}
-
-		foreach ( $billing_address as $key => $value ) {
-			update_user_meta( $user_id, 'billing_' . $key, $value );
-		}
-		if ( WC()->cart->needs_shipping() && false === $ignore_shipping_address ) {
-			foreach ( $shipping_address as $key => $value ) {
-				update_user_meta( $user_id, $name . '_' . $key, $value );
-			}
-		}
+		$customer->save();
 
 		return $update_customer_data;
 	}
