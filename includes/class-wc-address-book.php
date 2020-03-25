@@ -3,7 +3,7 @@
  * WooCommerce Address Book.
  *
  * @class    WC_Address_Book
- * @version  1.7.1
+ * @version  1.7.4
  * @package  WooCommerce Address Book
  */
 class WC_Address_Book {
