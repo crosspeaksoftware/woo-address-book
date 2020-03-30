@@ -57,7 +57,7 @@ rsync -rv --delete \
 	--exclude="phpunit.xml.dist" \
 	--exclude="build.sh" \
 	--exclude="release.sh" \
-	--exclude="deploy-readme.sh" \
+	--exclude="release-readme.sh" \
 	--exclude="README.md" \
 	. /tmp/release-${package}/.
 
