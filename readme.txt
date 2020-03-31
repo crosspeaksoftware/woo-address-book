@@ -73,6 +73,10 @@ There are currently no settings, everything is based on your current WooCommerce
 
 == Changelog ==
 
+= 1.7.5 =
+* Update Country strings that were changed in WooCommerce 4.0
+* add `load_plugin_textdomain`
+
 = 1.7.4 =
 * Update to support the latest versions of WooCommerce 3.x and 4.0.0 with Customer CRUD functions.
 
