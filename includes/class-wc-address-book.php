@@ -44,6 +44,9 @@ class WC_Address_Book {
 		// Enqueue Styles and Scripts.
 		add_action( 'wp_enqueue_scripts', array( $this, 'scripts_styles' ) );
 
+		// Load Plugin Textdomain for localization.
+		add_action( 'init', array( $this, 'load_plugin_textdomain' ) );
+
 		// Save an address to the address book.
 		add_action( 'woocommerce_customer_save_address', array( $this, 'update_address_names' ), 10, 2 );
 		add_action( 'woocommerce_customer_save_address', array( $this, 'redirect_on_save' ), 9999, 2 );
@@ -102,6 +105,15 @@ class WC_Address_Book {
 		}
 
 		return self::$instance;
+	}
+
+	/**
+	 * Load plugin textdomain for localization.
+	 *
+	 * @return void
+	 */
+	public function load_plugin_textdomain() {
+		load_plugin_textdomain( 'woo-address-book', false, basename( dirname( dirname( __FILE__ ) ) ) . '/languages/' );
 	}
 
 	/**
