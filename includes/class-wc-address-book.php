@@ -557,13 +557,24 @@ class WC_Address_Book {
 			);
 
 			if ( ! empty( $address_book ) && false !== $address_book ) {
+
+				$default_to_new_address = false;
+				if ( apply_filters( 'woo_address_book_default_to_new_address', false ) ) {
+				   
+				   $address_selector['address_book']['options']['add_new'] = __( 'Add New Address', 'woo-address-book' );
+				   $default_to_new_address = true;
+				}
+
 				foreach ( $address_book as $name => $address ) {
 					if ( ! empty( $address[ $name . '_address_1' ] ) ) {
 						$address_selector['address_book']['options'][ $name ] = $this->address_select_label( $address, $name );
 					}
 				}
 
-				$address_selector['address_book']['options']['add_new'] = __( 'Add New Address', 'woo-address-book' );
+				if ( ! $default_to_new_address ) {
+
+					$address_selector['address_book']['options']['add_new'] = __( 'Add New Address', 'woo-address-book' );
+				}
 
 				$fields['shipping'] = $address_selector + $fields['shipping'];
 			}
