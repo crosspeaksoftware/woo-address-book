@@ -47,6 +47,9 @@ class WC_Address_Book {
 		// Load Plugin Textdomain for localization.
 		add_action( 'init', array( $this, 'load_plugin_textdomain' ) );
 
+		// Convert old addresses for backwards compatibility
+		add_action( 'plugins_loaded', array( $this, 'format_addresses_backwards_compatible' ) );
+
 		// Save an address to the address book.
 		add_action( 'woocommerce_customer_save_address', array( $this, 'update_address_names' ), 10, 2 );
 		add_action( 'woocommerce_customer_save_address', array( $this, 'redirect_on_save' ), 9999, 2 );
@@ -178,6 +181,37 @@ class WC_Address_Book {
 
 		if ( is_account_page() || is_checkout() ) {
 			wp_enqueue_script( 'woo-address-book' );
+		}
+	}
+
+	/**
+	 * Format addresses from before update 1.8.0 where billing address functionality was added
+	 *
+	 * @since 1.8.0
+	 */
+	public function format_addresses_backwards_compatible() {
+
+		$user_id = get_current_user_id();
+
+		$address_names = get_user_meta( $user_id, 'wc_address_book', true );
+
+		$billing_addresses = get_user_meta( $user_id, 'wc_address_book_billing', true );
+		$shipping_addresses = get_user_meta( $user_id, 'wc_address_book_shipping', true );
+
+		if ( empty( $shipping_addresses ) ) {
+
+			if ( is_array( $address_names ) ) {
+				foreach ( $address_names as $address_name ) {
+					$this->add_address_name( $user_id, $address_name, 'shipping' );
+				}
+			} elseif ( ! empty ( $address_names ) ) {
+				$this->add_address_name( $user_id, $address_names, 'shipping' );
+			}
+		}
+
+		if ( empty( $billing_addresses ) ) {
+
+			$this->save_address_names( $user_id, array( 'billing' ), 'billing'  );
 		}
 	}
 
