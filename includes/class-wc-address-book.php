@@ -47,9 +47,6 @@ class WC_Address_Book {
 		// Load Plugin Textdomain for localization.
 		add_action( 'init', array( $this, 'load_plugin_textdomain' ) );
 
-		// Convert old addresses for backwards compatibility
-		add_action( 'plugins_loaded', array( $this, 'format_addresses_backwards_compatible' ) );
-
 		// Save an address to the address book.
 		add_action( 'woocommerce_customer_save_address', array( $this, 'update_address_names' ), 10, 2 );
 		add_action( 'woocommerce_customer_save_address', array( $this, 'redirect_on_save' ), 9999, 2 );
@@ -187,31 +184,29 @@ class WC_Address_Book {
 	/**
 	 * Format addresses from before update 1.8.0 where billing address functionality was added
 	 *
+	 * @param string $user_id The user ID
+	 * @param string $type    Address type
+	 *
 	 * @since 1.8.0
 	 */
-	public function format_addresses_backwards_compatible() {
-
-		$user_id = get_current_user_id();
+	public function format_addresses_backwards_compatible( $user_id, $type ) {
 
 		$address_names = get_user_meta( $user_id, 'wc_address_book', true );
 
-		$billing_addresses = get_user_meta( $user_id, 'wc_address_book_billing', true );
-		$shipping_addresses = get_user_meta( $user_id, 'wc_address_book_shipping', true );
+		$type_addresses = get_user_meta( $user_id, 'wc_address_book_' . $type, true );
 
-		if ( empty( $shipping_addresses ) ) {
+		if ( empty( $type_addresses ) ) {
 
-			if ( is_array( $address_names ) ) {
-				foreach ( $address_names as $address_name ) {
-					$this->add_address_name( $user_id, $address_name, 'shipping' );
+			if ( $type === 'shipping' ) {
+
+				if ( is_array( $address_names ) ) {
+					$this->save_address_names( $user_id, $address_names, 'shipping' );
+				} elseif ( $address_names === 'shipping' ) {
+					$this->save_address_names( $user_id, array( 'shipping' ), 'shipping' );
 				}
-			} elseif ( ! empty ( $address_names ) ) {
-				$this->add_address_name( $user_id, $address_names, 'shipping' );
+			} elseif ( $type === 'billing' ) {
+				$this->save_address_names( $user_id, array( 'billing' ), 'billing'  );
 			}
-		}
-
-		if ( empty( $billing_addresses ) ) {
-
-			$this->save_address_names( $user_id, array( 'billing' ), 'billing'  );
 		}
 	}
 
@@ -391,7 +386,7 @@ class WC_Address_Book {
 
 		/**
 		* HALL EDIT: The primary purpose for this override is to match the additional shipping
-		* billing addresses in addition to the default addresses. 
+		* billing addresses in addition to the default addresses.
 		*/
 		$countries = preg_match( '/shipping[0-9]*_country/', $key ) ? WC()->countries->get_shipping_countries() : WC()->countries->get_allowed_countries();
 
@@ -515,6 +510,9 @@ class WC_Address_Book {
 		$address_names = get_user_meta( $user_id, 'wc_address_book_' . $type, true );
 
 		if ( empty( $address_names ) && $type === 'shipping' ) {
+
+			$this->format_addresses_backwards_compatible( $user_id, 'shipping' );
+
 			$shipping_address = get_user_meta( $user_id, 'shipping_address_1', true );
 			// Return just a default shipping address if no other addresses are saved.
 			if ( ! empty( $shipping_address ) ) {
@@ -523,6 +521,9 @@ class WC_Address_Book {
 			// If we don't have a shipping address, just return an empty array.
 			return array();
 		} elseif ( empty( $address_names ) && $type === 'billing' ) {
+
+			$this->format_addresses_backwards_compatible( $user_id, 'billing' );
+
 			$billing_address = get_user_meta( $user_id, 'billing_address_1', true );
 			// Return just a default billing address if no other addresses are saved.
 			if ( ! empty( $billing_address ) ) {
@@ -638,7 +639,7 @@ class WC_Address_Book {
 
 						$default_to_new_address = false;
 						if ( apply_filters( 'woo_address_book_default_to_new_address', false ) ) {
-						   
+
 						   $address_selector[ $type . '_address_book' ]['options']['add_new'] = __( 'Add New Address', 'woo-address-book' );
 						   $default_to_new_address = true;
 						}
@@ -763,7 +764,7 @@ class WC_Address_Book {
 		check_ajax_referer( 'woo-address-book-primary', 'nonce' );
 
 		$customer_id  = get_current_user_id();
-		
+
 		if ( ! isset( $_POST['name'] ) ) {
 			die( 'no address passed' );
 		}
