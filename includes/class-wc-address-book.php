@@ -505,7 +505,11 @@ class WC_Address_Book {
 	 * @param string $type - 'billing' or 'shipping'
 	 * @return array
 	 */
-	public function get_address_names( $user_id = null, $type ) {
+	public function get_address_names( $user_id, $type ) {
+
+		if ( ! isset( $user_id ) ) {
+			$user_id = get_current_user_id();
+		}
 
 		$address_names = get_user_meta( $user_id, 'wc_address_book_' . $type, true );
 
@@ -544,7 +548,7 @@ class WC_Address_Book {
 	 * @param string $type - 'billing' or 'shipping'
 	 * @return array
 	 */
-	public function get_address_book( $user_id = null, $type ) {
+	public function get_address_book( $user_id, $type ) {
 		$countries = new WC_Countries();
 
 		if ( ! isset( $country ) ) {
