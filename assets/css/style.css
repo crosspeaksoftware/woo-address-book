@@ -1,5 +1,23 @@
-.woocommerce-account .add-new-address {
-	clear: both;
+.woocommerce-account .address_book header {
+	border-bottom: 1px solid #e2e2e2;
+	margin-bottom: 1em;
+}
+
+.woocommerce-account .address_book header h3 {
+	display: inline-block;
+	padding-bottom: 5px;
+	margin: 0;
+}
+
+.woocommerce-account .address_book .add-new-address {
+	display: inline-block;
+	padding-left: 10px;
+	float: right;
+}
+
+.woocommerce-account .address_book .wc-address-book-address > address:first-line {
+	padding-left: 0px;
+	font-weight: bold;
 }
 
 .woocommerce-account .address-book .wc-address-book-meta {
