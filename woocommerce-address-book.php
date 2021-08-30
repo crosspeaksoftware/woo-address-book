@@ -39,6 +39,9 @@ if ( ! is_plugin_active( 'woocommerce/woocommerce.php' ) && ! is_plugin_active_f
 } else {
 	require plugin_dir_path( __FILE__ ) . 'includes/class-wc-address-book.php';
 
+	// Adds plugin settings
+	include_once( dirname( __FILE__ ) . '/includes/settings.php');
+
 	// Init Class.
 	WC_Address_Book::get_instance();
 }

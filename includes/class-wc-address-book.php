@@ -93,6 +93,23 @@ class WC_Address_Book {
 	} // end constructor
 
 	/**
+	 * Load plugin option
+	 * 
+	 * @since 1.8.0
+	 * 
+	 * @return bolean
+	 */
+	public function get_wcab_option( $name, $default = 'yes' ) {
+
+		$option = get_option( 'woo_address_book_' . $name, $default );
+		if ( $option === 'yes' ) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/**
 	 * Return an instance of this class.
 	 *
 	 * @since     1.6.0
@@ -159,7 +176,9 @@ class WC_Address_Book {
 	public function scripts_styles() {
 		$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 		wp_register_style( 'woo-address-book', plugins_url( "/assets/css/style$min.css", dirname( __FILE__ ) ), array(), $this->version );
-		wp_register_script( 'woo-address-book', plugins_url( "/assets/js/scripts$min.js", dirname( __FILE__ ) ), array( 'jquery' ), $this->version, true );
+		//wp_register_script( 'woo-address-book', plugins_url( "/assets/js/scripts$min.js", dirname( __FILE__ ) ), array( 'jquery' ), $this->version, true );
+		$date = new DateTime(); // dočasně pouze pro testování
+		wp_register_script( 'woo-address-book', plugins_url( "/assets/js/scripts$min.js", dirname( __FILE__ ) ), array( 'jquery' ), $date->getTimestamp(), true ); // dočasně pouze pro testování
 
 		wp_localize_script(
 			'woo-address-book',
@@ -626,7 +645,7 @@ class WC_Address_Book {
 
 			foreach ( $fields as $type => $address_fields ) {
 
-				if ( $type === 'billing' || $type === 'shipping' ) {
+				if ( ( $type === 'billing' && $this->get_wcab_option( 'billing_enable' ) === true ) || ( $type === 'shipping' && $this->get_wcab_option( 'shipping_enable' ) === true ) ) {
 
 					$address_book = $this->get_address_book( null, $type );
 
