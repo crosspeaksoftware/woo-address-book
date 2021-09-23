@@ -176,9 +176,7 @@ class WC_Address_Book {
 	public function scripts_styles() {
 		$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 		wp_register_style( 'woo-address-book', plugins_url( "/assets/css/style$min.css", dirname( __FILE__ ) ), array(), $this->version );
-		//wp_register_script( 'woo-address-book', plugins_url( "/assets/js/scripts$min.js", dirname( __FILE__ ) ), array( 'jquery' ), $this->version, true );
-		$date = new DateTime(); // dočasně pouze pro testování
-		wp_register_script( 'woo-address-book', plugins_url( "/assets/js/scripts$min.js", dirname( __FILE__ ) ), array( 'jquery' ), $date->getTimestamp(), true ); // dočasně pouze pro testování
+		wp_register_script( 'woo-address-book', plugins_url( "/assets/js/scripts$min.js", dirname( __FILE__ ) ), array( 'jquery' ), $this->version, true );
 
 		wp_localize_script(
 			'woo-address-book',
