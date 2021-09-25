@@ -717,6 +717,12 @@ class WC_Address_Book {
 			}
 			$label .= $address[ $name . '_address_1' ];
 		}
+		if ( ! empty( $address[ $name . '_address_2' ] ) ) {
+			if ( ! empty( $label ) ) {
+				$label .= ', ';
+			}
+			$label .= $address[ $name . '_address_2' ];
+		}
 		if ( ! empty( $address[ $name . '_city' ] ) ) {
 			if ( ! empty( $label ) ) {
 				$label .= ', ';
