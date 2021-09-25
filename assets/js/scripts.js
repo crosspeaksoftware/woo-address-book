@@ -25,10 +25,16 @@ jQuery( function ( $ ) {
 		}
 	}
 
+	// Retrieves default billing address when checkout page loaded
+	billing_checkout_field_prepop();
+
 	// Retrieves billing address when another is selected.
 	$( '#billing_address_book_field #billing_address_book' ).on( 'change', function () {
 		billing_checkout_field_prepop();
 	} );
+
+	// Retrieves default shipping address when checkout page loaded
+	shipping_checkout_field_prepop();
 
 	// Retrieves shipping address when another is selected.
 	$( '#shipping_address_book_field #shipping_address_book' ).on( 'change', function () {
