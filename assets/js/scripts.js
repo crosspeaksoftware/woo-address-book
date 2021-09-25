@@ -25,7 +25,7 @@ jQuery( function ( $ ) {
 		}
 	}
 
-	// Retrieves default billing address when checkout page loaded
+	// Retrieves default billing address
 	billing_checkout_field_prepop();
 
 	// Retrieves billing address when another is selected.
@@ -33,8 +33,19 @@ jQuery( function ( $ ) {
 		billing_checkout_field_prepop();
 	} );
 
-	// Retrieves default shipping address when checkout page loaded
-	shipping_checkout_field_prepop();
+	// Customer entered address into the shipping calculator
+	if ( $( "form[name=checkout]" ).length > 0 && $( "#shipping_country" ).val() !== "" && ( $( "#shipping_state" ).val() !== "" || $( "#shipping_city" ).val() !== "" || $( "#shipping_postcode" ).val() !== "" ) ) {
+		$( "#shipping_address_book" ).val('add_new').trigger( 'change' );
+		$( "#shipping_company" ).val('');
+		$( "#shipping_first_name" ).val('');
+		$( "#shipping_last_name" ).val('');
+		$( "#shipping_address_1" ).val('');
+		$( "#shipping_address_2" ).val('');
+	}
+	// Retrieves default shipping address
+	else {
+		shipping_checkout_field_prepop();
+	}
 
 	// Retrieves shipping address when another is selected.
 	$( '#shipping_address_book_field #shipping_address_book' ).on( 'change', function () {
