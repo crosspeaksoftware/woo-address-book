@@ -131,14 +131,14 @@ jQuery( function ( $ ) {
 				// Don't reset the value if only one country is available to choose.
 				var country_input = $( '#shipping_country' );
 				if ( country_input.length > 0 && country_input.attr( "readonly" ) !== "readonly" ) {
-					country_input.val( '' ).on( 'change' );
+					country_input.val( '' ).trigger( 'change' );
 					$( "#shipping_country_chosen" ).find( 'span' ).html( '' );
 				}
 
 				// Set state dropdown.
 				var state_input = $( '#shipping_state' );
 				if ( state_input.length > 0 && state_input.attr( "readonly" ) !== "readonly" ) {
-					state_input.val( '' ).on( 'change' );
+					state_input.val( '' ).trigger( 'change' );
 					$( "#shipping_state_chosen" ).find( 'span' ).html( '' );
 				}
 
@@ -165,7 +165,7 @@ jQuery( function ( $ ) {
 						Object.keys( response ).forEach( function ( key ) {
 							var input = $( '#' + key );
 							if ( input.length > 0 && input.attr( "readonly" ) !== "readonly" ) {
-								input.val( response[key] ).on( 'change' );
+								input.val( response[key] ).trigger( 'change' );
 							}
 						} );
 
@@ -175,7 +175,7 @@ jQuery( function ( $ ) {
 							if ( country_input.hasClass( "selectized" ) && country_input[0] && country_input[0].selectize ) {
 								country_input[0].selectize.setValue( response.shipping_country );
 							} else {
-								country_input.val( response.shipping_country ).on( 'change' );
+								country_input.val( response.shipping_country ).trigger( 'change' );
 								$( "#shipping_country_chosen" ).find( 'span' ).html( response.shipping_country_text );
 							}
 						}
@@ -186,7 +186,7 @@ jQuery( function ( $ ) {
 							if ( state_input.hasClass( "selectized" ) && state_input[0] && state_input[0].selectize ) {
 								state_input[0].selectize.setValue( response.shipping_state );
 							} else {
-								state_input.val( response.shipping_state ).on( 'change' );
+								state_input.val( response.shipping_state ).trigger( 'change' );
 								var stateName = $( '#shipping_state option[value="' + response.shipping_state + '"]' ).text();
 								$( "#s2id_shipping_state" ).find( '.select2-chosen' ).html( stateName ).parent().removeClass( 'select2-default' );
 							}
@@ -221,14 +221,14 @@ jQuery( function ( $ ) {
 				// Don't reset the value if only one country is available to choose.
 				var country_input = $( '#billing_country' );
 				if ( country_input.length > 0 && country_input.attr( "readonly" ) !== "readonly" ) {
-					country_input.val( '' ).on( 'change' );
+					country_input.val( '' ).trigger( 'change' );
 					$( "#billing_country_chosen" ).find( 'span' ).html( '' );
 				}
 
 				// Set state dropdown.
 				var state_input = $( '#billing_state' );
 				if ( state_input.length > 0 && state_input.attr( "readonly" ) !== "readonly" ) {
-					state_input.val( '' ).on( 'change' );
+					state_input.val( '' ).trigger( 'change' );
 					$( "#billing_state_chosen" ).find( 'span' ).html( '' );
 				}
 
@@ -255,7 +255,7 @@ jQuery( function ( $ ) {
 						Object.keys( response ).forEach( function ( key ) {
 							var input = $( '#' + key );
 							if ( input.length > 0 && input.attr( "readonly" ) !== "readonly" ) {
-								input.val( response[key] ).on( 'change' );
+								input.val( response[key] ).trigger( 'change' );
 							}
 						} );
 
@@ -265,7 +265,7 @@ jQuery( function ( $ ) {
 							if ( country_input.hasClass( "selectized" ) && country_input[0] && country_input[0].selectize ) {
 								country_input[0].selectize.setValue( response.billing_country );
 							} else {
-								country_input.val( response.billing_country ).on( 'change' );
+								country_input.val( response.billing_country ).trigger( 'change' );
 								$( "#billing_country_chosen" ).find( 'span' ).html( response.billing_country_text );
 							}
 						}
@@ -276,7 +276,7 @@ jQuery( function ( $ ) {
 							if ( state_input.hasClass( "selectized" ) && state_input[0] && state_input[0].selectize ) {
 								state_input[0].selectize.setValue( response.billing_state );
 							} else {
-								state_input.val( response.billing_state ).on( 'change' );
+								state_input.val( response.billing_state ).trigger( 'change' );
 								var stateName = $( '#billing_state option[value="' + response.billing_state + '"]' ).text();
 								$( "#s2id_billing_state" ).find( '.select2-chosen' ).html( stateName ).parent().removeClass( 'select2-default' );
 							}
