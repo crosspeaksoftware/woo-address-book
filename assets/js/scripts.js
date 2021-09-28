@@ -25,6 +25,16 @@ jQuery( function ( $ ) {
 		}
 	}
 
+	// BlockUI settings
+	$.blockUI.defaults.fadeOut = 400;
+	$.blockUI.defaults.message = woo_address_book.blockui_message;
+	$.blockUI.defaults.overlayCSS.opacity = '.3';
+	$.blockUI.defaults.css.border = '1px solid';
+	$.blockUI.defaults.css.padding = '15px';
+
+	// Show BlockUI overlay on all ajax call
+	$( document ).ajaxStart( $.blockUI ).ajaxStop( $.unblockUI );
+
 	// Retrieves default billing address
 	billing_checkout_field_prepop();
 
@@ -34,23 +44,27 @@ jQuery( function ( $ ) {
 	} );
 
 	// Customer entered address into the shipping calculator
-	if ( $( "form[name=checkout]" ).length > 0 && $( "#shipping_country" ).val() !== "" && ( $( "#shipping_state" ).val() !== "" || $( "#shipping_city" ).val() !== "" || $( "#shipping_postcode" ).val() !== "" ) ) {
-		$( "#shipping_address_book" ).val('add_new').trigger( 'change' );
-		$( "#shipping_company" ).val('');
-		$( "#shipping_first_name" ).val('');
-		$( "#shipping_last_name" ).val('');
-		$( "#shipping_address_1" ).val('');
-		$( "#shipping_address_2" ).val('');
+	if ( $( "form[name=checkout]" ).length > 0 && ( $( "#shipping_country" ).val() !== "" ||  $( "#shipping_state" ).val() !== "" || $( "#shipping_city" ).val() !== "" || $( "#shipping_postcode" ).val() !== "" ) ) {
+		shipping_country_o = $( "#shipping_country" ).val();
+		shipping_state_o = $( "#shipping_state" ).val();
+		shipping_city_o = $( "#shipping_city" ).val();
+		shipping_postcode_o = $( "#shipping_postcode" ).val();
 	}
+
 	// Retrieves default shipping address
-	else {
-		shipping_checkout_field_prepop();
-	}
+	shipping_checkout_field_prepop();
 
 	// Retrieves shipping address when another is selected.
 	$( '#shipping_address_book_field #shipping_address_book' ).on( 'change', function () {
 		shipping_checkout_field_prepop();
 	} );
+
+	// Update checkout when address changes
+	if ( $( "form[name=checkout]" ).length > 0 ) {
+		$( '#shipping_country, #shipping_state, #shipping_city, #shipping_postcode' ).on( 'change', function () {
+			$( document.body ).trigger( 'update_checkout' );
+		} );
+	};
 
 	/*
 	 * AJAX call to delete address books.
@@ -59,9 +73,8 @@ jQuery( function ( $ ) {
 
 		e.preventDefault();
 
-		$( this ).closest( '.wc-address-book-address' ).addClass( 'blockUI blockOverlay wc-updating' );
-
 		var name = $( this ).attr( 'id' );
+		var toRemove = $( this ).closest( '.wc-address-book-address' );
 
 		$.ajax( {
 			url: woo_address_book.ajax_url,
@@ -71,8 +84,8 @@ jQuery( function ( $ ) {
 				name: name,
 				nonce: woo_address_book.delete_security,
 			},
-			success: function ( response ) {
-				$( '.wc-updating' ).remove();
+			success: function () {
+				toRemove.remove();
 			}
 		} );
 	} );
@@ -101,12 +114,6 @@ jQuery( function ( $ ) {
 		var pa_html = primary_address.html();
 		var aa_html = alt_address.html();
 
-		alt_address.html( pa_html );
-		primary_address.html( aa_html );
-
-		primary_address.addClass( 'blockUI blockOverlay wc-updating' );
-		alt_address.addClass( 'blockUI blockOverlay wc-updating' );
-
 		$.ajax( {
 			url: woo_address_book.ajax_url,
 			type: 'post',
@@ -115,8 +122,9 @@ jQuery( function ( $ ) {
 				name: name,
 				nonce: woo_address_book.primary_security,
 			},
-			success: function ( response ) {
-				$( '.wc-updating' ).removeClass( 'blockUI blockOverlay wc-updating' );
+			success: function () {
+				alt_address.html( pa_html );
+				primary_address.html( aa_html );
 			}
 		} );
 	} );
@@ -158,8 +166,6 @@ jQuery( function ( $ ) {
 
 			if ( name.length > 0 ) {
 
-				$( that ).closest( '.shipping_address' ).addClass( 'blockUI blockOverlay wc-updating' );
-
 				$.ajax( {
 					url: woo_address_book.ajax_url,
 					type: 'post',
@@ -171,6 +177,25 @@ jQuery( function ( $ ) {
 					},
 					dataType: 'json',
 					success: function ( response ) {
+						if ( typeof shipping_country_o !== 'undefined' && typeof shipping_state_o !== 'undefined' && typeof shipping_city_o !== 'undefined' && typeof shipping_postcode_o !== 'undefined' ) {
+
+							if ( shipping_country_o !== response.shipping_country || shipping_state_o !== response.shipping_state || shipping_city_o !== response.shipping_city || shipping_postcode_o !== response.shipping_postcode ) {
+
+								$( "#shipping_address_book" ).val( 'add_new' ).trigger( 'change' );
+
+								$( "#shipping_country" ).val( shipping_country_o ).trigger( 'change' );
+								$( "#shipping_state" ).val( shipping_state_o ).trigger( 'change' );
+								$( "#shipping_city" ).val( shipping_city_o );
+								$( "#shipping_postcode" ).val( shipping_postcode_o );
+							}
+
+							delete shipping_country_o;
+							delete shipping_state_o;
+							delete shipping_city_o;
+							delete shipping_postcode_o;
+
+							return;
+						}
 
 						// Loop through all fields incase there are custom ones.
 						Object.keys( response ).forEach( function ( key ) {
@@ -202,9 +227,6 @@ jQuery( function ( $ ) {
 								$( "#s2id_shipping_state" ).find( '.select2-chosen' ).html( stateName ).parent().removeClass( 'select2-default' );
 							}
 						}
-
-						// Remove loading screen.
-						$( '.shipping_address' ).removeClass( 'blockUI blockOverlay wc-updating' );
 					}
 				} );
 			}
@@ -248,8 +270,6 @@ jQuery( function ( $ ) {
 
 			if ( name.length > 0 ) {
 
-				$( that ).closest( '.woocommerce-billing-fields__field-wrapper' ).addClass( 'blockUI blockOverlay wc-updating' );
-
 				$.ajax( {
 					url: woo_address_book.ajax_url,
 					type: 'post',
@@ -292,9 +312,6 @@ jQuery( function ( $ ) {
 								$( "#s2id_billing_state" ).find( '.select2-chosen' ).html( stateName ).parent().removeClass( 'select2-default' );
 							}
 						}
-
-						// Remove loading screen.
-						$( '.woocommerce-billing-fields__field-wrapper' ).removeClass( 'blockUI blockOverlay wc-updating' );
 					}
 				} );
 			}

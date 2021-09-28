@@ -186,6 +186,7 @@ class WC_Address_Book {
 				'delete_security'   => wp_create_nonce( 'woo-address-book-delete' ),
 				'primary_security'  => wp_create_nonce( 'woo-address-book-primary' ),
 				'checkout_security' => wp_create_nonce( 'woo-address-book-checkout' ),
+				'blockui_message'   => __( 'Loading...<br/>Please wait.', 'woo-address-book' ),
 			)
 		);
 
@@ -658,12 +659,7 @@ class WC_Address_Book {
 
 					if ( ! empty( $address_book ) && false !== $address_book ) {
 
-						$default_to_new_address = false;
-						if ( apply_filters( 'woo_address_book_default_to_new_address', false ) ) {
-
-						   $address_selector[ $type . '_address_book' ]['options']['add_new'] = __( 'Add New Address', 'woo-address-book' );
-						   $default_to_new_address = true;
-						}
+						$default_to_new_address = $this->get_wcab_option( $type . '_default_to_new_address', 'no' );
 
 						foreach ( $address_book as $name => $address ) {
 							if ( ! empty( $address[ $name . '_address_1' ] ) ) {
@@ -671,9 +667,12 @@ class WC_Address_Book {
 							}
 						}
 
-						if ( ! $default_to_new_address ) {
+						$address_selector[ $type . '_address_book' ]['options']['add_new'] = __( 'Add New Address', 'woo-address-book' );
 
-							$address_selector[ $type . '_address_book' ]['options']['add_new'] = __( 'Add New Address', 'woo-address-book' );
+						if ( true === $default_to_new_address ) {
+							$address_selector[ $type . '_address_book' ]['default'] = 'add_new';
+						} else {
+							$address_selector[ $type . '_address_book' ]['default'] = $type;
 						}
 
 						$fields[ $type ] = $address_selector + $fields[ $type ];
@@ -746,7 +745,7 @@ class WC_Address_Book {
 	 *
 	 * @param string $address_name The name of a specific address in the address book.
 	 */
-	public function wc_address_book_delete( $address_name ) {
+	public function wc_address_book_delete() {
 		check_ajax_referer( 'woo-address-book-delete', 'nonce' );
 
 		if ( ! isset( $_POST['name'] ) ) {
