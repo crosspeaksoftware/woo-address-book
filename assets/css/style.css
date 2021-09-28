@@ -31,13 +31,3 @@
 .woocommerce-account .address-book .wc-address-book-meta a:hover {
 	cursor: pointer;
 }
-
-.wc-updating:before {
-	bottom: 0;
-	content: "";
-	left: 0;
-	position: absolute;
-	right: 0;
-	top: 0;
-	z-index: 9999;
-}
