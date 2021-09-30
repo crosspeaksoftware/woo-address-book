@@ -101,9 +101,9 @@ jQuery( function ( $ ) {
 		var type = name.replace( /\d+/g, '' );
 
 		if ( type === 'billing' ) {
-			var primary_address = $( '.woocommerce-Addresses .u-column1.woocommerce-Address address' );
+			var primary_address = $( '.u-column1.woocommerce-Address address' );
 		} else if ( type === 'shipping' ) {
-			var primary_address = $( '.woocommerce-Addresses .u-column2.woocommerce-Address address' );
+			var primary_address = $( '.u-column2.woocommerce-Address address' );
 		} else {
 			return;
 		}
