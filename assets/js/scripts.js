@@ -26,14 +26,8 @@ jQuery( function ( $ ) {
 	}
 
 	// BlockUI settings
-	$.blockUI.defaults.fadeOut = 400;
-	$.blockUI.defaults.message = woo_address_book.blockui_message;
-	$.blockUI.defaults.overlayCSS.opacity = '.3';
-	$.blockUI.defaults.css.border = '1px solid';
-	$.blockUI.defaults.css.padding = '15px';
-
-	// Show BlockUI overlay on all ajax call
-	$( document ).ajaxStart( $.blockUI ).ajaxStop( $.unblockUI );
+	$.blockUI.defaults.message = null;
+	$.blockUI.defaults.overlayCSS.backgroundColor = '#fff';
 
 	// Retrieves default billing address
 	billing_checkout_field_prepop();
@@ -76,6 +70,9 @@ jQuery( function ( $ ) {
 		var name = $( this ).attr( 'id' );
 		var toRemove = $( this ).closest( '.wc-address-book-address' );
 
+		// Show BlockUI overlay
+		$( '.woocommerce-MyAccount-content' ).block();
+
 		$.ajax( {
 			url: woo_address_book.ajax_url,
 			type: 'post',
@@ -86,6 +83,9 @@ jQuery( function ( $ ) {
 			},
 			success: function () {
 				toRemove.remove();
+
+				// Remove BlockUI overlay
+				$( '.woocommerce-MyAccount-content' ).unblock();
 			}
 		} );
 	} );
@@ -114,6 +114,9 @@ jQuery( function ( $ ) {
 		var pa_html = primary_address.html();
 		var aa_html = alt_address.html();
 
+		// Show BlockUI overlay
+		$( '.woocommerce-MyAccount-content' ).block();
+
 		$.ajax( {
 			url: woo_address_book.ajax_url,
 			type: 'post',
@@ -125,6 +128,9 @@ jQuery( function ( $ ) {
 			success: function () {
 				alt_address.html( pa_html );
 				primary_address.html( aa_html );
+				
+				// Remove BlockUI overlay
+				$( '.woocommerce-MyAccount-content' ).unblock();
 			}
 		} );
 	} );
@@ -166,6 +172,9 @@ jQuery( function ( $ ) {
 
 			if ( name.length > 0 ) {
 
+				// Show BlockUI overlay
+				$( '.woocommerce-shipping-fields' ).block();
+
 				$.ajax( {
 					url: woo_address_book.ajax_url,
 					type: 'post',
@@ -193,6 +202,9 @@ jQuery( function ( $ ) {
 							delete shipping_state_o;
 							delete shipping_city_o;
 							delete shipping_postcode_o;
+							
+							// Remove BlockUI overlay
+							$( '.woocommerce-shipping-fields' ).unblock();
 
 							return;
 						}
@@ -227,6 +239,9 @@ jQuery( function ( $ ) {
 								$( "#s2id_shipping_state" ).find( '.select2-chosen' ).html( stateName ).parent().removeClass( 'select2-default' );
 							}
 						}
+
+						// Remove BlockUI overlay
+						$( '.woocommerce-shipping-fields' ).unblock();
 					}
 				} );
 			}
@@ -270,6 +285,9 @@ jQuery( function ( $ ) {
 
 			if ( name.length > 0 ) {
 
+				// Show BlockUI overlay
+				$( '.woocommerce-billing-fields' ).block();
+
 				$.ajax( {
 					url: woo_address_book.ajax_url,
 					type: 'post',
@@ -312,6 +330,9 @@ jQuery( function ( $ ) {
 								$( "#s2id_billing_state" ).find( '.select2-chosen' ).html( stateName ).parent().removeClass( 'select2-default' );
 							}
 						}
+
+						// Remove BlockUI overlay
+						$( '.woocommerce-billing-fields' ).unblock();
 					}
 				} );
 			}

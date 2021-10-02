@@ -186,7 +186,6 @@ class WC_Address_Book {
 				'delete_security'   => wp_create_nonce( 'woo-address-book-delete' ),
 				'primary_security'  => wp_create_nonce( 'woo-address-book-primary' ),
 				'checkout_security' => wp_create_nonce( 'woo-address-book-checkout' ),
-				'blockui_message'   => __( 'Loading...<br/>Please wait.', 'woo-address-book' ),
 			)
 		);
 
