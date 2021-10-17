@@ -13,6 +13,7 @@
  * @package WooCommerce Address Book/Templates
  * @version 1.8.0
  */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }

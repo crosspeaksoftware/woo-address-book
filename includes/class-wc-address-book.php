@@ -93,15 +93,15 @@ class WC_Address_Book {
 	} // end constructor
 
 	/**
-	 * Load plugin option
+	 * Load plugin option.
 	 *
-	 * @since 1.8.0
+	 * @since 2.0.0
 	 *
-	 * @return bolean
+	 * @return boolean
 	 */
 	public function get_wcab_option( $name, $default = 'yes' ) {
 		$option = get_option( 'woo_address_book_' . $name, $default );
-		if ( $option === 'yes' ) {
+		if ( 'yes' === $option ) {
 			return true;
 		} else {
 			return false;
@@ -200,8 +200,8 @@ class WC_Address_Book {
 	/**
 	 * Format addresses from before update 1.8.0 where billing address functionality was added
 	 *
-	 * @param string $user_id The user ID
-	 * @param string $type    Address type
+	 * @param string $user_id The user ID.
+	 * @param string $type    Address type.
 	 *
 	 * @since 1.8.0
 	 */
@@ -211,13 +211,13 @@ class WC_Address_Book {
 		$type_addresses = get_user_meta( $user_id, 'wc_address_book_' . $type, true );
 
 		if ( empty( $type_addresses ) ) {
-			if ( $type === 'shipping' ) {
+			if ( 'shipping' === $type ) {
 				if ( is_array( $address_names ) ) {
 					$this->save_address_names( $user_id, $address_names, 'shipping' );
-				} elseif ( $address_names === 'shipping' ) {
+				} elseif ( 'shipping' === $address_names ) {
 					$this->save_address_names( $user_id, array( 'shipping' ), 'shipping' );
 				}
-			} elseif ( $type === 'billing' ) {
+			} elseif ( 'billing' === $type ) {
 				$this->save_address_names( $user_id, array( 'billing' ), 'billing' );
 			}
 		}
@@ -226,7 +226,7 @@ class WC_Address_Book {
 	/**
 	 * Get address type from name
 	 *
-	 * @param string $name Address name
+	 * @param string $name Address name.
 	 *
 	 * @since 1.8.0
 	 */
@@ -238,7 +238,7 @@ class WC_Address_Book {
 	/**
 	 * Adds a link/button to the my account page under the addresses for adding additional addresses to their account.
 	 *
-	 * @param string $type - 'billing' or 'shipping'
+	 * @param string $type - 'billing' or 'shipping'.
 	 *
 	 * @since 1.0.0
 	 */
@@ -250,13 +250,13 @@ class WC_Address_Book {
 
 		?>
 
-		<?php if ( $type === 'billing' ) : ?>
+		<?php if ( 'billing' === $type ) : ?>
 		<div class="add-new-address">
 			<a href="<?php echo esc_url( $this->get_address_book_endpoint_url( $name, 'billing' ) ); ?>" class="add button"><?php echo esc_html_e( 'Add New Billing Address', 'woo-address-book' ); ?></a>
 		</div>
 		<?php endif; ?>
 
-		<?php if ( $type === 'shipping' ) : ?>
+		<?php if ( 'shipping' === $type ) : ?>
 		<div class="add-new-address">
 			<a href="<?php echo esc_url( $this->get_address_book_endpoint_url( $name, 'shipping' ) ); ?>" class="add button"><?php echo esc_html_e( 'Add New Shipping Address', 'woo-address-book' ); ?></a>
 		</div>
@@ -269,7 +269,7 @@ class WC_Address_Book {
 	 * Get the address book edit endpoint URL.
 	 *
 	 * @param string $address_book Address book name.
-	 * @param string $type - 'billing' or 'shipping'
+	 * @param string $type - 'billing' or 'shipping'.
 	 *
 	 * @return string
 	 */
@@ -282,7 +282,7 @@ class WC_Address_Book {
 	 * Returns the next available shipping address name.
 	 *
 	 * @param string $address_names - An array of saved address names.
-	 * @param string $type - 'billing' or 'shipping'
+	 * @param string $type - 'billing' or 'shipping'.
 	 * @since 1.0.0
 	 */
 	public function set_new_address_name( $address_names, $type ) {
@@ -469,7 +469,7 @@ class WC_Address_Book {
 	 *
 	 * @param int    $user_id - User's ID.
 	 * @param string $name - The name of the address being updated.
-	 * @param string $type - 'billing' or 'shipping'
+	 * @param string $type - 'billing' or 'shipping'.
 	 */
 	private function add_address_name( $user_id, $name, $type ) {
 
@@ -510,7 +510,7 @@ class WC_Address_Book {
 	 * @since 1.0.0
 	 *
 	 * @param int    $user_id - User's ID.
-	 * @param string $type - 'billing' or 'shipping'
+	 * @param string $type - 'billing' or 'shipping'.
 	 * @return array
 	 */
 	public function get_address_names( $user_id, $type ) {
@@ -520,7 +520,7 @@ class WC_Address_Book {
 
 		$address_names = get_user_meta( $user_id, 'wc_address_book_' . $type, true );
 
-		if ( empty( $address_names ) && $type === 'shipping' ) {
+		if ( empty( $address_names ) && 'shipping' === $type ) {
 			$this->format_addresses_backwards_compatible( $user_id, 'shipping' );
 
 			$shipping_address = get_user_meta( $user_id, 'shipping_address_1', true );
@@ -530,7 +530,7 @@ class WC_Address_Book {
 			}
 			// If we don't have a shipping address, just return an empty array.
 			return array();
-		} elseif ( empty( $address_names ) && $type === 'billing' ) {
+		} elseif ( empty( $address_names ) && 'billing' === $type ) {
 			$this->format_addresses_backwards_compatible( $user_id, 'billing' );
 
 			$billing_address = get_user_meta( $user_id, 'billing_address_1', true );
@@ -550,7 +550,7 @@ class WC_Address_Book {
 	 * @since 1.0.0
 	 *
 	 * @param int    $user_id - User's ID.
-	 * @param string $type - 'billing' or 'shipping'
+	 * @param string $type - 'billing' or 'shipping'.
 	 * @return array
 	 */
 	public function get_address_book( $user_id, $type ) {
@@ -603,7 +603,7 @@ class WC_Address_Book {
 	 *
 	 * @param int    $user_id User's ID.
 	 * @param array  $new_value Address book names.
-	 * @param string $type - 'billing' or 'shipping'
+	 * @param string $type - 'billing' or 'shipping'.
 	 */
 	public function save_address_names( $user_id, $new_value, $type ) {
 
@@ -627,7 +627,7 @@ class WC_Address_Book {
 	public function checkout_address_select_field( $fields ) {
 		if ( is_user_logged_in() ) {
 			foreach ( $fields as $type => $address_fields ) {
-				if ( ( $type === 'billing' && $this->get_wcab_option( 'billing_enable' ) === true ) || ( $type === 'shipping' && $this->get_wcab_option( 'shipping_enable' ) === true ) ) {
+				if ( ( 'billing' === $type && $this->get_wcab_option( 'billing_enable' ) === true ) || ( 'shipping' === $type && $this->get_wcab_option( 'shipping_enable' ) === true ) ) {
 					$address_book = $this->get_address_book( null, $type );
 
 					$address_selector                            = array();
@@ -723,8 +723,6 @@ class WC_Address_Book {
 	 * Used for deleting addresses from the my-account page.
 	 *
 	 * @since 1.0.0
-	 *
-	 * @param string $address_name The name of a specific address in the address book.
 	 */
 	public function wc_address_book_delete() {
 		check_ajax_referer( 'woo-address-book-delete', 'nonce' );
@@ -820,9 +818,9 @@ class WC_Address_Book {
 
 		$address_book = $this->get_address_book( null, $type );
 
-		if ( $type === 'billing' ) {
+		if ( 'billing' === $type ) {
 			$countries = $woocommerce->countries->get_allowed_countries();
-		} elseif ( $type === 'shipping' ) {
+		} elseif ( 'shipping' === $type ) {
 			$countries = $woocommerce->countries->get_shipping_countries();
 		}
 
@@ -901,7 +899,7 @@ class WC_Address_Book {
 
 		foreach ( $data as $key => $value ) {
 			// Prevent address book and label fields from being written to the DB.
-			if ( in_array( $key, array( 'address_book', 'address_label', 'shipping_address_book', 'shipping_address_label', 'billing_address_book', 'billing_address_label' ) ) ) {
+			if ( in_array( $key, array( 'address_book', 'address_label', 'shipping_address_book', 'shipping_address_label', 'billing_address_book', 'billing_address_label' ), true ) ) {
 				continue;
 			}
 
