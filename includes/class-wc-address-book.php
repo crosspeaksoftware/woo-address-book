@@ -94,13 +94,12 @@ class WC_Address_Book {
 
 	/**
 	 * Load plugin option
-	 * 
+	 *
 	 * @since 1.8.0
-	 * 
+	 *
 	 * @return bolean
 	 */
 	public function get_wcab_option( $name, $default = 'yes' ) {
-
 		$option = get_option( 'woo_address_book_' . $name, $default );
 		if ( $option === 'yes' ) {
 			return true;
@@ -207,22 +206,19 @@ class WC_Address_Book {
 	 * @since 1.8.0
 	 */
 	public function format_addresses_backwards_compatible( $user_id, $type ) {
-
 		$address_names = get_user_meta( $user_id, 'wc_address_book', true );
 
 		$type_addresses = get_user_meta( $user_id, 'wc_address_book_' . $type, true );
 
 		if ( empty( $type_addresses ) ) {
-
 			if ( $type === 'shipping' ) {
-
 				if ( is_array( $address_names ) ) {
 					$this->save_address_names( $user_id, $address_names, 'shipping' );
 				} elseif ( $address_names === 'shipping' ) {
 					$this->save_address_names( $user_id, array( 'shipping' ), 'shipping' );
 				}
 			} elseif ( $type === 'billing' ) {
-				$this->save_address_names( $user_id, array( 'billing' ), 'billing'  );
+				$this->save_address_names( $user_id, array( 'billing' ), 'billing' );
 			}
 		}
 	}
@@ -235,7 +231,7 @@ class WC_Address_Book {
 	 * @since 1.8.0
 	 */
 	public function get_address_type( $name ) {
-		$type = preg_replace('/\d/', '', $name );
+		$type = preg_replace( '/\d/', '', $name );
 		return $type;
 	}
 
@@ -348,7 +344,6 @@ class WC_Address_Book {
 	 * @return string
 	 */
 	public function address_country_select( $field, $key, $args, $value ) {
-
 		if ( $args['required'] ) {
 			$args['class'][] = 'validate-required';
 			$required        = '&nbsp;<abbr class="required" title="' . esc_attr__( 'required', 'woocommerce' ) . '">*</abbr>';
@@ -408,13 +403,10 @@ class WC_Address_Book {
 		$countries = preg_match( '/shipping[0-9]*_country/', $key ) ? WC()->countries->get_shipping_countries() : WC()->countries->get_allowed_countries();
 
 		if ( 1 === count( $countries ) ) {
-
 			$field .= '<strong>' . current( array_values( $countries ) ) . '</strong>';
 
 			$field .= '<input type="hidden" name="' . esc_attr( $key ) . '" id="' . esc_attr( $args['id'] ) . '" value="' . current( array_keys( $countries ) ) . '" ' . implode( ' ', $custom_attributes ) . ' class="country_to_state" readonly="readonly" />';
-
 		} else {
-
 			$field = '<select name="' . esc_attr( $key ) . '" id="' . esc_attr( $args['id'] ) . '" class="country_to_state country_select ' . esc_attr( implode( ' ', $args['input_class'] ) ) . '" ' . implode( ' ', $custom_attributes ) . '><option value="">' . esc_html__( 'Select a country / region&hellip;', 'woocommerce' ) . '</option>';
 
 			foreach ( $countries as $ckey => $cvalue ) {
@@ -424,7 +416,6 @@ class WC_Address_Book {
 			$field .= '</select>';
 
 			$field .= '<noscript><button type="submit" name="woocommerce_checkout_update_totals" value="' . esc_attr__( 'Update country / region', 'woocommerce' ) . '">' . esc_html__( 'Update country / region', 'woocommerce' ) . '</button></noscript>';
-
 		}
 
 		if ( ! empty( $field ) ) {
@@ -518,12 +509,11 @@ class WC_Address_Book {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param int $user_id - User's ID.
+	 * @param int    $user_id - User's ID.
 	 * @param string $type - 'billing' or 'shipping'
 	 * @return array
 	 */
 	public function get_address_names( $user_id, $type ) {
-
 		if ( ! isset( $user_id ) ) {
 			$user_id = get_current_user_id();
 		}
@@ -531,7 +521,6 @@ class WC_Address_Book {
 		$address_names = get_user_meta( $user_id, 'wc_address_book_' . $type, true );
 
 		if ( empty( $address_names ) && $type === 'shipping' ) {
-
 			$this->format_addresses_backwards_compatible( $user_id, 'shipping' );
 
 			$shipping_address = get_user_meta( $user_id, 'shipping_address_1', true );
@@ -542,7 +531,6 @@ class WC_Address_Book {
 			// If we don't have a shipping address, just return an empty array.
 			return array();
 		} elseif ( empty( $address_names ) && $type === 'billing' ) {
-
 			$this->format_addresses_backwards_compatible( $user_id, 'billing' );
 
 			$billing_address = get_user_meta( $user_id, 'billing_address_1', true );
@@ -561,7 +549,7 @@ class WC_Address_Book {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param int $user_id - User's ID.
+	 * @param int    $user_id - User's ID.
 	 * @param string $type - 'billing' or 'shipping'
 	 * @return array
 	 */
@@ -587,7 +575,6 @@ class WC_Address_Book {
 
 		if ( ! empty( $address_names ) ) {
 			foreach ( $address_names as $name ) {
-
 				if ( strpos( $name, $type ) === false ) {
 					continue;
 				}
@@ -595,7 +582,6 @@ class WC_Address_Book {
 				$address = array();
 
 				foreach ( $address_keys as $field ) {
-
 
 					// Remove the default name so the custom ones can be added.
 					$field = str_replace( $type, '', $field );
@@ -615,8 +601,8 @@ class WC_Address_Book {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param int   $user_id User's ID.
-	 * @param array $new_value Address book names.
+	 * @param int    $user_id User's ID.
+	 * @param array  $new_value Address book names.
 	 * @param string $type - 'billing' or 'shipping'
 	 */
 	public function save_address_names( $user_id, $new_value, $type ) {
@@ -640,14 +626,11 @@ class WC_Address_Book {
 	 */
 	public function checkout_address_select_field( $fields ) {
 		if ( is_user_logged_in() ) {
-
 			foreach ( $fields as $type => $address_fields ) {
-
 				if ( ( $type === 'billing' && $this->get_wcab_option( 'billing_enable' ) === true ) || ( $type === 'shipping' && $this->get_wcab_option( 'shipping_enable' ) === true ) ) {
-
 					$address_book = $this->get_address_book( null, $type );
 
-					$address_selector = array();
+					$address_selector                            = array();
 					$address_selector[ $type . '_address_book' ] = array(
 						'type'     => 'select',
 						'class'    => array( 'form-row-wide', 'address_book' ),
@@ -657,7 +640,6 @@ class WC_Address_Book {
 					);
 
 					if ( ! empty( $address_book ) && false !== $address_book ) {
-
 						$default_to_new_address = $this->get_wcab_option( $type . '_default_to_new_address', 'no' );
 
 						foreach ( $address_book as $name => $address ) {
@@ -752,7 +734,7 @@ class WC_Address_Book {
 		}
 
 		$address_name  = sanitize_text_field( wp_unslash( $_POST['name'] ) );
-		$type 		   = $this->get_address_type( $address_name );
+		$type          = $this->get_address_type( $address_name );
 		$customer_id   = get_current_user_id();
 		$address_book  = $this->get_address_book( $customer_id, $type );
 		$address_names = $this->get_address_names( $customer_id, $type );
@@ -788,15 +770,15 @@ class WC_Address_Book {
 	public function wc_address_book_make_primary() {
 		check_ajax_referer( 'woo-address-book-primary', 'nonce' );
 
-		$customer_id  = get_current_user_id();
+		$customer_id = get_current_user_id();
 
 		if ( ! isset( $_POST['name'] ) ) {
 			die( 'no address passed' );
 		}
 
 		$alt_address_name = sanitize_text_field( wp_unslash( $_POST['name'] ) );
-		$type = $this->get_address_type( $alt_address_name );
-		$address_book = $this->get_address_book( $customer_id, $type );
+		$type             = $this->get_address_type( $alt_address_name );
+		$address_book     = $this->get_address_book( $customer_id, $type );
 
 		$primary_address_name = $type;
 
@@ -840,7 +822,7 @@ class WC_Address_Book {
 
 		if ( $type === 'billing' ) {
 			$countries = $woocommerce->countries->get_allowed_countries();
-		} else if ( $type === 'shipping' ) {
+		} elseif ( $type === 'shipping' ) {
 			$countries = $woocommerce->countries->get_shipping_countries();
 		}
 
@@ -878,7 +860,7 @@ class WC_Address_Book {
 	 */
 	public function woocommerce_checkout_update_customer_data( $update_customer_data, $checkout_object ) {
 		$billing_name            = isset( $_POST['billing_address_book'] ) ? sanitize_text_field( wp_unslash( $_POST['billing_address_book'] ) ) : false;
-		$shipping_name            = isset( $_POST['shipping_address_book'] ) ? sanitize_text_field( wp_unslash( $_POST['shipping_address_book'] ) ) : false;
+		$shipping_name           = isset( $_POST['shipping_address_book'] ) ? sanitize_text_field( wp_unslash( $_POST['shipping_address_book'] ) ) : false;
 		$customer_id             = apply_filters( 'woocommerce_checkout_customer_id', get_current_user_id() );
 		$update_customer_data    = false;
 		$ignore_shipping_address = true;
@@ -889,14 +871,12 @@ class WC_Address_Book {
 
 		// Name new address and update address book.
 		if ( 'add_new' === $billing_name || false === $billing_name ) {
-
 			$address_names = $this->get_address_names( $customer_id, 'billing' );
-			$billing_name = $this->set_new_address_name( $address_names, 'billing' );
+			$billing_name  = $this->set_new_address_name( $address_names, 'billing' );
 			$this->add_address_name( $customer_id, $billing_name, 'billing' );
 		}
 
 		if ( ( 'add_new' === $shipping_name || false === $shipping_name ) && false === $ignore_shipping_address ) {
-
 			$address_names = $this->get_address_names( $customer_id, 'shipping' );
 			$shipping_name = $this->set_new_address_name( $address_names, 'shipping' );
 			$this->add_address_name( $customer_id, $shipping_name, 'shipping' );
@@ -1000,7 +980,7 @@ class WC_Address_Book {
 			$name = trim( sanitize_text_field( wp_unslash( $_GET['address-book'] ) ), '/' );
 			if ( isset( $_POST[ $name . '_country' ] ) ) {
 				// Copy to shipping_country to bypass the check in save address.
-				$type = $this->get_address_type( $name );
+				$type                        = $this->get_address_type( $name );
 				$_POST[ $type . '_country' ] = sanitize_text_field( wp_unslash( $_POST[ $name . '_country' ] ) );
 			}
 		}
@@ -1053,7 +1033,6 @@ class WC_Address_Book {
 	 * @since 1.8.0
 	 */
 	public function add_billing_address_nickname_field( $address_fields ) {
-
 		if ( ! isset( $address_fields['billing_address_nickname'] ) ) {
 			$address_fields['billing_address_nickname'] = array(
 				'label'        => __( 'Address nickname', 'woo-address-book' ),
@@ -1079,7 +1058,6 @@ class WC_Address_Book {
 	 * @since 1.8.0
 	 */
 	public function add_shipping_address_nickname_field( $address_fields ) {
-
 		if ( ! isset( $address_fields['shipping_address_nickname'] ) ) {
 			$address_fields['shipping_address_nickname'] = array(
 				'label'        => __( 'Address nickname', 'woo-address-book' ),
@@ -1109,7 +1087,7 @@ class WC_Address_Book {
 
 			if ( ! empty( $_GET['address-book'] ) ) {
 				$address_name = sanitize_text_field( wp_unslash( $_GET['address-book'] ) );
-				$type = $this->get_address_type( $address_name );
+				$type         = $this->get_address_type( $address_name );
 				add_filter( 'woocommerce_process_myaccount_field_' . $address_name . '_address_nickname', array( $this, 'validate_' . $type . '_address_nickname' ), 10, 1 );
 			} else {
 				add_filter( 'woocommerce_process_myaccount_field_billing_address_nickname', array( $this, 'validate_billing_address_nickname' ), 10, 1 );
