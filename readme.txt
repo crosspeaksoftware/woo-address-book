@@ -2,7 +2,7 @@
 Contributors: hallme, doomwaxer, timbhowe, matt-h-1
 Tags: WooCommerce, address book, multiple addresses, address
 Requires at least: 4.6
-Tested up to: 5.7.0
+Tested up to: 5.8.1
 Stable tag: 1.7.5
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -72,6 +72,17 @@ There are currently no settings, everything is based on your current WooCommerce
 2. Easily select your shipping address on checkout.
 
 == Changelog ==
+
+= 2.0.0 =
+* This is version 2.0.0 which is a major update with new functionality, be sure to review the changes below.
+* Billing and Shipping address support. This release adds support for Billing addresses in addition to Shipping addresses.
+* New settings to be able to Enable or Disable the address book for billing or shipping. Thanks [Hinyka](https://github.com/hallme/woo-address-book/pull/97)
+  * Make sure to set these settings for your store after updating. Both are enabled by default.
+* Adds settings to set if new address should be selected or primary address on checkout.
+* Adds setting if the address nickname field should show on checkout.
+* Fix checkbox to change address that didn't work from showing with WooCommerce Subscriptions plugin.
+* Support for PHP 8 and jQuery 3. Thanks [Hinyka](https://github.com/hallme/woo-address-book/pull/96)
+* Various other fixes, see [#97](https://github.com/hallme/woo-address-book/pull/97) for details.
 
 = 1.7.5 =
 * Update Country strings that were changed in WooCommerce 4.0
