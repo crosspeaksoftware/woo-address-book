@@ -2,12 +2,18 @@
 /**
  * WooCommerce Address Book.
  *
- * @version  1.8.0
+ * @version  2.0.0
  * @package  WooCommerce Address Book
  */
 
 add_filter( 'woocommerce_general_settings', 'wc_address_book_general_settings' );
 
+/**
+ * The WooCommerce Address Book settings page for the admin.
+ *
+ * @param array $settings The current settings array.
+ * @return array
+ */
 function wc_address_book_general_settings( $settings ) {
 	$settings[] = array(
 		'title' => __( 'WooCommerce Address Book options', 'woo-address-book' ),
