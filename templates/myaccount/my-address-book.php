@@ -13,23 +13,23 @@
  * @package WooCommerce Address Book/Templates
  * @version 1.8.0
  */
-if ( !defined( 'ABSPATH' ) ) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
 $wc_address_book = WC_Address_Book::get_instance();
 
-$woo_address_book_customer_id			 = get_current_user_id();
-$woo_address_book_billing_address_book	 = $wc_address_book->get_address_book( $woo_address_book_customer_id, 'billing' );
-$woo_address_book_shipping_address_book	 = $wc_address_book->get_address_book( $woo_address_book_customer_id, 'shipping' );
+$woo_address_book_customer_id           = get_current_user_id();
+$woo_address_book_billing_address_book  = $wc_address_book->get_address_book( $woo_address_book_customer_id, 'billing' );
+$woo_address_book_shipping_address_book = $wc_address_book->get_address_book( $woo_address_book_customer_id, 'shipping' );
 
 // Do not display on address edit pages.
-if ( !$type ) {
+if ( ! $type ) {
 	if ( $wc_address_book->get_wcab_option( 'billing_enable' ) === true ) {
 		$woo_address_book_billing_address = get_user_meta( $woo_address_book_customer_id, 'billing_address_1', true );
 
 		// Only display if primary addresses are set and not on an edit page.
-		if ( !empty( $woo_address_book_billing_address ) ) {
+		if ( ! empty( $woo_address_book_billing_address ) ) {
 			?>
 
 			<div class="address_book billing_address_book">
@@ -54,14 +54,14 @@ if ( !$type ) {
 							'woocommerce_my_account_my_address_formatted_address',
 							array(
 								'first_name' => get_user_meta( $woo_address_book_customer_id, $woo_address_book_name . '_first_name', true ),
-								'last_name'	 => get_user_meta( $woo_address_book_customer_id, $woo_address_book_name . '_last_name', true ),
-								'company'	 => get_user_meta( $woo_address_book_customer_id, $woo_address_book_name . '_company', true ),
-								'address_1'	 => get_user_meta( $woo_address_book_customer_id, $woo_address_book_name . '_address_1', true ),
-								'address_2'	 => get_user_meta( $woo_address_book_customer_id, $woo_address_book_name . '_address_2', true ),
-								'city'		 => get_user_meta( $woo_address_book_customer_id, $woo_address_book_name . '_city', true ),
-								'state'		 => get_user_meta( $woo_address_book_customer_id, $woo_address_book_name . '_state', true ),
-								'postcode'	 => get_user_meta( $woo_address_book_customer_id, $woo_address_book_name . '_postcode', true ),
-								'country'	 => get_user_meta( $woo_address_book_customer_id, $woo_address_book_name . '_country', true ),
+								'last_name'  => get_user_meta( $woo_address_book_customer_id, $woo_address_book_name . '_last_name', true ),
+								'company'    => get_user_meta( $woo_address_book_customer_id, $woo_address_book_name . '_company', true ),
+								'address_1'  => get_user_meta( $woo_address_book_customer_id, $woo_address_book_name . '_address_1', true ),
+								'address_2'  => get_user_meta( $woo_address_book_customer_id, $woo_address_book_name . '_address_2', true ),
+								'city'       => get_user_meta( $woo_address_book_customer_id, $woo_address_book_name . '_city', true ),
+								'state'      => get_user_meta( $woo_address_book_customer_id, $woo_address_book_name . '_state', true ),
+								'postcode'   => get_user_meta( $woo_address_book_customer_id, $woo_address_book_name . '_postcode', true ),
+								'country'    => get_user_meta( $woo_address_book_customer_id, $woo_address_book_name . '_country', true ),
 							),
 							$woo_address_book_customer_id,
 							$woo_address_book_name
@@ -79,7 +79,7 @@ if ( !$type ) {
 									<a id="<?php echo esc_attr( $woo_address_book_name ); ?>" class="wc-address-book-make-primary"><?php echo esc_attr__( 'Make Primary', 'woo-address-book' ); ?></a>
 								</div>
 								<address>
-									<?php echo wp_kses( $woo_address_book_formatted_address, array('br' => array()) ); ?>
+									<?php echo wp_kses( $woo_address_book_formatted_address, array( 'br' => array() ) ); ?>
 								</address>
 							</div>
 
@@ -97,7 +97,7 @@ if ( !$type ) {
 		$woo_address_book_shipping_address = get_user_meta( $woo_address_book_customer_id, 'shipping_address_1', true );
 
 		// Only display if primary addresses are set and not on an edit page.
-		if ( !empty( $woo_address_book_shipping_address ) ) {
+		if ( ! empty( $woo_address_book_shipping_address ) ) {
 			?>
 
 			<div class="address_book shipping_address_book">
@@ -115,7 +115,7 @@ if ( !$type ) {
 				</p>
 
 				<?php
-				if ( !wc_ship_to_billing_address_only() && get_option( 'woocommerce_calc_shipping' ) !== 'no' ) {
+				if ( ! wc_ship_to_billing_address_only() && get_option( 'woocommerce_calc_shipping' ) !== 'no' ) {
 					echo '<div class="col2-set addresses address-book">';
 				}
 
@@ -130,14 +130,14 @@ if ( !$type ) {
 						'woocommerce_my_account_my_address_formatted_address',
 						array(
 							'first_name' => get_user_meta( $woo_address_book_customer_id, $woo_address_book_name . '_first_name', true ),
-							'last_name'	 => get_user_meta( $woo_address_book_customer_id, $woo_address_book_name . '_last_name', true ),
-							'company'	 => get_user_meta( $woo_address_book_customer_id, $woo_address_book_name . '_company', true ),
-							'address_1'	 => get_user_meta( $woo_address_book_customer_id, $woo_address_book_name . '_address_1', true ),
-							'address_2'	 => get_user_meta( $woo_address_book_customer_id, $woo_address_book_name . '_address_2', true ),
-							'city'		 => get_user_meta( $woo_address_book_customer_id, $woo_address_book_name . '_city', true ),
-							'state'		 => get_user_meta( $woo_address_book_customer_id, $woo_address_book_name . '_state', true ),
-							'postcode'	 => get_user_meta( $woo_address_book_customer_id, $woo_address_book_name . '_postcode', true ),
-							'country'	 => get_user_meta( $woo_address_book_customer_id, $woo_address_book_name . '_country', true ),
+							'last_name'  => get_user_meta( $woo_address_book_customer_id, $woo_address_book_name . '_last_name', true ),
+							'company'    => get_user_meta( $woo_address_book_customer_id, $woo_address_book_name . '_company', true ),
+							'address_1'  => get_user_meta( $woo_address_book_customer_id, $woo_address_book_name . '_address_1', true ),
+							'address_2'  => get_user_meta( $woo_address_book_customer_id, $woo_address_book_name . '_address_2', true ),
+							'city'       => get_user_meta( $woo_address_book_customer_id, $woo_address_book_name . '_city', true ),
+							'state'      => get_user_meta( $woo_address_book_customer_id, $woo_address_book_name . '_state', true ),
+							'postcode'   => get_user_meta( $woo_address_book_customer_id, $woo_address_book_name . '_postcode', true ),
+							'country'    => get_user_meta( $woo_address_book_customer_id, $woo_address_book_name . '_country', true ),
 						),
 						$woo_address_book_customer_id,
 						$woo_address_book_name
@@ -154,19 +154,19 @@ if ( !$type ) {
 								<a id="<?php echo esc_attr( $woo_address_book_name ); ?>" class="wc-address-book-make-primary"><?php echo esc_attr__( 'Make Primary', 'woo-address-book' ); ?></a>
 							</div>
 							<address>
-								<?php echo wp_kses( $woo_address_book_formatted_address, array('br' => array()) ); ?>
+								<?php echo wp_kses( $woo_address_book_formatted_address, array( 'br' => array() ) ); ?>
 							</address>
 						</div>
 						<?php
 					}
 				}
 
-				if ( !wc_ship_to_billing_address_only() && get_option( 'woocommerce_calc_shipping' ) !== 'no' ) {
+				if ( ! wc_ship_to_billing_address_only() && get_option( 'woocommerce_calc_shipping' ) !== 'no' ) {
 					echo '</div>';
 				}
 				?>
 			</div>
-		<?php
+			<?php
 		}
 	}
 }
