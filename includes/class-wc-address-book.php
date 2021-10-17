@@ -82,6 +82,9 @@ class WC_Address_Book {
 		// Hook in before address save.
 		add_action( 'template_redirect', array( $this, 'before_save_address' ), 9 );
 
+		// WooCommerce Subscriptions support.
+		add_filter( 'woocommerce_shipping_fields', array( $this, 'remove_address_subscription_update_box' ), 10, 1 );
+
 		// Adds support for address nicknames.
 		add_filter( 'woocommerce_billing_fields', array( $this, 'add_billing_address_nickname_field' ), 10, 1 );
 		add_filter( 'woocommerce_shipping_fields', array( $this, 'add_shipping_address_nickname_field' ), 10, 1 );
@@ -1044,6 +1047,20 @@ class WC_Address_Book {
 				'description'  => __( 'Will help you identify your addresses easily.', 'woo-address-book' ),
 				'validate'     => array( 'address-nickname' ),
 			);
+		}
+
+		return $address_fields;
+	}
+
+	/**
+	* Checks for non-primary Address Book address and doesn't show the checkbox to update subscriptions.
+	*
+	* @param array $address_fields Current Address fields.
+	* @return array
+	*/
+	public function remove_address_subscription_update_box( $address_fields ) {
+		if ( isset( $_GET['address-book'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			remove_action( 'woocommerce_after_edit_address_form_shipping', 'WC_Subscriptions_Addresses::maybe_add_edit_address_checkbox', 10 );
 		}
 
 		return $address_fields;
