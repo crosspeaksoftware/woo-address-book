@@ -1220,17 +1220,17 @@ class WC_Address_Book {
 	}
 
 	/**
-	 * Don't show Address Nickname field on the checkout. This is only for Edit/Add address.
+	 * Don't show Address Nickname field on the checkout if the option is configured not to.
 	 *
 	 * @param array $fields Checkout fields.
 	 * @return array
 	 */
 	public function remove_nickname_field_from_checkout( $fields ) {
-		if ( isset( $fields['shipping']['shipping_address_nickname'] ) ) {
+		if ( isset( $fields['shipping']['shipping_address_nickname'] ) && ! $this->get_wcab_option( 'shipping_address_nickname_checkout', 'no' ) ) {
 			unset( $fields['shipping']['shipping_address_nickname'] );
 		}
 
-		if ( isset( $fields['billing']['billing_address_nickname'] ) ) {
+		if ( isset( $fields['billing']['billing_address_nickname'] ) && ! $this->get_wcab_option( 'shipping_address_nickname_checkout', 'no' ) ) {
 			unset( $fields['billing']['billing_address_nickname'] );
 		}
 
