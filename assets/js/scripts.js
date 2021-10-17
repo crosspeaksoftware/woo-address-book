@@ -55,7 +55,7 @@ jQuery( function ( $ ) {
 
 	// Update checkout when address changes
 	if ( $( "form[name=checkout]" ).length > 0 ) {
-		$( '#shipping_country, #shipping_state, #shipping_city, #shipping_postcode' ).on( 'change', function () {
+		$( '#shipping_country, #shipping_state_field, #shipping_city, #shipping_postcode, #billing_country, #billing_state_field, #billing_city, #billing_postcode' ).on( 'change', function () {
 			$( document.body ).trigger( 'update_checkout' );
 		} );
 	};
