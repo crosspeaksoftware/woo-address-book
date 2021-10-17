@@ -97,6 +97,8 @@ class WC_Address_Book {
 	 *
 	 * @since 2.0.0
 	 *
+	 * @param string $name The option name.
+	 * @param string $default The default value for the setting.
 	 * @return boolean
 	 */
 	public function get_wcab_option( $name, $default = 'yes' ) {
