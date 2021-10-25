@@ -48,6 +48,7 @@ rsync -rv --delete \
 	--exclude=".travis.yml" \
 	--exclude=".gitignore" \
 	--exclude=".svn" \
+	--exclude="wordpress.org-assets" \
 	--exclude="vendor" \
 	--exclude="node_modules" \
 	--exclude="tests" \
@@ -58,6 +59,7 @@ rsync -rv --delete \
 	--exclude="build.sh" \
 	--exclude="release.sh" \
 	--exclude="release-readme.sh" \
+	--exclude="release-assets.sh" \
 	--exclude="README.md" \
 	. /tmp/release-${package}/.
 
