@@ -30,11 +30,11 @@ jQuery( function ( $ ) {
 	$.blockUI.defaults.overlayCSS.backgroundColor = '#fff';
 
 	// Retrieves default billing address
-	billing_checkout_field_prepop();
+	checkout_field_prepop( 'billing' );
 
 	// Retrieves billing address when another is selected.
 	$( '#billing_address_book_field #billing_address_book' ).on( 'change', function () {
-		billing_checkout_field_prepop();
+		checkout_field_prepop( 'billing' );
 	} );
 
 	// Customer entered address into the shipping calculator
@@ -46,11 +46,11 @@ jQuery( function ( $ ) {
 	}
 
 	// Retrieves default shipping address
-	shipping_checkout_field_prepop();
+	checkout_field_prepop( 'shipping' );
 
 	// Retrieves shipping address when another is selected.
 	$( '#shipping_address_book_field #shipping_address_book' ).on( 'change', function () {
-		shipping_checkout_field_prepop();
+		checkout_field_prepop( 'shipping' );
 	} );
 
 	// Update checkout when address changes
@@ -138,33 +138,37 @@ jQuery( function ( $ ) {
 	/*
 	 * AJAX call display address on checkout when selected.
 	 */
-	function shipping_checkout_field_prepop() {
+	function checkout_field_prepop( addressType) {
+		
+		let countryInputName = addressType + '_country';
+		let stateInputName = addressType + '_state';
 
-		var that = $( '#shipping_address_book_field #shipping_address_book' );
-		var name = $( that ).val();
+		let countryInput = $( '#' + countryInputName );
+		let stateInput = $( '#' + stateInputName );
+
+		let that = $( '#' + addressType + '_address_book_field #' + addressType + '_address_book' );
+		let name = $( that ).val();
 
 		if ( name !== undefined ) {
 
 			if ( 'add_new' === name ) {
 
 				// Clear values when adding a new address.
-				$( '.shipping_address input' ).not( $( '#shipping_country' ) ).each( function () {
+				$( '.woocommerce-' + addressType + '-fields__field-wrapper input' ).not( $( '#' + countryInputName ) ).each( function () {
 					$( this ).val( '' );
 				} );
 
 				// Set Country Dropdown.
 				// Don't reset the value if only one country is available to choose.
-				var country_input = $( '#shipping_country' );
-				if ( country_input.length > 0 && country_input.attr( "readonly" ) !== "readonly" ) {
-					country_input.val( '' ).trigger( 'change' );
-					$( "#shipping_country_chosen" ).find( 'span' ).html( '' );
+				if ( countryInput.length > 0 && countryInput.attr( 'readonly' ) !== 'readonly' ) {
+					countryInput.val( [] ).trigger( 'change' );
+					$( '#' + countryInputName + '_chosen' ).find( 'span' ).html( '' );
 				}
 
 				// Set state dropdown.
-				var state_input = $( '#shipping_state' );
-				if ( state_input.length > 0 && state_input.attr( "readonly" ) !== "readonly" ) {
-					state_input.val( '' ).trigger( 'change' );
-					$( "#shipping_state_chosen" ).find( 'span' ).html( '' );
+				if ( stateInput.length > 0 && stateInput.attr( 'readonly' ) !== 'readonly' ) {
+					stateInput.val( [] ).trigger( 'change' );
+					$( '#' + stateInputName + '_chosen' ).find( 'span' ).html( '' );
 				}
 
 				return;
@@ -173,7 +177,7 @@ jQuery( function ( $ ) {
 			if ( name.length > 0 ) {
 
 				// Show BlockUI overlay
-				$( '.woocommerce-shipping-fields' ).block();
+				$( '.woocommerce-' + addressType + '-fields' ).block();
 
 				$.ajax( {
 					url: woo_address_book.ajax_url,
@@ -181,12 +185,12 @@ jQuery( function ( $ ) {
 					data: {
 						action: 'wc_address_book_checkout_update',
 						name: name,
-						type: 'shipping',
+						type: addressType,
 						nonce: woo_address_book.checkout_security,
 					},
 					dataType: 'json',
 					success: function ( response ) {
-						if ( typeof shipping_country_o !== 'undefined' && typeof shipping_state_o !== 'undefined' && typeof shipping_city_o !== 'undefined' && typeof shipping_postcode_o !== 'undefined' ) {
+						if ( addressType === 'shipping' && typeof shipping_country_o !== 'undefined' && typeof shipping_state_o !== 'undefined' && typeof shipping_city_o !== 'undefined' && typeof shipping_postcode_o !== 'undefined' ) {
 
 							if ( shipping_country_o !== response.shipping_country || shipping_state_o !== response.shipping_state || shipping_city_o !== response.shipping_city || shipping_postcode_o !== response.shipping_postcode ) {
 
@@ -211,132 +215,41 @@ jQuery( function ( $ ) {
 
 						// Loop through all fields incase there are custom ones.
 						Object.keys( response ).forEach( function ( key ) {
-							var input = $( '#' + key );
-							if ( input.length > 0 && input.attr( "readonly" ) !== "readonly" ) {
+							let input = $( '#' + key );
+							if ( input.length > 0 && input.attr( 'readonly' ) !== 'readonly' ) {
 								input.val( response[key] ).trigger( 'change' );
 							}
 						} );
 
+
 						// Set Country Dropdown.
-						var country_input = $( '#shipping_country' );
-						if ( country_input.length > 0 && country_input.attr( "readonly" ) !== "readonly" ) {
-							if ( country_input.hasClass( "selectized" ) && country_input[0] && country_input[0].selectize ) {
-								country_input[0].selectize.setValue( response.shipping_country );
+						if ( countryInput.length > 0 && countryInput.attr( 'readonly' ) !== 'readonly' ) {
+							if ( countryInput.hasClass( 'selectized' ) && countryInput[0] && countryInput[0].selectize ) {
+								countryInput[0].selectize.setValue( response[countryInputName] );
 							} else {
-								country_input.val( response.shipping_country ).trigger( 'change' );
-								$( "#shipping_country_chosen" ).find( 'span' ).html( response.shipping_country_text );
+								countryInput.val( response[countryInputName] ).trigger( 'change' );
+								let countryInputNameText = countryInputName + '_text';
+								$( '#' + countryInputName + '_chosen' ).find( 'span' ).html( response.countryInputNameText );
 							}
 						}
 
 						// Set state dropdown.
-						var state_input = $( '#shipping_state' );
-						if ( state_input.length > 0 && state_input.attr( "readonly" ) !== "readonly" ) {
-							if ( state_input.hasClass( "selectized" ) && state_input[0] && state_input[0].selectize ) {
-								state_input[0].selectize.setValue( response.shipping_state );
+						if ( stateInput.length > 0 && stateInput.attr( 'readonly' ) !== 'readonly' ) {
+							if ( stateInput.hasClass( 'selectized' ) && stateInput[0] && stateInput[0].selectize ) {
+								stateInput[0].selectize.setValue( response[stateInputName] );
 							} else {
-								state_input.val( response.shipping_state ).trigger( 'change' );
-								var stateName = $( '#shipping_state option[value="' + response.shipping_state + '"]' ).text();
-								$( "#s2id_shipping_state" ).find( '.select2-chosen' ).html( stateName ).parent().removeClass( 'select2-default' );
+								stateInput.val( response[stateInputName] ).trigger( 'change' );
+								let stateName = $( '#' + stateInputName + ' option[value="' + response[stateInputName] + '"]' ).text();
+								$( '#s2id_' + stateInputName ).find( '.select2-chosen' ).html( stateName ).parent().removeClass( 'select2-default' );
 							}
 						}
 
 						// Remove BlockUI overlay
-						$( '.woocommerce-shipping-fields' ).unblock();
+						$( '.woocommerce-' + addressType + '-fields' ).unblock();
 					}
 				} );
 			}
 		}
 	}
-
-	/*
-	 * AJAX call display address on checkout when selected.
-	 */
-	function billing_checkout_field_prepop() {
-
-		var that = $( '#billing_address_book_field #billing_address_book' );
-		var name = $( that ).val();
-
-		if ( name !== undefined ) {
-
-			if ( 'add_new' === name ) {
-
-				// Clear values when adding a new address.
-				$( '.woocommerce-billing-fields__field-wrapper input' ).not( $( '#billing_country' ) ).each( function () {
-					$( this ).val( '' );
-				} );
-
-				// Set Country Dropdown.
-				// Don't reset the value if only one country is available to choose.
-				var country_input = $( '#billing_country' );
-				if ( country_input.length > 0 && country_input.attr( "readonly" ) !== "readonly" ) {
-					country_input.val( '' ).trigger( 'change' );
-					$( "#billing_country_chosen" ).find( 'span' ).html( '' );
-				}
-
-				// Set state dropdown.
-				var state_input = $( '#billing_state' );
-				if ( state_input.length > 0 && state_input.attr( "readonly" ) !== "readonly" ) {
-					state_input.val( '' ).trigger( 'change' );
-					$( "#billing_state_chosen" ).find( 'span' ).html( '' );
-				}
-
-				return;
-			}
-
-			if ( name.length > 0 ) {
-
-				// Show BlockUI overlay
-				$( '.woocommerce-billing-fields' ).block();
-
-				$.ajax( {
-					url: woo_address_book.ajax_url,
-					type: 'post',
-					data: {
-						action: 'wc_address_book_checkout_update',
-						name: name,
-						type: 'billing',
-						nonce: woo_address_book.checkout_security,
-					},
-					dataType: 'json',
-					success: function ( response ) {
-
-						// Loop through all fields incase there are custom ones.
-						Object.keys( response ).forEach( function ( key ) {
-							var input = $( '#' + key );
-							if ( input.length > 0 && input.attr( "readonly" ) !== "readonly" ) {
-								input.val( response[key] ).trigger( 'change' );
-							}
-						} );
-
-						// Set Country Dropdown.
-						var country_input = $( '#billing_country' );
-						if ( country_input.length > 0 && country_input.attr( "readonly" ) !== "readonly" ) {
-							if ( country_input.hasClass( "selectized" ) && country_input[0] && country_input[0].selectize ) {
-								country_input[0].selectize.setValue( response.billing_country );
-							} else {
-								country_input.val( response.billing_country ).trigger( 'change' );
-								$( "#billing_country_chosen" ).find( 'span' ).html( response.billing_country_text );
-							}
-						}
-
-						// Set state dropdown.
-						var state_input = $( '#billing_state' );
-						if ( state_input.length > 0 && state_input.attr( "readonly" ) !== "readonly" ) {
-							if ( state_input.hasClass( "selectized" ) && state_input[0] && state_input[0].selectize ) {
-								state_input[0].selectize.setValue( response.billing_state );
-							} else {
-								state_input.val( response.billing_state ).trigger( 'change' );
-								var stateName = $( '#billing_state option[value="' + response.billing_state + '"]' ).text();
-								$( "#s2id_billing_state" ).find( '.select2-chosen' ).html( stateName ).parent().removeClass( 'select2-default' );
-							}
-						}
-
-						// Remove BlockUI overlay
-						$( '.woocommerce-billing-fields' ).unblock();
-					}
-				} );
-			}
-		}
-	}
-
+	
 } );
