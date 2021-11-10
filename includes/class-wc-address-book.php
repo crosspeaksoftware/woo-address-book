@@ -1053,11 +1053,11 @@ class WC_Address_Book {
 	}
 
 	/**
-	* Checks for non-primary Address Book address and doesn't show the checkbox to update subscriptions.
-	*
-	* @param array $address_fields Current Address fields.
-	* @return array
-	*/
+	 * Checks for non-primary Address Book address and doesn't show the checkbox to update subscriptions.
+	 *
+	 * @param array $address_fields Current Address fields.
+	 * @return array
+	 */
 	public function remove_address_subscription_update_box( $address_fields ) {
 		if ( isset( $_GET['address-book'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			remove_action( 'woocommerce_after_edit_address_form_shipping', 'WC_Subscriptions_Addresses::maybe_add_edit_address_checkbox', 10 );
