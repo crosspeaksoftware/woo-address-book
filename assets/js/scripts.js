@@ -67,6 +67,11 @@ jQuery( function ( $ ) {
 
 		e.preventDefault();
 
+		var confirmDelete = confirm( 'Are you sure you want to delete this address?' );
+		if ( ! confirmDelete ) {
+			return;
+		}
+
 		var name = $( this ).attr( 'id' );
 		var toRemove = $( this ).closest( '.wc-address-book-address' );
 
