@@ -14,8 +14,6 @@ if [[ ! $version ]]; then
 	exit 1
 fi
 
-./build.sh
-
 echo "Releasing version ${version}"
 
 echo "Setting version number in readme.txt and php files"
@@ -41,27 +39,10 @@ git push --tags origin master
 echo "Checking out current version on Wordpress SVN"
 svn co https://plugins.svn.wordpress.org/${package}/trunk /tmp/release-${package}
 
+./makedist.sh
+
 echo "Copying in updated files"
-rsync -rv --delete \
-	--exclude=".git" \
-	--exclude=".distignore" \
-	--exclude=".travis.yml" \
-	--exclude=".gitignore" \
-	--exclude=".svn" \
-	--exclude="wordpress.org-assets" \
-	--exclude="vendor" \
-	--exclude="node_modules" \
-	--exclude="tests" \
-	--exclude="composeer.json" \
-	--exclude="composeer.lock" \
-	--exclude="phpcs.xml.dist" \
-	--exclude="phpunit.xml.dist" \
-	--exclude="build.sh" \
-	--exclude="release.sh" \
-	--exclude="release-readme.sh" \
-	--exclude="release-assets.sh" \
-	--exclude="README.md" \
-	. /tmp/release-${package}/.
+rsync -rv --delete --exclude ".svn" dist/. /tmp/release-${package}/.
 
 cd /tmp/release-${package}/
 # Add and delete new/old files.
