@@ -67,7 +67,7 @@ jQuery( function ( $ ) {
 
 		e.preventDefault();
 
-		var confirmDelete = confirm( woo_address_book.deleteConfirmation );
+		var confirmDelete = confirm( woo_address_book.delete_confirmation );
 		if ( ! confirmDelete ) {
 			return;
 		}
@@ -133,7 +133,7 @@ jQuery( function ( $ ) {
 			success: function () {
 				alt_address.html( pa_html );
 				primary_address.html( aa_html );
-				
+
 				// Remove BlockUI overlay
 				$( '.woocommerce-MyAccount-content' ).unblock();
 			}
@@ -144,7 +144,7 @@ jQuery( function ( $ ) {
 	 * AJAX call display address on checkout when selected.
 	 */
 	function checkout_field_prepop( addressType) {
-		
+
 		let countryInputName = addressType + '_country';
 		let stateInputName = addressType + '_state';
 
@@ -211,7 +211,7 @@ jQuery( function ( $ ) {
 							delete shipping_state_o;
 							delete shipping_city_o;
 							delete shipping_postcode_o;
-							
+
 							// Remove BlockUI overlay
 							$( '.woocommerce-shipping-fields' ).unblock();
 
@@ -256,5 +256,5 @@ jQuery( function ( $ ) {
 			}
 		}
 	}
-	
+
 } );
