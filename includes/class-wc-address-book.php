@@ -187,10 +187,10 @@ class WC_Address_Book {
 			'woo-address-book',
 			'woo_address_book',
 			array(
-				'ajax_url'          => admin_url( 'admin-ajax.php' ),
-				'delete_security'   => wp_create_nonce( 'woo-address-book-delete' ),
-				'primary_security'  => wp_create_nonce( 'woo-address-book-primary' ),
-				'checkout_security' => wp_create_nonce( 'woo-address-book-checkout' ),
+				'ajax_url'            => admin_url( 'admin-ajax.php' ),
+				'delete_security'     => wp_create_nonce( 'woo-address-book-delete' ),
+				'primary_security'    => wp_create_nonce( 'woo-address-book-primary' ),
+				'checkout_security'   => wp_create_nonce( 'woo-address-book-checkout' ),
 				'delete_confirmation' => __( 'Are you sure you want to delete this address?', 'woo-address-book' ),
 			)
 		);
