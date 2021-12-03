@@ -67,7 +67,7 @@ jQuery( function ( $ ) {
 
 		e.preventDefault();
 
-		var confirmDelete = confirm( 'Are you sure you want to delete this address?' );
+		var confirmDelete = confirm( woo_address_book.deleteConfirmation );
 		if ( ! confirmDelete ) {
 			return;
 		}
