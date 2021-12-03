@@ -7,11 +7,21 @@ Stable tag: 1.7.5
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Gives your customers the option to store multiple shipping addresses and retrieve them on checkout.
+Gives your customers the option to store multiple billing and shipping addresses and retrieve them on checkout.
 
 == Description ==
 
-Gives your customers the option to store multiple shipping addresses and retrieve them on checkout. Addresses can be updated and modified quickly and easily in /my-account/, or saved as part of the checkout process.
+Gives your customers the option to store multiple billing and shipping addresses and retrieve them on checkout. Addresses can be updated and modified quickly and easily in /my-account/, or saved as part of the checkout process.
+
+= Settings =
+
+The settings for this plugin are located in WooCommerce General settings: WooCommerce -> Settings -> General.
+
+WooCommerce Address Book options:
+
+* Enable billing/shipping address book
+* Add New Address as default selection
+* Enable setting Billing/Shipping Address Nickname during Checkout
 
 = Code =
 
@@ -22,19 +32,19 @@ View the source on [GitHub](https://github.com/hallme/woo-address-book). You can
 1. Upload the `woo-address-book` folder to the `/wp-content/plugins/` directory
 2. Make sure you have WooCommerce installed and enabled.
 3. Activate the WooCommerce Address Book through the 'Plugins' menu in WordPress.
-4. Address Book options will now appear on the customer's account page and checkout once they've entered their primary shipping address.
+4. Address Book options will now appear on the customer's account page and checkout once they've entered their primary billing or shipping address.
 
 == Frequently Asked Questions ==
 
 = Why can't I add a new address to my address book? =
-The address book will only begin to display after the primary shipping address has been created for the customer.
+The address book will only begin to display after the primary billing or shipping address has been created for the customer.
 
 = Will this plugin allow my customers to ship to multiple locations with a single order? =
 No, this plugin only allows for the storage of multiple shipping addresses. If a customer would like to ship to multiple locations, they should complete multiple orders.
 
-= How can I add custom fields to my shipping address? =
-WooCommerce Address Book uses the standard WooCommerce address functions so any method to modify the shipping fields will still work.
-We have tested that using the standard filters work correctly:
+= How can I add custom fields to my billing/shipping address? =
+WooCommerce Address Book uses the standard WooCommerce address functions so any method to modify the address fields will still work.
+We have tested that using the standard filters works correctly:
 * https://docs.woocommerce.com/document/tutorial-customising-checkout-fields-using-actions-and-filters/
 We have also tested this plugin by WooCommerce:
 * https://woocommerce.com/products/woocommerce-checkout-field-editor/
@@ -63,13 +73,9 @@ Then save this .mo file to your WordPress site at `wp-content/languages/plugins/
 
 You may also use PoEdit and create a translation file which can be exported as a `.mo` file to be saved in the same location.
 
-= Where are the settings for this plugin? =
-
-There are currently no settings, everything is based on your current WooCommerce address and checkout settings.
-
 == Screenshots ==
-1. Manage your address book on the account page. Choose your primary shipping address, or add multiple alternative addresses.
-2. Easily select your shipping address on checkout.
+1. Manage your address book on the account page. Choose your primary billing address, shipping address, or add multiple alternative addresses.
+2. Easily select your billing and shipping address on checkout.
 
 == Changelog ==
 
@@ -81,6 +87,7 @@ There are currently no settings, everything is based on your current WooCommerce
 * Adds settings to set if new address should be selected or primary address on checkout.
 * Adds setting if the address nickname field should show on checkout.
 * Fix checkbox to change address that didn't work from showing with WooCommerce Subscriptions plugin.
+* Adds confirmation when deleting an address from the address book.
 * Support for PHP 8 and jQuery 3. Thanks [Hinyka](https://github.com/hallme/woo-address-book/pull/96)
 * Various other fixes, see [#97](https://github.com/hallme/woo-address-book/pull/97) for details.
 
