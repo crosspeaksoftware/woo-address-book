@@ -83,6 +83,7 @@ class WC_Address_Book {
 		add_action( 'template_redirect', array( $this, 'before_save_address' ), 9 );
 
 		// WooCommerce Subscriptions support.
+		add_filter( 'woocommerce_billing_fields', array( $this, 'remove_address_subscription_update_box' ), 10, 1 );
 		add_filter( 'woocommerce_shipping_fields', array( $this, 'remove_address_subscription_update_box' ), 10, 1 );
 
 		// Adds support for address nicknames.
@@ -1061,6 +1062,7 @@ class WC_Address_Book {
 	 */
 	public function remove_address_subscription_update_box( $address_fields ) {
 		if ( isset( $_GET['address-book'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			remove_action( 'woocommerce_after_edit_address_form_billing', 'WC_Subscriptions_Addresses::maybe_add_edit_address_checkbox', 10 );
 			remove_action( 'woocommerce_after_edit_address_form_shipping', 'WC_Subscriptions_Addresses::maybe_add_edit_address_checkbox', 10 );
 		}
 
