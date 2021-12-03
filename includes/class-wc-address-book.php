@@ -190,6 +190,7 @@ class WC_Address_Book {
 				'delete_security'   => wp_create_nonce( 'woo-address-book-delete' ),
 				'primary_security'  => wp_create_nonce( 'woo-address-book-primary' ),
 				'checkout_security' => wp_create_nonce( 'woo-address-book-checkout' ),
+				'deleteConfirmation' => __( 'Are you sure you want to delete this address?', 'woo-address-book' ),
 			)
 		);
 
