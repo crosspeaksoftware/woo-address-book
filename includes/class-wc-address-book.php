@@ -205,32 +205,6 @@ class WC_Address_Book {
 	}
 
 	/**
-	 * Format addresses from before update 1.8.0 where billing address functionality was added
-	 *
-	 * @param string $user_id The user ID.
-	 * @param string $type    Address type.
-	 *
-	 * @since 1.8.0
-	 */
-	public function format_addresses_backwards_compatible( $user_id, $type ) {
-		$address_names = get_user_meta( $user_id, 'wc_address_book', true );
-
-		$type_addresses = get_user_meta( $user_id, 'wc_address_book_' . $type, true );
-
-		if ( empty( $type_addresses ) ) {
-			if ( 'shipping' === $type ) {
-				if ( is_array( $address_names ) ) {
-					$this->save_address_names( $user_id, $address_names, 'shipping' );
-				} elseif ( 'shipping' === $address_names ) {
-					$this->save_address_names( $user_id, array( 'shipping' ), 'shipping' );
-				}
-			} elseif ( 'billing' === $type ) {
-				$this->save_address_names( $user_id, array( 'billing' ), 'billing' );
-			}
-		}
-	}
-
-	/**
 	 * Get address type from name
 	 *
 	 * @param string $name Address name.
@@ -526,28 +500,33 @@ class WC_Address_Book {
 		}
 
 		$address_names = get_user_meta( $user_id, 'wc_address_book_' . $type, true );
-
-		if ( empty( $address_names ) && 'shipping' === $type ) {
-			$this->format_addresses_backwards_compatible( $user_id, 'shipping' );
-
-			$shipping_address = get_user_meta( $user_id, 'shipping_address_1', true );
-			// Return just a default shipping address if no other addresses are saved.
-			if ( ! empty( $shipping_address ) ) {
-				return array( 'shipping' );
+		if ( empty( $address_names ) ) {
+			if ( 'shipping' === $type ) {
+				// Check for shipping addresses saved in pre 2.0 format.
+				$address_names = get_user_meta( $user_id, 'wc_address_book', true );
+				if ( is_array( $address_names ) ) {
+					// Save addresses in the new format.
+					$this->save_address_names( $user_id, $address_names, 'shipping' );
+					return $address_names;
+				}
+				$shipping_address = get_user_meta( $user_id, 'shipping_address_1', true );
+				// Return just a default shipping address if no other addresses are saved.
+				if ( ! empty( $shipping_address ) ) {
+					return array( 'shipping' );
+				}
 			}
-			// If we don't have a shipping address, just return an empty array.
-			return array();
-		} elseif ( empty( $address_names ) && 'billing' === $type ) {
-			$this->format_addresses_backwards_compatible( $user_id, 'billing' );
-
-			$billing_address = get_user_meta( $user_id, 'billing_address_1', true );
-			// Return just a default billing address if no other addresses are saved.
-			if ( ! empty( $billing_address ) ) {
-				return array( 'billing' );
+			if ( 'billing' === $type ) {
+				$billing_address = get_user_meta( $user_id, 'billing_address_1', true );
+				// Return just a default billing address if no other addresses are saved.
+				if ( ! empty( $billing_address ) ) {
+					return array( 'billing' );
+				}
 			}
-			// If we don't have a billing address, just return an empty array.
+
+			// If we don't have an address, just return an empty array.
 			return array();
 		}
+
 		return $address_names;
 	}
 
