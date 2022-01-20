@@ -143,7 +143,7 @@ jQuery( function ( $ ) {
 	/*
 	 * AJAX call display address on checkout when selected.
 	 */
-	function checkout_field_prepop( addressType) {
+	function checkout_field_prepop( addressType ) {
 
 		let countryInputName = addressType + '_country';
 		let stateInputName = addressType + '_state';
@@ -157,6 +157,25 @@ jQuery( function ( $ ) {
 		if ( name !== undefined ) {
 
 			if ( 'add_new' === name ) {
+
+				// If shipping calculator used on cart page
+				if ( addressType === 'shipping' && typeof shipping_country_o !== 'undefined' && typeof shipping_state_o !== 'undefined' && typeof shipping_city_o !== 'undefined' && typeof shipping_postcode_o !== 'undefined' ) {
+					
+					$( "#shipping_country" ).val( shipping_country_o ).trigger( 'change' );
+					$( "#shipping_state" ).val( shipping_state_o ).trigger( 'change' );
+					$( "#shipping_city" ).val( shipping_city_o );
+					$( "#shipping_postcode" ).val( shipping_postcode_o );
+
+					delete shipping_country_o;
+					delete shipping_state_o;
+					delete shipping_city_o;
+					delete shipping_postcode_o;
+
+					// Remove BlockUI overlay
+					$( '.woocommerce-shipping-fields' ).unblock();
+
+					return;
+				}
 
 				// Clear values when adding a new address.
 				$( '.woocommerce-' + addressType + '-fields__field-wrapper input' ).not( $( '#' + countryInputName ) ).each( function () {
@@ -195,8 +214,11 @@ jQuery( function ( $ ) {
 					},
 					dataType: 'json',
 					success: function ( response ) {
+
+						// If shipping calculator used on cart page
 						if ( addressType === 'shipping' && typeof shipping_country_o !== 'undefined' && typeof shipping_state_o !== 'undefined' && typeof shipping_city_o !== 'undefined' && typeof shipping_postcode_o !== 'undefined' ) {
 
+							// If entered values do not equal shipping calculator values
 							if ( shipping_country_o !== response.shipping_country || shipping_state_o !== response.shipping_state || shipping_city_o !== response.shipping_city || shipping_postcode_o !== response.shipping_postcode ) {
 
 								$( "#shipping_address_book" ).val( 'add_new' ).trigger( 'change' );
