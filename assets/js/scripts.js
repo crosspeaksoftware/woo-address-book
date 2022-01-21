@@ -150,9 +150,27 @@ jQuery( function ( $ ) {
 		let that = $( '#' + addressType + '_address_book_field #' + addressType + '_address_book' );
 		let name = $( that ).val();
 
-		if ( name !== undefined ) {
+		if ( name !== undefined && name !== null ) {
 
 			if ( 'add_new' === name ) {
+
+				// Clear values when adding a new address.
+				$( '.woocommerce-' + addressType + '-fields__field-wrapper input' ).not( $( '#' + countryInputName ) ).not( '#' + addressType + '_address_book' ).each( function () {
+					var input = $( this );
+					if ( input.attr("type") === "checkbox" || input.attr("type") === "radio") {
+						input.prop( "checked", false );
+					} else {
+						input.val( '' );
+					}
+				} );
+				$( '.woocommerce-' + addressType + '-fields__field-wrapper select' ).not( $( '#' + countryInputName ) ).not( '#' + addressType + '_address_book' ).each( function () {
+					var input = $( this );
+					if ( input.hasClass( 'selectized' ) && input[0] && input[0].selectize ) {
+						input[0].selectize.setValue( "" );
+					} else {
+						input.val( [] ).trigger( 'change' );
+					}
+				} );
 
 				// If shipping calculator used on cart page
 				if ( addressType === 'shipping' && typeof shipping_country_o !== 'undefined' && typeof shipping_state_o !== 'undefined' && typeof shipping_city_o !== 'undefined' && typeof shipping_postcode_o !== 'undefined' ) {
@@ -170,13 +188,7 @@ jQuery( function ( $ ) {
 					// Remove BlockUI overlay
 					$( '.woocommerce-shipping-fields' ).unblock();
 
-					return;
 				}
-
-				// Clear values when adding a new address.
-				$( '.woocommerce-' + addressType + '-fields__field-wrapper input' ).not( $( '#' + countryInputName ) ).each( function () {
-					$( this ).val( '' );
-				} );
 
 				return;
 			}
@@ -200,27 +212,11 @@ jQuery( function ( $ ) {
 
 						// If shipping calculator used on cart page
 						if ( addressType === 'shipping' && typeof shipping_country_o !== 'undefined' && typeof shipping_state_o !== 'undefined' && typeof shipping_city_o !== 'undefined' && typeof shipping_postcode_o !== 'undefined' ) {
-
 							// If entered values do not equal shipping calculator values
 							if ( shipping_country_o !== response.shipping_country || shipping_state_o !== response.shipping_state || shipping_city_o !== response.shipping_city || shipping_postcode_o !== response.shipping_postcode ) {
-
 								$( "#shipping_address_book" ).val( 'add_new' ).trigger( 'change' );
-
-								$( "#shipping_country" ).val( shipping_country_o ).trigger( 'change' );
-								$( "#shipping_state" ).val( shipping_state_o ).trigger( 'change' );
-								$( "#shipping_city" ).val( shipping_city_o );
-								$( "#shipping_postcode" ).val( shipping_postcode_o );
+								return;
 							}
-
-							delete shipping_country_o;
-							delete shipping_state_o;
-							delete shipping_city_o;
-							delete shipping_postcode_o;
-
-							// Remove BlockUI overlay
-							$( '.woocommerce-shipping-fields' ).unblock();
-
-							return;
 						}
 
 						// Loop through all fields and set values to the form.
