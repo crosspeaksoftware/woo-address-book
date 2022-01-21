@@ -146,10 +146,6 @@ jQuery( function ( $ ) {
 	function checkout_field_prepop( addressType ) {
 
 		let countryInputName = addressType + '_country';
-		let stateInputName = addressType + '_state';
-
-		let countryInput = $( '#' + countryInputName );
-		let stateInput = $( '#' + stateInputName );
 
 		let that = $( '#' + addressType + '_address_book_field #' + addressType + '_address_book' );
 		let name = $( that ).val();
@@ -160,7 +156,7 @@ jQuery( function ( $ ) {
 
 				// If shipping calculator used on cart page
 				if ( addressType === 'shipping' && typeof shipping_country_o !== 'undefined' && typeof shipping_state_o !== 'undefined' && typeof shipping_city_o !== 'undefined' && typeof shipping_postcode_o !== 'undefined' ) {
-					
+
 					$( "#shipping_country" ).val( shipping_country_o ).trigger( 'change' );
 					$( "#shipping_state" ).val( shipping_state_o ).trigger( 'change' );
 					$( "#shipping_city" ).val( shipping_city_o );
@@ -181,19 +177,6 @@ jQuery( function ( $ ) {
 				$( '.woocommerce-' + addressType + '-fields__field-wrapper input' ).not( $( '#' + countryInputName ) ).each( function () {
 					$( this ).val( '' );
 				} );
-
-				// Set Country Dropdown.
-				// Don't reset the value if only one country is available to choose.
-				if ( countryInput.length > 0 && countryInput.attr( 'readonly' ) !== 'readonly' ) {
-					countryInput.val( [] ).trigger( 'change' );
-					$( '#' + countryInputName + '_chosen' ).find( 'span' ).html( '' );
-				}
-
-				// Set state dropdown.
-				if ( stateInput.length > 0 && stateInput.attr( 'readonly' ) !== 'readonly' ) {
-					stateInput.val( [] ).trigger( 'change' );
-					$( '#' + stateInputName + '_chosen' ).find( 'span' ).html( '' );
-				}
 
 				return;
 			}
@@ -240,36 +223,35 @@ jQuery( function ( $ ) {
 							return;
 						}
 
-						// Loop through all fields incase there are custom ones.
+						// Loop through all fields and set values to the form.
 						Object.keys( response ).forEach( function ( key ) {
 							let input = $( '#' + key );
-							if ( input.length > 0 && input.attr( 'readonly' ) !== 'readonly' ) {
-								input.val( response[key] ).trigger( 'change' );
+							if ( input.length > 0 ) {
+								if ( input.attr( 'readonly' ) !== 'readonly' ) {
+									if ( input.is("select") ) {
+										if ( input.hasClass( 'selectized' ) && input[0] && input[0].selectize ) {
+											input[0].selectize.setValue( response[key] );
+										} else {
+											input.val( response[key] ).trigger( 'change' );
+										}
+									} else if ( input.attr("type") === "checkbox" ) {
+										input.prop( 'checked', response[key] === "1" ).trigger( 'change' );
+									} else {
+										input.val( response[key] ).trigger( 'change' );
+									}
+								}
+							} else {
+								// Handle radio buttons.
+								let radio_field = $( '#' + key + '_field' );
+								if ( radio_field.length > 0 ) {
+									radio_field.find("input[type='radio']").each( function (index, radio_button) {
+										if ( $(radio_button).val() === response[key] ) {
+											$(radio_button).prop( 'checked', true ).trigger( 'change' );
+										}
+									});
+								}
 							}
 						} );
-
-
-						// Set Country Dropdown.
-						if ( countryInput.length > 0 && countryInput.attr( 'readonly' ) !== 'readonly' ) {
-							if ( countryInput.hasClass( 'selectized' ) && countryInput[0] && countryInput[0].selectize ) {
-								countryInput[0].selectize.setValue( response[countryInputName] );
-							} else {
-								countryInput.val( response[countryInputName] ).trigger( 'change' );
-								let countryInputNameText = countryInputName + '_text';
-								$( '#' + countryInputName + '_chosen' ).find( 'span' ).html( response.countryInputNameText );
-							}
-						}
-
-						// Set state dropdown.
-						if ( stateInput.length > 0 && stateInput.attr( 'readonly' ) !== 'readonly' ) {
-							if ( stateInput.hasClass( 'selectized' ) && stateInput[0] && stateInput[0].selectize ) {
-								stateInput[0].selectize.setValue( response[stateInputName] );
-							} else {
-								stateInput.val( response[stateInputName] ).trigger( 'change' );
-								let stateName = $( '#' + stateInputName + ' option[value="' + response[stateInputName] + '"]' ).text();
-								$( '#s2id_' + stateInputName ).find( '.select2-chosen' ).html( stateName ).parent().removeClass( 'select2-default' );
-							}
-						}
 
 						// Remove BlockUI overlay
 						$( '.woocommerce-' + addressType + '-fields' ).unblock();
