@@ -79,6 +79,11 @@ You may also use PoEdit and create a translation file which can be exported as a
 
 == Changelog ==
 
+= 2.0.1 =
+* Fix select address issue when 'Add New Address as default selection' is enabled for shipping address.
+* Improve backwards compatibility with versions prior to 2.0.0
+* Better support custom field types other than standard input field.
+
 = 2.0.0 =
 * This is version 2.0.0 which is a major update with new functionality, be sure to review the changes below.
 * Billing and Shipping address support. This release adds support for Billing addresses in addition to Shipping addresses.
