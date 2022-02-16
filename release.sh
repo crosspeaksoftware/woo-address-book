@@ -34,7 +34,7 @@ echo "Tagging locally"
 git tag $version
 
 echo "Pushing tag to git"
-git push --tags origin master
+git push --tags origin main
 
 echo "Checking out current version on Wordpress SVN"
 svn co https://plugins.svn.wordpress.org/${package}/trunk /tmp/release-${package}
