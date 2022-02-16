@@ -13,6 +13,8 @@ Gives your customers the option to store multiple billing and shipping addresses
 
 Gives your customers the option to store multiple billing and shipping addresses and retrieve them on checkout. Addresses can be updated and modified quickly and easily in /my-account/, or saved as part of the checkout process.
 
+There is a demo setup at https://woo-address-book.hallme.com if you would like to try this plugin out with a demo store.
+
 = Settings =
 
 The settings for this plugin are located in WooCommerce General settings: WooCommerce -> Settings -> General.
