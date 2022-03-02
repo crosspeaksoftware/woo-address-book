@@ -44,6 +44,9 @@ The address book will only begin to display after the primary billing or shippin
 = Will this plugin allow my customers to ship to multiple locations with a single order? =
 No, this plugin only allows for the storage of multiple shipping addresses. If a customer would like to ship to multiple locations, they should complete multiple orders.
 
+= Why is the address not populating my custom fields at checkout? =
+Most standard custom fields do work with the Address Book. However, if you have custom fields added by a plugin which are updated by javascript then the Address Book plugin will not always know how to handle the data. If you are running into an issue please post an issue in the [support forum](https://wordpress.org/support/plugin/woo-address-book/) or on [github](https://github.com/hallme/woo-address-book/issues) with what plugin or code you are using and as much details as you can. We will determine if the Address Book plugin is able to provide support for the plugin or if a custom solution would need to be developed for your use case.
+
 = How can I add custom fields to my billing/shipping address? =
 WooCommerce Address Book uses the standard WooCommerce address functions so any method to modify the address fields will still work.
 We have tested that using the standard filters works correctly:
