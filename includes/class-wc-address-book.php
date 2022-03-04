@@ -76,8 +76,8 @@ class WC_Address_Book {
 		// Standardize the address edit fields to match Woo's IDs.
 		add_filter( 'woocommerce_form_field_args', array( $this, 'standardize_field_ids' ), 20, 3 );
 
-		add_filter( 'woocommerce_billing_fields', array( $this, 'replace_address_key' ), 1001, 2 );
-		add_filter( 'woocommerce_shipping_fields', array( $this, 'replace_address_key' ), 1001, 2 );
+		add_filter( 'woocommerce_billing_fields', array( $this, 'replace_address_key' ), 10001, 2 );
+		add_filter( 'woocommerce_shipping_fields', array( $this, 'replace_address_key' ), 10001, 2 );
 
 		// Hook in before address save.
 		add_action( 'template_redirect', array( $this, 'before_save_address' ), 9 );
