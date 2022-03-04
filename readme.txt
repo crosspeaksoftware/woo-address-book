@@ -84,7 +84,7 @@ You may also use PoEdit and create a translation file which can be exported as a
 
 == Changelog ==
 
-= 2.0.2 =
+= 2.0.2 and 2.0.3 =
 * Improve compatibility with [Conditional Checkout Fields for WooCommerce](https://woocommerce.com/products/conditional-checkout-fields-for-woocommerce/)
 
 = 2.0.1 =
