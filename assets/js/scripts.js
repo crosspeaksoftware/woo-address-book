@@ -168,7 +168,7 @@ jQuery( function ( $ ) {
 					if ( input.hasClass( 'selectized' ) && input[0] && input[0].selectize ) {
 						input[0].selectize.setValue( "" );
 					} else {
-						input.val( [] ).trigger( 'change' );
+						input.val( "" ).trigger( 'change' );
 					}
 				} );
 
