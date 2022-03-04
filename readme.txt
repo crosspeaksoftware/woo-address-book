@@ -84,6 +84,9 @@ You may also use PoEdit and create a translation file which can be exported as a
 
 == Changelog ==
 
+= 2.0.2 =
+* Improve compatibility with [Conditional Checkout Fields for WooCommerce](https://woocommerce.com/products/conditional-checkout-fields-for-woocommerce/)
+
 = 2.0.1 =
 * Fix select address issue when 'Add New Address as default selection' is enabled for shipping address.
 * Improve backwards compatibility with versions prior to 2.0.0
