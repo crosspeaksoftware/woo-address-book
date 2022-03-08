@@ -231,13 +231,13 @@ class WC_Address_Book {
 
 		?>
 
-		<?php if ( 'billing' === $type ) : ?>
+		<?php if ( 'billing' === $type && apply_filters( 'wc_address_book_show_billing_address_button', true ) ) : ?>
 		<div class="add-new-address">
 			<a href="<?php echo esc_url( $this->get_address_book_endpoint_url( $name, 'billing' ) ); ?>" class="add button"><?php echo esc_html_e( 'Add New Billing Address', 'woo-address-book' ); ?></a>
 		</div>
 		<?php endif; ?>
 
-		<?php if ( 'shipping' === $type ) : ?>
+		<?php if ( 'shipping' === $type && apply_filters( 'wc_address_book_show_shipping_address_button', true ) ) : ?>
 		<div class="add-new-address">
 			<a href="<?php echo esc_url( $this->get_address_book_endpoint_url( $name, 'shipping' ) ); ?>" class="add button"><?php echo esc_html_e( 'Add New Shipping Address', 'woo-address-book' ); ?></a>
 		</div>

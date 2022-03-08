@@ -84,6 +84,9 @@ You may also use PoEdit and create a translation file which can be exported as a
 
 == Changelog ==
 
+= 2.1.0 =
+* Add `wc_address_book_show_billing_address_button` and `wc_address_book_show_shipping_address_button` so you can programmatically disable the add new address buttons.
+
 = 2.0.2 and 2.0.3 =
 * Improve compatibility with [Conditional Checkout Fields for WooCommerce](https://woocommerce.com/products/conditional-checkout-fields-for-woocommerce/)
 
