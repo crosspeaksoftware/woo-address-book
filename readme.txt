@@ -2,7 +2,7 @@
 Contributors: hallme, doomwaxer, timbhowe, matt-h-1, hinyka
 Tags: WooCommerce, address book, multiple addresses, address
 Requires at least: 4.6
-Tested up to: 5.9.2
+Tested up to: 5.9.3
 Stable tag: 2.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -83,6 +83,9 @@ You may also use PoEdit and create a translation file which can be exported as a
 2. Easily select your billing and shipping address on checkout.
 
 == Changelog ==
+
+= 2.1.1 =
+* Require jquery-blockui for the script to fix loading order.
 
 = 2.1.0 =
 * Add `wc_address_book_show_billing_address_button` and `wc_address_book_show_shipping_address_button` so you can programmatically disable the add new address buttons.
