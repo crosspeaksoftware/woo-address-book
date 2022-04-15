@@ -2,7 +2,7 @@
 /**
  * Plugin Name: WooCommerce Address Book
  * Description: Gives your customers the option to store multiple shipping addresses and retrieve them on checkout..
- * Version: 2.1.0
+ * Version: 2.1.1
  * Author: Hall Internet Marketing
  * Author URI: https://www.hallme.com/
  * License: GPL2
