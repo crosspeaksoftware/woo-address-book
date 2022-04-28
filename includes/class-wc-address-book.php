@@ -1229,7 +1229,7 @@ class WC_Address_Book {
 			unset( $fields['shipping']['shipping_address_nickname'] );
 		}
 
-		if ( isset( $fields['billing']['billing_address_nickname'] ) && ! $this->get_wcab_option( 'shipping_address_nickname_checkout', 'no' ) ) {
+		if ( isset( $fields['billing']['billing_address_nickname'] ) && ! $this->get_wcab_option( 'billing_address_nickname_checkout', 'no' ) ) {
 			unset( $fields['billing']['billing_address_nickname'] );
 		}
 
