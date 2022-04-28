@@ -3,7 +3,7 @@ Contributors: hallme, doomwaxer, timbhowe, matt-h-1, hinyka
 Tags: WooCommerce, address book, multiple addresses, address
 Requires at least: 4.6
 Tested up to: 5.9.3
-Stable tag: 2.1.1
+Stable tag: 2.1.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -83,6 +83,9 @@ You may also use PoEdit and create a translation file which can be exported as a
 2. Easily select your billing and shipping address on checkout.
 
 == Changelog ==
+
+= 2.1.2 =
+* Fix: "Enable setting Billing Address Nickname during Checkout" setting not working properly [#121](https://github.com/hallme/woo-address-book/issues/121)
 
 = 2.1.1 =
 * Require jquery-blockui for the script to fix loading order.
