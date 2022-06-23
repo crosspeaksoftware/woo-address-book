@@ -8,7 +8,7 @@
  * License: GPL2
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: woo-address-book
- * WC tested up to: 6.5.1
+ * WC tested up to: 6.6.1
  *
  * @package WooCommerce Address Book
  */
