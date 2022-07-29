@@ -147,7 +147,11 @@ jQuery( function ( $ ) {
 	 */
 	function checkout_field_prepop( address_type, initial_address ) {
 
+		if ( initial_address && $( '#' + address_type + '_address_book_field' ).hasClass( 'wc-address-book-subscription-renewal' ) ) {
+			return;
+		}
 		let that = $( '#' + address_type + '_address_book_field #' + address_type + '_address_book' );
+
 		let name = $( that ).val();
 
 		if ( name !== undefined && name !== null ) {

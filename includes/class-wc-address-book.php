@@ -626,12 +626,22 @@ class WC_Address_Book {
 					);
 
 					if ( ! empty( $address_book ) && false !== $address_book ) {
-						$default_to_new_address = $this->get_wcab_option( $type . '_default_to_new_address', 'no' );
+						$is_subscription_renewal = $this->is_subscription_renewal();
+
+						if ( $is_subscription_renewal ) {
+							$default_to_new_address = false;
+						} else {
+							$default_to_new_address = $this->get_wcab_option( $type . '_default_to_new_address', false );
+						}
 
 						foreach ( $address_book as $name => $address ) {
 							if ( ! empty( $address[ $name . '_address_1' ] ) ) {
 								$address_selector[ $type . '_address_book' ]['options'][ $name ] = $this->address_select_label( $address, $name );
 							}
+						}
+
+						if ( $is_subscription_renewal ) {
+							$address_selector[ $type . '_address_book' ]['class'][] = 'wc-address-book-subscription-renewal';
 						}
 
 						$address_selector[ $type . '_address_book' ]['options']['add_new'] = __( 'Add New Address', 'woo-address-book' );
@@ -870,8 +880,7 @@ class WC_Address_Book {
 				$shipping_name = $this->set_new_address_name( $address_names, 'shipping' );
 				$this->add_address_name( $customer_id, $shipping_name, 'shipping' );
 			}
-		}
-		else {
+		} else {
 			$shipping_name = 'shipping';
 		}
 
@@ -1055,6 +1064,18 @@ class WC_Address_Book {
 		}
 
 		return $address_fields;
+	}
+
+	/**
+	 * Checks if this is a subscription renewal order.
+	 *
+	 * @return bool
+	 */
+	public function is_subscription_renewal() {
+		if ( ! function_exists( 'wcs_get_order_type_cart_items' ) ) {
+			return false;
+		}
+		return isset( WC()->cart ) && count( wcs_get_order_type_cart_items( 'renewal' ) ) === count( WC()->cart->get_cart() );
 	}
 
 	/**
