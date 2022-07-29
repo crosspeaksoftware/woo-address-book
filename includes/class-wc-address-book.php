@@ -854,16 +854,25 @@ class WC_Address_Book {
 		}
 
 		// Name new address and update address book.
-		if ( 'add_new' === $billing_name || false === $billing_name ) {
-			$address_names = $this->get_address_names( $customer_id, 'billing' );
-			$billing_name  = $this->set_new_address_name( $address_names, 'billing' );
-			$this->add_address_name( $customer_id, $billing_name, 'billing' );
+		if ( $this->get_wcab_option( 'billing_enable' ) === true ) {
+			if ( 'add_new' === $billing_name || false === $billing_name ) {
+				$address_names = $this->get_address_names( $customer_id, 'billing' );
+				$billing_name  = $this->set_new_address_name( $address_names, 'billing' );
+				$this->add_address_name( $customer_id, $billing_name, 'billing' );
+			}
+		} else {
+			$billing_name = 'billing';
 		}
 
-		if ( ( 'add_new' === $shipping_name || false === $shipping_name ) && false === $ignore_shipping_address ) {
-			$address_names = $this->get_address_names( $customer_id, 'shipping' );
-			$shipping_name = $this->set_new_address_name( $address_names, 'shipping' );
-			$this->add_address_name( $customer_id, $shipping_name, 'shipping' );
+		if ( $this->get_wcab_option( 'shipping_enable' ) === true ) {
+			if ( ( 'add_new' === $shipping_name || false === $shipping_name ) && false === $ignore_shipping_address ) {
+				$address_names = $this->get_address_names( $customer_id, 'shipping' );
+				$shipping_name = $this->set_new_address_name( $address_names, 'shipping' );
+				$this->add_address_name( $customer_id, $shipping_name, 'shipping' );
+			}
+		}
+		else {
+			$shipping_name = 'shipping';
 		}
 
 		$data = $checkout_object->get_posted_data();
