@@ -30,27 +30,29 @@ jQuery( function ( $ ) {
 	$.blockUI.defaults.overlayCSS.backgroundColor = '#fff';
 
 	// Retrieves default billing address
-	checkout_field_prepop( 'billing' );
+	checkout_field_prepop( 'billing', true );
 
 	// Retrieves billing address when another is selected.
 	$( '#billing_address_book_field #billing_address_book' ).on( 'change', function () {
-		checkout_field_prepop( 'billing' );
+		checkout_field_prepop( 'billing', false );
 	} );
 
+	var shipping_address_from_cart = false;
 	// Customer entered address into the shipping calculator
-	if ( $( "form[name=checkout]" ).length > 0 && ( $( "#shipping_country" ).val() !== "" ||  $( "#shipping_state" ).val() !== "" || $( "#shipping_city" ).val() !== "" || $( "#shipping_postcode" ).val() !== "" ) ) {
+	if ( $( "form[name=checkout]" ).length > 0 && ( $( "#shipping_country" ).val() !== "" || $( "#shipping_state" ).val() !== "" || $( "#shipping_city" ).val() !== "" || $( "#shipping_postcode" ).val() !== "" ) ) {
 		shipping_country_o = $( "#shipping_country" ).val();
 		shipping_state_o = $( "#shipping_state" ).val();
 		shipping_city_o = $( "#shipping_city" ).val();
 		shipping_postcode_o = $( "#shipping_postcode" ).val();
+		shipping_address_from_cart = true;
 	}
 
 	// Retrieves default shipping address
-	checkout_field_prepop( 'shipping' );
+	checkout_field_prepop( 'shipping', true );
 
 	// Retrieves shipping address when another is selected.
 	$( '#shipping_address_book_field #shipping_address_book' ).on( 'change', function () {
-		checkout_field_prepop( 'shipping' );
+		checkout_field_prepop( 'shipping', false );
 	} );
 
 	// Update checkout when address changes
@@ -143,11 +145,9 @@ jQuery( function ( $ ) {
 	/*
 	 * AJAX call display address on checkout when selected.
 	 */
-	function checkout_field_prepop( addressType ) {
+	function checkout_field_prepop( address_type, initial_address ) {
 
-		let countryInputName = addressType + '_country';
-
-		let that = $( '#' + addressType + '_address_book_field #' + addressType + '_address_book' );
+		let that = $( '#' + address_type + '_address_book_field #' + address_type + '_address_book' );
 		let name = $( that ).val();
 
 		if ( name !== undefined && name !== null ) {
@@ -155,7 +155,7 @@ jQuery( function ( $ ) {
 			if ( 'add_new' === name ) {
 
 				// Clear values when adding a new address.
-				$( '.woocommerce-' + addressType + '-fields__field-wrapper input' ).not( $( '#' + countryInputName ) ).not( '#' + addressType + '_address_book' ).each( function () {
+				$( '.woocommerce-' + address_type + '-fields__field-wrapper input' ).not( $( '#' + address_type + '_country' ) ).not( '#' + address_type + '_address_book' ).each( function () {
 					var input = $( this );
 					if ( input.attr("type") === "checkbox" || input.attr("type") === "radio") {
 						input.prop( "checked", false );
@@ -163,7 +163,7 @@ jQuery( function ( $ ) {
 						input.val( '' );
 					}
 				} );
-				$( '.woocommerce-' + addressType + '-fields__field-wrapper select' ).not( $( '#' + countryInputName ) ).not( '#' + addressType + '_address_book' ).each( function () {
+				$( '.woocommerce-' + address_type + '-fields__field-wrapper select' ).not( $( '#' + address_type + '_country' ) ).not( '#' + address_type + '_address_book' ).each( function () {
 					var input = $( this );
 					if ( input.hasClass( 'selectized' ) && input[0] && input[0].selectize ) {
 						input[0].selectize.setValue( "" );
@@ -173,7 +173,7 @@ jQuery( function ( $ ) {
 				} );
 
 				// If shipping calculator used on cart page
-				if ( addressType === 'shipping' && typeof shipping_country_o !== 'undefined' && typeof shipping_state_o !== 'undefined' && typeof shipping_city_o !== 'undefined' && typeof shipping_postcode_o !== 'undefined' ) {
+				if ( address_type === 'shipping' && shipping_address_from_cart ) {
 
 					$( "#shipping_country" ).val( shipping_country_o ).trigger( 'change' );
 					$( "#shipping_state" ).val( shipping_state_o ).trigger( 'change' );
@@ -184,6 +184,7 @@ jQuery( function ( $ ) {
 					delete shipping_state_o;
 					delete shipping_city_o;
 					delete shipping_postcode_o;
+					shipping_address_from_cart = false;
 
 					// Remove BlockUI overlay
 					$( '.woocommerce-shipping-fields' ).unblock();
@@ -196,7 +197,7 @@ jQuery( function ( $ ) {
 			if ( name.length > 0 ) {
 
 				// Show BlockUI overlay
-				$( '.woocommerce-' + addressType + '-fields' ).block();
+				$( '.woocommerce-' + address_type + '-fields' ).block();
 
 				$.ajax( {
 					url: woo_address_book.ajax_url,
@@ -204,14 +205,14 @@ jQuery( function ( $ ) {
 					data: {
 						action: 'wc_address_book_checkout_update',
 						name: name,
-						type: addressType,
+						type: address_type,
 						nonce: woo_address_book.checkout_security,
 					},
 					dataType: 'json',
 					success: function ( response ) {
 
 						// If shipping calculator used on cart page
-						if ( addressType === 'shipping' && typeof shipping_country_o !== 'undefined' && typeof shipping_state_o !== 'undefined' && typeof shipping_city_o !== 'undefined' && typeof shipping_postcode_o !== 'undefined' ) {
+						if ( initial_address && address_type === 'shipping' && shipping_address_from_cart ) {
 							// If entered values do not equal shipping calculator values
 							if ( shipping_country_o !== response.shipping_country || shipping_state_o !== response.shipping_state || shipping_city_o !== response.shipping_city || shipping_postcode_o !== response.shipping_postcode ) {
 								$( "#shipping_address_book" ).val( 'add_new' ).trigger( 'change' );
@@ -250,7 +251,7 @@ jQuery( function ( $ ) {
 						} );
 
 						// Remove BlockUI overlay
-						$( '.woocommerce-' + addressType + '-fields' ).unblock();
+						$( '.woocommerce-' + address_type + '-fields' ).unblock();
 					}
 				} );
 			}
