@@ -84,6 +84,9 @@ You may also use PoEdit and create a translation file which can be exported as a
 
 == Changelog ==
 
+= 2.1.3 =
+* Fix: Address saving to customer Address Book if Billing or Shipping Address Book was disabled. [#128](https://github.com/hallme/woo-address-book/issues/128)
+
 = 2.1.2 =
 * Fix: "Enable setting Billing Address Nickname during Checkout" setting not working properly [#121](https://github.com/hallme/woo-address-book/issues/121)
 
