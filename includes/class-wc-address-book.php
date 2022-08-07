@@ -96,6 +96,9 @@ class WC_Address_Book {
 		add_filter( 'woocommerce_localisation_address_formats', array( $this, 'address_nickname_localization_format' ), -10 );
 		add_filter( 'woocommerce_my_account_my_address_formatted_address', array( $this, 'get_address_nickname' ), 10, 3 );
 		add_filter( 'woocommerce_checkout_fields', array( $this, 'remove_nickname_field_from_checkout' ) );
+
+		// Add Address Book export endpoint.
+		add_action( 'init', array( $this, 'wc_address_book_export_endpoint' ) );
 	} // end constructor
 
 	/**
@@ -361,6 +364,221 @@ class WC_Address_Book {
 	 */
 	public function wc_address_book_page( $type ) {
 		wc_get_template( 'myaccount/my-address-book.php', array( 'type' => $type ), '', plugin_dir_path( dirname( __FILE__ ) ) . 'templates/' );
+	}
+
+	/**
+	 * Address Book export endpoint.
+	 *
+	 * @since 2.2.0
+	 */
+	public function wc_address_book_export_endpoint() {
+		if( isset( $_GET['type'] ) ) {
+			$type = $_GET['type'];
+			$woo_address_book_customer_id = get_current_user_id();
+			$delimiter = ";";
+
+			if( 'billing' === $type || 'shipping' === $type ) {
+				header("Content-type: text/csv");
+				header("Cache-Control: no-store, no-cache");
+				header('Content-Disposition: attachment; filename="woo-address-book_' . $type . '.csv"');
+
+				$this->get_addresses_as_csv( $this->get_address_book( $woo_address_book_customer_id, $type ), $delimiter );
+
+				exit;
+			}
+		}
+	}
+
+	/**
+	 * Adds a link/button to the my account for Address Book export.
+	 *
+	 * @since 2.2.0
+	 *
+	 * @param string $type - 'billing' or 'shipping'.
+	 */
+	public function add_wc_address_book_export_button( $type ) {
+		if ( 'billing' === $type ) : ?>
+		<div class="">
+			<a href="<?php echo esc_url( $this->get_wc_address_book_export_endpoint_url( $type ) ); ?>" class="button"><?php echo esc_html_e( 'Export all Billing Addresses', 'woo-address-book' ); ?></a>
+		</div>
+		<?php endif;
+
+		if ( 'shipping' === $type ) : ?>
+		<div class="">
+			<a href="<?php echo esc_url( $this->get_wc_address_book_export_endpoint_url( $type ) ); ?>" class="button"><?php echo esc_html_e( 'Export all Shipping Addresses', 'woo-address-book' ); ?></a>
+		</div>
+		<?php endif;
+	}
+
+	/**
+	 * Get the Address Book export endpoint URL.
+	 *
+	 * @since 2.2.0
+	 *
+	 * @param string $type - 'billing' or 'shipping'.
+	 * @return string
+	 */
+	public function get_wc_address_book_export_endpoint_url( $type ) {
+		$url = wc_get_endpoint_url( 'address-book-export', '', get_permalink() );
+
+		return add_query_arg( array( 'type' => $type ), $url );
+	}
+
+
+	/**
+	 * Replaces keys in the associative array
+	 *
+	 * @since 2.2.0
+	 *
+	 * @param array $input
+	 * @param string $pattern
+	 * @param string $replacement
+	 * @return array
+	 */
+	public function replace_array_keys(array $input, $pattern, $replacement) {
+		$keys = array_keys( $input );
+		$values = array_values( $input );
+		$result = preg_replace( $pattern, $replacement, $keys );
+		$output = array_combine( $result, $values );
+
+		return $output;
+	}
+
+	/**
+	 * Format adresses as csv file
+	 *
+	 * @since 2.2.0
+	 *
+	 * @param array $addresses_array
+	 * @param string $delimiter
+	 */
+	public function get_addresses_as_csv( $addresses_array, $delimiter = "," ) {
+		$i = 1;
+		$arr = array();
+
+		foreach ( $addresses_array as $address_array => $name ) {
+			$replaced_arr = $this->replace_array_keys( $name, "/\d_/", "_" );
+
+			if( $i === 1 ) {
+				$keys = array_keys($replaced_arr);
+			}
+
+			$arr[$i++] = $replaced_arr;
+		}
+
+		echo implode( $delimiter, $keys ) . "\n";
+
+		foreach ( $arr as $column => $row ) {
+			if ( !empty( array_filter( $row ) ) ) {
+				echo implode( $delimiter, $row ) . "\n";
+			}
+		}
+	}
+
+	/**
+	 * Parse uploaded csv file
+	 *
+	 * @since 2.2.0
+	 *
+	 * @param array $file
+	 * @param string $delimiter
+	 * @return array
+	 */
+	public function wc_address_book_parse_csv_file( $file, $delimiter = "," ) {
+		if ( $file['error'] === 0 ) {
+			$ext = strtolower( end( explode( '.', $file['name'] ) ) );
+			// $type = $file['type'];
+			$tmp_name = $file['tmp_name'];
+
+			if ( $ext === 'csv' ) {
+				if ( ( $handle = fopen( $tmp_name, 'r' ) ) !== false ) {
+					$row = 0;
+					$csv = array();
+
+					while ( ( $data = fgetcsv( $handle, 1000, $delimiter ) ) !== false ) {
+						if ( $row === 0 ) {
+							// Number of columns in the .csv file.
+							$col_count = count( $data );
+
+							// Values in the first row are used as key names.
+							$keys = array_values( $data );
+						} else {
+							for ( $i = 0; $i < $col_count; $i++ ) {
+								$csv[$row-1][$keys[$i]] = $data[$i];
+							}
+						}
+						$row++;
+					}
+
+					fclose( $handle );
+
+					return $csv;
+				}
+			} else {
+				// Invalid file type
+				echo "<div>Invalid file type!</div>";
+			}
+		} else {
+			// Error uploading file
+			echo "<div>Error uploading file!</div>";
+		}
+	}
+
+	/**
+	 * Get last address number
+	 *
+	 * @since 2.2.0
+	 *
+	 * @param int $user_id
+	 * @param string $type - 'billing' or 'shipping'.
+	 * @return int
+	 */
+	public function get_last_address_number( $user_id, $type ) {
+		$last_address_number = $this->get_address_names( $user_id, $type );
+		return intval( trim( end( $last_address_number ), "bghilnps" ) );
+	}
+
+	/**
+	 * Get new address number
+	 *
+	 * @since 2.2.0
+	 *
+	 * @param int $user_id
+	 * @param string $type - 'billing' or 'shipping'.
+	 * @return int
+	 */
+	public function get_new_address_number( $user_id, $type ) {
+		$last_address_number = $this->get_last_address_number( $user_id, $type );
+		if ( $last_address_number === 0 ) {
+			$new_address_number = 2;
+		} else {
+			$new_address_number = $last_address_number + 1;
+		}
+		return $new_address_number;
+	}
+
+	/**
+	 * Import parsed adresses
+	 *
+	 * @since 2.2.0
+	 *
+	 * @param int $user_id
+	 * @param string $type - 'billing' or 'shipping'.
+	 * @param array $parsed_data
+	 *
+	 * @todo add success / failure verification
+	 */
+	public function import_addresses( $user_id, $type, $parsed_data  ) {
+
+		foreach ( $parsed_data as $data  ) {
+			$new_address_number = $this->get_new_address_number( $user_id, $type );
+
+			foreach($data as $key => $value) {
+				update_user_meta( $user_id, str_replace( $type, $type.$new_address_number, $key ), $value );
+			}
+
+			$this->add_address_name( $user_id, $type.$new_address_number, $type );
+		}
 	}
 
 	/**

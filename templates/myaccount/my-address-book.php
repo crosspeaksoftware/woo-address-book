@@ -11,7 +11,7 @@
  * the readme will list any important changes.
  *
  * @package WooCommerce Address Book/Templates
- * @version 1.8.0
+ * @version 2.2.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -26,6 +26,107 @@ $woo_address_book_shipping_address_book = $wc_address_book->get_address_book( $w
 
 // Do not display on address edit pages.
 if ( ! $type ) {
+	if ( $wc_address_book->get_wcab_option( 'tools_enable' ) === true && ( $wc_address_book->get_wcab_option( 'billing_enable' ) === true || $wc_address_book->get_wcab_option( 'shipping_enable' ) === true ) ) {
+		?>
+		<div class="address_book address_book_tools" style="padding-bottom:20px;">
+			<header>
+				<h3><?php esc_html_e( 'Address Book Tools', 'woo-address-book' ); ?></h3>
+			</header>
+			<div class="u-columns woocommerce-Addresses col2-set addresses">
+				<?php
+				if ( $wc_address_book->get_wcab_option( 'billing_enable' ) === true ) {
+				?>
+				<div class="u-column1 col-1 woocommerce-Address">
+					<strong><?php echo esc_html_e( 'Import new Billing Addresses', 'woo-address-book' ); ?></strong>
+					<?php
+					if(isset($_FILES['wc_address_book_upload_billing_csv'])){
+						$file = $_FILES['wc_address_book_upload_billing_csv'];
+						switch ( strval( $_POST['delimiter'] ) ) {
+							case "comma":
+								$delimiter = ",";
+								break;
+							case "semicolon":
+								$delimiter = ";";
+								break;
+						}
+
+						$parsed_data = $wc_address_book->wc_address_book_parse_csv_file( $file, $delimiter );
+						$wc_address_book->import_addresses($woo_address_book_customer_id, 'billing', $parsed_data );
+					} else {
+					?>
+						<form  method="post" enctype="multipart/form-data" id="wc_address_book_upload_billing" name="wc_address_book_upload_billing">
+							<div>
+								<span><?php echo esc_html_e( 'Delimiter', 'woo-address-book' ); ?>: </span>
+								<label for="billing_delimiter_comma"><?php echo esc_html_e( 'Comma', 'woo-address-book' ); ?></label>
+								<input type="radio" name="delimiter" value="comma" id="billing_delimiter_comma">
+								<label for="billing_delimiter_semicolon"><?php echo esc_html_e( 'Semicolon', 'woo-address-book' ); ?></label>
+								<input type="radio" name="delimiter" value="semicolon" id="billing_delimiter_semicolon" checked="checked">
+							</div>
+							<div>
+								<input type="file" accept=".csv" id="wc_address_book_upload_billing_csv" name="wc_address_book_upload_billing_csv">
+							</div>
+							<div>
+								<input type="submit" value="<?php echo esc_attr__( 'Import', 'woo-address-book' ); ?>">
+							</div>
+						</form>
+					<?php
+					}
+					?>
+					<p><strong><?php $wc_address_book->add_wc_address_book_export_button( 'billing' ); ?></strong></p>
+				</div>
+				<?php
+				}
+				?>
+				<?php
+				if ( $wc_address_book->get_wcab_option( 'shipping_enable' ) === true ) {
+				?>
+
+				<div class="u-column2 col-2 woocommerce-Address">
+					<strong><?php echo esc_html_e( 'Import new Shipping Addresses', 'woo-address-book' ); ?></strong>
+					<?php
+					if(isset($_FILES['wc_address_book_upload_shipping_csv'])){
+						$file = $_FILES['wc_address_book_upload_shipping_csv'];
+						switch ( strval( $_POST['delimiter'] ) ) {
+							case "comma":
+								$delimiter = ",";
+								break;
+							case "semicolon":
+								$delimiter = ";";
+								break;
+						}
+
+						$parsed_data = $wc_address_book->wc_address_book_parse_csv_file( $file, $delimiter );
+						$wc_address_book->import_addresses($woo_address_book_customer_id, 'shipping', $parsed_data );
+					} else {
+					?>
+						<form  method="post" enctype="multipart/form-data" id="wc_address_book_upload_shipping" name="wc_address_book_upload_shipping">
+							<div>
+								<span><?php echo esc_html_e( 'Delimiter', 'woo-address-book' ); ?>: </span>
+								<label for="shipping_delimiter_comma"><?php echo esc_html_e( 'Comma', 'woo-address-book' ); ?></label>
+								<input type="radio" name="delimiter" value="comma" id="shipping_delimiter_comma">
+								<label for="shipping_delimiter_semicolon"><?php echo esc_html_e( 'Semicolon', 'woo-address-book' ); ?></label>
+								<input type="radio" name="delimiter" value="semicolon" id="shipping_delimiter_semicolon" checked="checked">
+							</div>
+							<div>
+								<input type="file" accept=".csv" id="wc_address_book_upload_shipping_csv" name="wc_address_book_upload_shipping_csv">
+							</div>
+							<div>
+								<input type="submit" value="<?php echo esc_attr__( 'Import', 'woo-address-book' ); ?>">
+							</div>
+						</form>
+					<?php
+					}
+					?>
+					<p><strong><?php $wc_address_book->add_wc_address_book_export_button( 'shipping' ); ?></strong></p>
+				</div>
+				<?php
+				}
+				?>
+			</div>
+		</div>
+	<?php
+	}
+
 	if ( $wc_address_book->get_wcab_option( 'billing_enable' ) === true ) {
 		$woo_address_book_billing_address = get_user_meta( $woo_address_book_customer_id, 'billing_address_1', true );
 
