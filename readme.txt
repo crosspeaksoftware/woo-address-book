@@ -84,6 +84,10 @@ You may also use PoEdit and create a translation file which can be exported as a
 
 == Changelog ==
 
+= 2.1.4 =
+* Fix: When using WooCommerce Subscriptions, preserve existing address when doing a manual payment on the subscription.
+* Cleanup: Improve the checking for the address from the cart to prevent some issues with it not being loaded.
+
 = 2.1.3 =
 * Fix: Address saving to customer Address Book if Billing or Shipping Address Book was disabled. [#128](https://github.com/hallme/woo-address-book/issues/128)
 
