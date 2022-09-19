@@ -39,7 +39,7 @@ jQuery( function ( $ ) {
 
 	var shipping_address_from_cart = false;
 	// Customer entered address into the shipping calculator
-	if ( $( "form[name=checkout]" ).length > 0 && ( $( "#shipping_country" ).val() !== "" || $( "#shipping_state" ).val() !== "" || $( "#shipping_city" ).val() !== "" || $( "#shipping_postcode" ).val() !== "" ) ) {
+	if ( $("#woocommerce_enable_shipping_calc").val() === "yes" && $( "form[name=checkout]" ).length > 0 && ( $( "#shipping_country" ).val() !== "" || $( "#shipping_state" ).val() !== "" || $( "#shipping_city" ).val() !== "" || $( "#shipping_postcode" ).val() !== "" ) ) {
 		shipping_country_o = $( "#shipping_country" ).val();
 		shipping_state_o = $( "#shipping_state" ).val();
 		shipping_city_o = $( "#shipping_city" ).val();

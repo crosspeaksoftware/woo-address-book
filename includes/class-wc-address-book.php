@@ -66,6 +66,8 @@ class WC_Address_Book {
 		// Update the customer data with the information entered on checkout.
 		add_filter( 'woocommerce_checkout_update_customer_data', array( $this, 'woocommerce_checkout_update_customer_data' ), 10, 2 );
 
+		add_action( 'woocommerce_before_checkout_shipping_form', array( $this, 'woocommerce_before_checkout_shipping_form' ) );
+
 		// Add Address Book to Menu.
 		add_filter( 'woocommerce_account_menu_items', array( $this, 'wc_address_book_add_to_menu' ), 10 );
 		add_action( 'woocommerce_account_edit-address_endpoint', array( $this, 'wc_address_book_page' ), 20 );
@@ -1264,6 +1266,13 @@ class WC_Address_Book {
 		}
 
 		return $fields;
+	}
+
+	/**
+	 * Show an input to be able to get the shipping_calc setting into javascript.
+	 */
+	public function woocommerce_before_checkout_shipping_form() {
+		echo '<input type="hidden" id="woocommerce_enable_shipping_calc" value="' . esc_attr( get_option( 'woocommerce_enable_shipping_calc' ) ) . '" />';
 	}
 
 	/**

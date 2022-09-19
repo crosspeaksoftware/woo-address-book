@@ -84,6 +84,9 @@ You may also use PoEdit and create a translation file which can be exported as a
 
 == Changelog ==
 
+= 2.2.0 =
+* Update: When "Enable the shipping calculator on the cart page" is not checked in the admin then the City/State/Zip fields will not be pre-populated on Add New Address.
+
 = 2.1.4 =
 * Fix: When using WooCommerce Subscriptions, preserve existing address when doing a manual payment on the subscription.
 * Cleanup: Improve the checking for the address from the cart to prevent some issues with it not being loaded.
