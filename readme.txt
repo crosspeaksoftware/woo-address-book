@@ -13,7 +13,7 @@ Gives your customers the option to store multiple billing and shipping addresses
 
 Gives your customers the option to store multiple billing and shipping addresses and retrieve them on checkout. Addresses can be updated and modified quickly and easily in /my-account/, or saved as part of the checkout process.
 
-There is a demo setup at https://woo-address-book.hallme.com if you would like to try this plugin out with a demo store.
+There is a [demo setup](https://woo-address-book.hallme.com) if you would like to try this plugin out with a demo store.
 
 = Settings =
 
@@ -50,20 +50,20 @@ Most standard custom fields do work with the Address Book. However, if you have 
 = How can I add custom fields to my billing/shipping address? =
 WooCommerce Address Book uses the standard WooCommerce address functions so any method to modify the address fields will still work.
 We have tested that using the standard filters works correctly:
-* https://docs.woocommerce.com/document/tutorial-customising-checkout-fields-using-actions-and-filters/
+* [https://docs.woocommerce.com/document/tutorial-customising-checkout-fields-using-actions-and-filters/](https://docs.woocommerce.com/document/tutorial-customising-checkout-fields-using-actions-and-filters/)
 We have also tested this plugin by WooCommerce:
-* https://woocommerce.com/products/woocommerce-checkout-field-editor/
+* [https://woocommerce.com/products/woocommerce-checkout-field-editor/](https://woocommerce.com/products/woocommerce-checkout-field-editor/)
 
 = How do I translate this plugin? =
-We now use the new way of translating WordPress plugins at https://translate.wordpress.org/
+We now use the new way of translating WordPress plugins at [https://translate.wordpress.org/](https://translate.wordpress.org/)
 
-Feel free to contribute a translation at https://translate.wordpress.org/projects/wp-plugins/woo-address-book/
+Feel free to contribute a translation at [https://translate.wordpress.org/projects/wp-plugins/woo-address-book/](https://translate.wordpress.org/projects/wp-plugins/woo-address-book/)
 
 = How do I get my translation approved? =
 Someone needs to apply to be a translation editor for this plugin. If you have contributed a translation, you may apply to be the editor yourself.
 
 You can make the request and that request can be approved by the WordPress Localization editors.
-See here for more details: https://make.wordpress.org/polyglots/handbook/rosetta/roles-and-capabilities/pte-request/#pte-request-by-a-translator
+See here for more details: [https://make.wordpress.org/polyglots/handbook/rosetta/roles-and-capabilities/pte-request/#pte-request-by-a-translator](https://make.wordpress.org/polyglots/handbook/rosetta/roles-and-capabilities/pte-request/#pte-request-by-a-translator)
 
 = How can I use my translation before it is approved? =
 What you can do to use it locally right now is go to the translate page.
@@ -72,7 +72,7 @@ At the bottom by the Export link, select "Only matching the filter" and "Machine
 Then save this .mo file to your WordPress site at `wp-content/languages/plugins/woo-address-book-LANGUAGE.mo` replacing `LANGUAGE` with your language code.
 
 For example for German, you would go here:
-https://translate.wordpress.org/projects/wp-plugins/woo-address-book/stable/de/default/
+[https://translate.wordpress.org/projects/wp-plugins/woo-address-book/stable/de/default/](https://translate.wordpress.org/projects/wp-plugins/woo-address-book/stable/de/default/)
 
 Then save this .mo file to your WordPress site at `wp-content/languages/plugins/woo-address-book-de_DE.mo`
 
