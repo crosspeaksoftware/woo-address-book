@@ -34,7 +34,7 @@ class WC_Address_Book {
 	public function __construct() {
 
 		// Version Number.
-		$this->version = '2.2.0';
+		$this->version = '2.2.1';
 
 		// Register hooks that are fired when the plugin is activated, deactivated, and uninstalled, respectively.
 		register_activation_hook( __FILE__, array( $this, 'activate' ) );
@@ -96,6 +96,7 @@ class WC_Address_Book {
 		add_filter( 'woocommerce_localisation_address_formats', array( $this, 'address_nickname_localization_format' ), -10 );
 		add_filter( 'woocommerce_my_account_my_address_formatted_address', array( $this, 'get_address_nickname' ), 10, 3 );
 		add_filter( 'woocommerce_checkout_fields', array( $this, 'remove_nickname_field_from_checkout' ) );
+
 	} // end constructor
 
 	/**
@@ -228,24 +229,78 @@ class WC_Address_Book {
 	public function add_additional_address_button( $type ) {
 		$user_id       = get_current_user_id();
 		$address_names = $this->get_address_names( $user_id, $type );
+		$name 		   = $this->set_new_address_name( $address_names, $type );
+		$under_limit   = $this->limit_saved_addresses( $type );
 
-		$name = $this->set_new_address_name( $address_names, $type );
+		$add_button_link     = 'href="' . esc_url( $this->get_address_book_endpoint_url( $name, $type ) ) . '"';
+		$add_button_title    = '';
+		$add_button_classes  = 'add button add-'. $type . '-button scoot-down';
+		$add_button_text     = 'Add New ' . ucfirst( $type ) . ' Address';
 
+		if ( ! $under_limit ) {
+			$add_button_link     = '';
+			$add_button_title    = 'title="Refresh page after deleting addresses"';
+			$add_button_classes  = $add_button_classes . ' disabled';
+			$add_button_text     = ucfirst( $type ) . ' Address Book Full';
+		}
 		?>
 
-		<?php if ( 'billing' === $type && apply_filters( 'wc_address_book_show_billing_address_button', true ) ) : ?>
+		<?php if ( apply_filters( 'wc_address_book_show_' . $type . '_address_button', true ) ) : ?>
 		<div class="add-new-address">
-			<a href="<?php echo esc_url( $this->get_address_book_endpoint_url( $name, 'billing' ) ); ?>" class="add button"><?php echo esc_html_e( 'Add New Billing Address', 'woo-address-book' ); ?></a>
-		</div>
-		<?php endif; ?>
-
-		<?php if ( 'shipping' === $type && apply_filters( 'wc_address_book_show_shipping_address_button', true ) ) : ?>
-		<div class="add-new-address">
-			<a href="<?php echo esc_url( $this->get_address_book_endpoint_url( $name, 'shipping' ) ); ?>" class="add button"><?php echo esc_html_e( 'Add New Shipping Address', 'woo-address-book' ); ?></a>
+			<a
+				<?php echo $add_button_link; ?>
+				<?php echo $add_button_title; ?>
+				class="<?php echo $add_button_classes; ?>">
+					<?php echo esc_html_e( $add_button_text, 'woo-address-book' ); ?>
+			</a>
 		</div>
 		<?php endif; ?>
 
 		<?php
+	}
+
+	/**
+	 * Removes the link/button to add new addresses, if over the save limit in the settings.
+	 *
+	 * @param string $type - 'billing' or 'shipping'.
+	 *
+	 * @since 2.2.1
+	 */
+
+	public function limit_saved_addresses( $type ) {
+
+		$woo_address_book_customer_id            = get_current_user_id();
+		$woo_address_book_customer_address_book  = $this->get_address_book( $woo_address_book_customer_id, $type );
+
+		$count_addresses = $this->count_saved_addresses( $woo_address_book_customer_address_book );
+
+		$save_limit = get_option( 'woo_address_book_' . $type . '_save_limit', 0 );
+
+		if ( $save_limit == 0 ) {
+			return true;
+		} elseif ( $count_addresses < $save_limit ) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * Count the number of addresses saved in the customer's address book.
+	 *
+	 * @param array $customer_address_book - An array of customer addresses
+	 *
+	 * @since 2.2.1
+	 */
+
+	public function count_saved_addresses( $customer_address_book ) {
+
+		$count = 0;
+		foreach ( $customer_address_book as $wab_name => $wab_field ) {
+			$count++;
+		}
+		return $count;
+
 	}
 
 	/**
@@ -617,6 +672,7 @@ class WC_Address_Book {
 			foreach ( $fields as $type => $address_fields ) {
 				if ( ( 'billing' === $type && $this->get_wcab_option( 'billing_enable' ) === true ) || ( 'shipping' === $type && $this->get_wcab_option( 'shipping_enable' ) === true ) ) {
 					$address_book = $this->get_address_book( null, $type );
+					$under_limit   = $this->limit_saved_addresses( $type );
 
 					$address_selector                            = array();
 					$address_selector[ $type . '_address_book' ] = array(
@@ -646,7 +702,9 @@ class WC_Address_Book {
 							$address_selector[ $type . '_address_book' ]['class'][] = 'wc-address-book-subscription-renewal';
 						}
 
-						$address_selector[ $type . '_address_book' ]['options']['add_new'] = __( 'Add New Address', 'woo-address-book' );
+						if ( $under_limit ) {
+							$address_selector[ $type . '_address_book' ]['options']['add_new'] = __( 'Add New Address', 'woo-address-book' );
+						}
 
 						if ( true === $default_to_new_address ) {
 							$address_selector[ $type . '_address_book' ]['default'] = 'add_new';

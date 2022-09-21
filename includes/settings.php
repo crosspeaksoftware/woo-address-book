@@ -2,7 +2,7 @@
 /**
  * WooCommerce Address Book.
  *
- * @version  2.0.0
+ * @version  2.2.1
  * @package  WooCommerce Address Book
  */
 
@@ -31,7 +31,7 @@ function woo_address_book_general_settings( $settings ) {
 	);
 
 	$settings[] = array(
-		'desc'    => __( 'Add New Address as default selection', 'woo-address-book' ),
+		'desc'    => __( '"Add New Address" as default selection', 'woo-address-book' ),
 		'id'      => 'woo_address_book_billing_default_to_new_address',
 		'default' => 'no',
 		'type'    => 'checkbox',
@@ -53,7 +53,7 @@ function woo_address_book_general_settings( $settings ) {
 	);
 
 	$settings[] = array(
-		'desc'    => __( 'Add New Address as default selection', 'woo-address-book' ),
+		'desc'    => __( '"Add New Address" as default selection', 'woo-address-book' ),
 		'id'      => 'woo_address_book_shipping_default_to_new_address',
 		'default' => 'no',
 		'type'    => 'checkbox',
@@ -64,6 +64,34 @@ function woo_address_book_general_settings( $settings ) {
 		'id'      => 'woo_address_book_shipping_address_nickname_checkout',
 		'default' => 'no',
 		'type'    => 'checkbox',
+	);
+
+	$settings[] = array(
+		'title'             => __( 'Billing address save limit', 'woo-address-book' ),
+		'desc'              => __( 'This sets the maximum number of billing addresses that each user can save. Set to 0 for unlimited.', 'woocommerce' ),
+		'id'                => 'woo_address_book_billing_save_limit',
+		'css'               => 'width:50px;',
+		'default'           => '0',
+		'desc_tip'          => false,
+		'type'              => 'number',
+		'custom_attributes' => array(
+			'min'  => 0,
+			'step' => 1,
+		),
+	);
+
+	$settings[] = array(
+		'title'             => __( 'Shipping address save limit', 'woo-address-book' ),
+		'desc'              => __( 'This sets the maximum number of shipping addresses that each user can save. Set to 0 for unlimited.', 'woocommerce' ),
+		'id'                => 'woo_address_book_shipping_save_limit',
+		'css'               => 'width:50px;',
+		'default'           => '0',
+		'desc_tip'          => false,
+		'type'              => 'number',
+		'custom_attributes' => array(
+			'min'  => 0,
+			'step' => 1,
+		),
 	);
 
 	$settings[] = array(
