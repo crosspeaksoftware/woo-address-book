@@ -239,7 +239,6 @@ class WC_Address_Book {
 
 		if ( ! $under_limit ) {
 			$add_button_link     = '';
-			$add_button_title    = 'title="Refresh page after deleting addresses"';
 			$add_button_classes  = $add_button_classes . ' disabled';
 			$add_button_text     = ucfirst( $type ) . ' Address Book Full';
 		}
@@ -249,7 +248,6 @@ class WC_Address_Book {
 		<div class="add-new-address">
 			<a
 				<?php echo $add_button_link; ?>
-				<?php echo $add_button_title; ?>
 				class="<?php echo $add_button_classes; ?>">
 					<?php echo esc_html_e( $add_button_text, 'woo-address-book' ); ?>
 			</a>
