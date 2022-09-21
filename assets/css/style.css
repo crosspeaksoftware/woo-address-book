@@ -31,3 +31,7 @@
 .woocommerce-account .address-book .wc-address-book-meta a:hover {
 	cursor: pointer;
 }
+
+.scoot-down {
+	margin-top: 1px;
+}
