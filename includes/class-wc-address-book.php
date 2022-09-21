@@ -262,22 +262,20 @@ class WC_Address_Book {
 	 *
 	 * @since 2.2.1
 	 */
-
 	public function limit_saved_addresses( $type ) {
+		$save_limit = get_option( 'woo_address_book_' . $type . '_save_limit', 0 );
+		if ( empty( $save_limit ) ) {
+			return true;
+		}
 		$woo_address_book_customer_id           = get_current_user_id();
 		$woo_address_book_customer_address_book = $this->get_address_book( $woo_address_book_customer_id, $type );
 
 		$count_addresses = $this->count_saved_addresses( $woo_address_book_customer_address_book );
 
-		$save_limit = get_option( 'woo_address_book_' . $type . '_save_limit', 0 );
-
-		if ( $save_limit == 0 ) {
+		if ( $count_addresses < $save_limit ) {
 			return true;
-		} elseif ( $count_addresses < $save_limit ) {
-			return true;
-		} else {
-			return false;
 		}
+		return false;
 	}
 
 	/**
