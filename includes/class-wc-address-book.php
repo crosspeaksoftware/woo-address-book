@@ -233,7 +233,6 @@ class WC_Address_Book {
 		$under_limit   = $this->limit_saved_addresses( $type );
 
 		$add_button_link     = 'href="' . esc_url( $this->get_address_book_endpoint_url( $name, $type ) ) . '"';
-		$add_button_title    = '';
 		$add_button_classes  = 'add button add-'. $type . '-button scoot-down';
 		$add_button_text     = 'Add New ' . ucfirst( $type ) . ' Address';
 
