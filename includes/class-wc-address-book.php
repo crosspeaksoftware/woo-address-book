@@ -267,31 +267,13 @@ class WC_Address_Book {
 		if ( empty( $save_limit ) ) {
 			return true;
 		}
-		$woo_address_book_customer_id           = get_current_user_id();
-		$woo_address_book_customer_address_book = $this->get_address_book( $woo_address_book_customer_id, $type );
+		$customer_id  = get_current_user_id();
+		$address_book = $this->get_address_book( $customer_id, $type );
 
-		$count_addresses = $this->count_saved_addresses( $woo_address_book_customer_address_book );
-
-		if ( $count_addresses < $save_limit ) {
+		if ( count( $address_book ) < $save_limit ) {
 			return true;
 		}
 		return false;
-	}
-
-	/**
-	 * Count the number of addresses saved in the customer's address book.
-	 *
-	 * @param array $customer_address_book - An array of customer addresses
-	 *
-	 * @since 2.2.1
-	 */
-
-	public function count_saved_addresses( $customer_address_book ) {
-		$count = 0;
-		foreach ( $customer_address_book as $wab_name => $wab_field ) {
-			$count++;
-		}
-		return $count;
 	}
 
 	/**

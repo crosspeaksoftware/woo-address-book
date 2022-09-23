@@ -30,7 +30,7 @@ if ( ! $type ) {
 		$woo_address_book_billing_address = get_user_meta( $woo_address_book_customer_id, 'billing_address_1', true );
 
 		// Hide the billing address book if there are no addresses to show and no ability to add new ones.
-		$count_section = $wc_address_book->count_saved_addresses( $woo_address_book_billing_address_book );
+		$count_section = count( $woo_address_book_billing_address_book );
 		$save_limit    = get_option( 'woo_address_book_billing_save_limit', 0 );
 
 		if ( 1 == $save_limit && $count_section <= 1 ) {
@@ -109,7 +109,7 @@ if ( ! $type ) {
 		$woo_address_book_shipping_address = get_user_meta( $woo_address_book_customer_id, 'shipping_address_1', true );
 
 		// Hide the billing address book if there are no addresses to show and no ability to add new ones.
-		$count_section = $wc_address_book->count_saved_addresses( $woo_address_book_shipping_address_book );
+		$count_section = count( $woo_address_book_shipping_address_book );
 		$save_limit    = intval( get_option( 'woo_address_book_shipping_save_limit', 0 ) );
 
 		if ( 1 == $save_limit && $count_section <= 1 ) {
