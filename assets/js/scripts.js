@@ -9,7 +9,6 @@
 	shipping_address_from_cart: '',
 
 	init: function() {
-		s = this.settings;
 		$ = jQuery;
 		this.checkout();
 	},
