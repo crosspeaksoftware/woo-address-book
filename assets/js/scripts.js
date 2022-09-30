@@ -4,148 +4,161 @@
  * @package woo-address-book
  */
 
-jQuery( function ( $ ) {
+ var woo_address_book_app = {
 
-	var load_selectWoo = true;
-	var address_book = $( 'select#shipping_address_book:visible, select#billing_address_book:visible' );
+	shipping_address_from_cart: '',
 
-	// Check for Selectize being used.
-	if ( $.fn.selectize ) {
-		if ( address_book.hasClass( "selectized" ) && address_book[0] && address_book[0].selectize ) {
-			load_selectWoo = false;
-		}
-	}
+	init: function() {
+		s = this.settings;
+		$ = jQuery;
+		this.checkout();
+	},
 
-	// SelectWoo / Select2 Enhancement if it exists.
-	if ( load_selectWoo ) {
-		if ( $.fn.selectWoo ) {
-			address_book.selectWoo();
-		} else if ( $.fn.select2 ) {
-			address_book.select2();
-		}
-	}
+	checkout: function() {
+		var load_selectWoo = true;
+		var address_book = $( 'select#shipping_address_book:visible, select#billing_address_book:visible' );
 
-	// BlockUI settings
-	$.blockUI.defaults.message = null;
-	$.blockUI.defaults.overlayCSS.backgroundColor = '#fff';
-
-	// Retrieves default billing address
-	checkout_field_prepop( 'billing', true );
-
-	// Retrieves billing address when another is selected.
-	$( '#billing_address_book_field #billing_address_book' ).on( 'change', function () {
-		checkout_field_prepop( 'billing', false );
-	} );
-
-	var shipping_address_from_cart = false;
-	// Customer entered address into the shipping calculator
-	if ( $("#woocommerce_enable_shipping_calc").val() === "yes" && $( "form[name=checkout]" ).length > 0 && ( $( "#shipping_country" ).val() !== "" || $( "#shipping_state" ).val() !== "" || $( "#shipping_city" ).val() !== "" || $( "#shipping_postcode" ).val() !== "" ) ) {
-		shipping_country_o = $( "#shipping_country" ).val();
-		shipping_state_o = $( "#shipping_state" ).val();
-		shipping_city_o = $( "#shipping_city" ).val();
-		shipping_postcode_o = $( "#shipping_postcode" ).val();
-		shipping_address_from_cart = true;
-	}
-
-	// Retrieves default shipping address
-	checkout_field_prepop( 'shipping', true );
-
-	// Retrieves shipping address when another is selected.
-	$( '#shipping_address_book_field #shipping_address_book' ).on( 'change', function () {
-		checkout_field_prepop( 'shipping', false );
-	} );
-
-	// Update checkout when address changes
-	if ( $( "form[name=checkout]" ).length > 0 ) {
-		$( '#shipping_country, #shipping_state_field, #shipping_city, #shipping_postcode, #billing_country, #billing_state_field, #billing_city, #billing_postcode' ).on( 'change', function () {
-			$( document.body ).trigger( 'update_checkout' );
-		} );
-	};
-
-	/*
-	 * AJAX call to delete address books.
-	 */
-	$( 'a.wc-address-book-delete' ).on( 'click', function ( e ) {
-
-		e.preventDefault();
-
-		var confirmDelete = confirm( woo_address_book.delete_confirmation );
-		if ( ! confirmDelete ) {
-			return;
-		}
-
-		var name = $( this ).attr( 'id' );
-		var toRemove = $( this ).closest( '.wc-address-book-address' );
-
-		// Show BlockUI overlay
-		$( '.woocommerce-MyAccount-content' ).block();
-
-		$.ajax( {
-			url: woo_address_book.ajax_url,
-			type: 'post',
-			data: {
-				action: 'wc_address_book_delete',
-				name: name,
-				nonce: woo_address_book.delete_security,
-			},
-			success: function () {
-				toRemove.remove();
-
-				// Remove BlockUI overlay
-				$( '.woocommerce-MyAccount-content' ).unblock();
+		// Check for Selectize being used.
+		if ( $.fn.selectize ) {
+			if ( address_book.hasClass( "selectized" ) && address_book[0] && address_book[0].selectize ) {
+				load_selectWoo = false;
 			}
-		} );
-	} );
-
-	/*
-	 * AJAX call to switch address to primary.
-	 */
-	$( 'a.wc-address-book-make-primary' ).on( 'click', function ( e ) {
-
-		e.preventDefault();
-
-		var name = $( this ).attr( 'id' );
-		var type = name.replace( /\d+/g, '' );
-
-		if ( type === 'billing' ) {
-			var primary_address = $( '.u-column1.woocommerce-Address address' );
-		} else if ( type === 'shipping' ) {
-			var primary_address = $( '.u-column2.woocommerce-Address address' );
-		} else {
-			return;
 		}
 
-		var alt_address = $( this ).parent().siblings( 'address' );
-
-		// Swap HTML values for address and label.
-		var pa_html = primary_address.html();
-		var aa_html = alt_address.html();
-
-		// Show BlockUI overlay
-		$( '.woocommerce-MyAccount-content' ).block();
-
-		$.ajax( {
-			url: woo_address_book.ajax_url,
-			type: 'post',
-			data: {
-				action: 'wc_address_book_make_primary',
-				name: name,
-				nonce: woo_address_book.primary_security,
-			},
-			success: function () {
-				alt_address.html( pa_html );
-				primary_address.html( aa_html );
-
-				// Remove BlockUI overlay
-				$( '.woocommerce-MyAccount-content' ).unblock();
+		// SelectWoo / Select2 Enhancement if it exists.
+		if ( load_selectWoo ) {
+			if ( $.fn.selectWoo ) {
+				address_book.selectWoo();
+			} else if ( $.fn.select2 ) {
+				address_book.select2();
 			}
+		}
+
+		// BlockUI settings
+		$.blockUI.defaults.message = null;
+		$.blockUI.defaults.overlayCSS.backgroundColor = '#fff';
+
+		// Retrieves default billing address
+		woo_address_book_app.checkout_field_prepop( 'billing', true );
+
+		// Retrieves billing address when another is selected.
+		$( '#billing_address_book_field #billing_address_book' ).on( 'change', function () {
+			woo_address_book_app.checkout_field_prepop( 'billing', false );
 		} );
-	} );
+
+		woo_address_book_app.shipping_address_from_cart = false;
+		// Customer entered address into the shipping calculator
+		if ( $("#woocommerce_enable_shipping_calc").val() === "yes" && $( "form[name=checkout]" ).length > 0 && ( $( "#shipping_country" ).val() !== "" || $( "#shipping_state" ).val() !== "" || $( "#shipping_city" ).val() !== "" || $( "#shipping_postcode" ).val() !== "" ) ) {
+			shipping_country_o = $( "#shipping_country" ).val();
+			shipping_state_o = $( "#shipping_state" ).val();
+			shipping_city_o = $( "#shipping_city" ).val();
+			shipping_postcode_o = $( "#shipping_postcode" ).val();
+			woo_address_book_app.shipping_address_from_cart = true;
+		}
+
+		// Retrieves default shipping address
+		woo_address_book_app.checkout_field_prepop( 'shipping', true );
+
+		// Retrieves shipping address when another is selected.
+		$( '#shipping_address_book_field #shipping_address_book' ).on( 'change', function () {
+			woo_address_book_app.checkout_field_prepop( 'shipping', false );
+		} );
+
+		// Update checkout when address changes
+		if ( $( "form[name=checkout]" ).length > 0 ) {
+			$( '#shipping_country, #shipping_state_field, #shipping_city, #shipping_postcode, #billing_country, #billing_state_field, #billing_city, #billing_postcode' ).on( 'change', function () {
+				$( document.body ).trigger( 'update_checkout' );
+			} );
+		};
+
+		/*
+		 * AJAX call to delete address books.
+		 */
+		$( 'a.wc-address-book-delete' ).on( 'click', function ( e ) {
+
+			e.preventDefault();
+
+			var confirmDelete = confirm( woo_address_book.delete_confirmation );
+			if ( ! confirmDelete ) {
+				return;
+			}
+
+			var name = $( this ).attr( 'id' );
+			var toRemove = $( this ).closest( '.wc-address-book-address' );
+
+			// Show BlockUI overlay
+			$( '.woocommerce-MyAccount-content' ).block();
+
+			$.ajax( {
+				url: woo_address_book.ajax_url,
+				type: 'post',
+				data: {
+					action: 'wc_address_book_delete',
+					name: name,
+					nonce: woo_address_book.delete_security,
+				},
+				success: function () {
+					toRemove.remove();
+
+					// Remove BlockUI overlay
+					$( '.woocommerce-MyAccount-content' ).unblock();
+				}
+			} );
+		} );
+
+		/*
+		 * AJAX call to switch address to primary.
+		 */
+		$( 'a.wc-address-book-make-primary' ).on( 'click', function ( e ) {
+
+			e.preventDefault();
+
+			var name = $( this ).attr( 'id' );
+			var type = name.replace( /\d+/g, '' );
+
+			if ( type === 'billing' ) {
+				var primary_address = $( '.u-column1.woocommerce-Address address' );
+			} else if ( type === 'shipping' ) {
+				var primary_address = $( '.u-column2.woocommerce-Address address' );
+			} else {
+				return;
+			}
+
+			var alt_address = $( this ).parent().siblings( 'address' );
+
+			// Swap HTML values for address and label.
+			var pa_html = primary_address.html();
+			var aa_html = alt_address.html();
+
+			// Show BlockUI overlay
+			$( '.woocommerce-MyAccount-content' ).block();
+
+			$.ajax( {
+				url: woo_address_book.ajax_url,
+				type: 'post',
+				data: {
+					action: 'wc_address_book_make_primary',
+					name: name,
+					nonce: woo_address_book.primary_security,
+				},
+				success: function () {
+					alt_address.html( pa_html );
+					primary_address.html( aa_html );
+
+					// Remove BlockUI overlay
+					$( '.woocommerce-MyAccount-content' ).unblock();
+				}
+			} );
+		} );
+
+	},
 
 	/*
 	 * AJAX call display address on checkout when selected.
 	 */
-	function checkout_field_prepop( address_type, initial_address ) {
+	checkout_field_prepop: function( address_type, initial_address ) {
+
+		var shipping_address_from_cart = woo_address_book_app.shipping_address_from_cart;
 
 		if ( initial_address && $( '#' + address_type + '_address_book_field' ).hasClass( 'wc-address-book-subscription-renewal' ) ) {
 			return;
@@ -261,5 +274,13 @@ jQuery( function ( $ ) {
 			}
 		}
 	}
+
+};
+
+jQuery( function( $ ) {
+
+	'use strict';
+
+	woo_address_book_app.init();
 
 } );
