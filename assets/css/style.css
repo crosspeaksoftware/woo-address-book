@@ -9,10 +9,11 @@
 	margin: 0;
 }
 
-.woocommerce-account .address_book .add-new-address {
+.woocommerce-account .wc-address-book-add-new-address {
 	display: inline-block;
 	padding-left: 10px;
 	float: right;
+	margin-top: 1px;
 }
 
 .woocommerce-account .address_book .wc-address-book-address > address:first-line {
@@ -30,8 +31,4 @@
 
 .woocommerce-account .address-book .wc-address-book-meta a:hover {
 	cursor: pointer;
-}
-
-.scoot-down {
-	margin-top: 1px;
 }

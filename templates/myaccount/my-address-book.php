@@ -122,7 +122,7 @@ if ( ! $type ) {
 		if ( ! empty( $woo_address_book_shipping_address ) && ! $hide_shipping_address_book ) {
 			?>
 
-			<div class="address_book shipping_address_book" data-addresses='<?php echo $count_section; ?>' data-limit='<?php echo $save_limit; ?>'>
+			<div class="address_book shipping_address_book" data-addresses='<?php echo esc_attr( $count_section ); ?>' data-limit='<?php echo esc_attr( $save_limit ); ?>'>
 
 				<header>
 					<h3><?php esc_html_e( 'Shipping Address Book', 'woo-address-book' ); ?></h3>

@@ -231,23 +231,44 @@ class WC_Address_Book {
 		$name          = $this->set_new_address_name( $address_names, $type );
 		$under_limit   = $this->limit_saved_addresses( $type );
 
-		$add_button_link    = 'href="' . esc_url( $this->get_address_book_endpoint_url( $name, $type ) ) . '"';
-		$add_button_classes = 'add button add-' . $type . '-button scoot-down';
-		$add_button_text    = 'Add New ' . ucfirst( $type ) . ' Address';
+		$add_button_classes = 'add button wc-address-book-add-' . $type . '-button';
 
-		if ( ! $under_limit ) {
-			$add_button_link    = '';
-			$add_button_classes = $add_button_classes . ' disabled';
-			$add_button_text    = ucfirst( $type ) . ' Address Book Full';
-		}
 		?>
 
 		<?php if ( apply_filters( 'wc_address_book_show_' . $type . '_address_button', true ) ) : ?>
-		<div class="add-new-address">
+		<div class="wc-address-book-add-new-address add-new-address">
+			<span
+				class="<?php echo esc_attr( $add_button_classes ); ?> disabled"
+					<?php
+					if ( $under_limit ) {
+						echo 'style="display:none"';
+					}
+					?>
+				>
+				<?php
+				if ( 'billing' === $type ) {
+					echo esc_html__( 'Billing Address Book Full', 'woo-address-book' );
+				} elseif ( 'shipping' === $type ) {
+					echo esc_html__( 'Shipping Address Book Full', 'woo-address-book' );
+				}
+				?>
+			</span>
 			<a
-				<?php echo $add_button_link; ?>
-				class="<?php echo $add_button_classes; ?>">
-					<?php echo esc_html_e( $add_button_text, 'woo-address-book' ); ?>
+				href="<?php echo esc_url( $this->get_address_book_endpoint_url( $name, $type ) ); ?>"
+				class="<?php echo esc_attr( $add_button_classes ); ?>"
+					<?php
+					if ( ! $under_limit ) {
+						echo 'style="display:none"';
+					}
+					?>
+				>
+				<?php
+				if ( 'billing' === $type ) {
+					echo esc_html__( 'Add New Billing Address', 'woo-address-book' );
+				} elseif ( 'shipping' === $type ) {
+					echo esc_html__( 'Add New Shipping Address', 'woo-address-book' );
+				}
+				?>
 			</a>
 		</div>
 		<?php endif; ?>

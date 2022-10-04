@@ -83,8 +83,11 @@ var woo_address_book_app = {
 				return;
 			}
 
+			var addressBook = $( this ).closest( '.address_book' );
 			var name = $( this ).attr( 'id' );
 			var toRemove = $( this ).closest( '.wc-address-book-address' );
+			var numOfAddresses = parseInt( addressBook.attr( 'data-addresses' ) );
+			var addressLimit = parseInt( addressBook.attr( 'data-limit' ) );
 
 			// Show BlockUI overlay
 			$( '.woocommerce-MyAccount-content' ).block();
@@ -99,6 +102,11 @@ var woo_address_book_app = {
 				},
 				success: function () {
 					toRemove.remove();
+					addressBook.attr( 'data-addresses', numOfAddresses - 1 );
+					if ( numOfAddresses <= addressLimit ) {
+						addressBook.find(".wc-address-book-add-new-address span").hide();
+						addressBook.find(".wc-address-book-add-new-address a").show();
+					}
 
 					// Remove BlockUI overlay
 					$( '.woocommerce-MyAccount-content' ).unblock();
