@@ -4,16 +4,17 @@
  * @package woo-address-book
  */
 
- var woo_address_book_app = {
+var woo_address_book_app = {
 
 	shipping_address_from_cart: '',
 
-	init: function() {
-		$ = jQuery;
+	init: function($) {
+		this.jQuery = $;
 		this.checkout();
 	},
 
 	checkout: function() {
+		var $ = this.jQuery;
 		var load_selectWoo = true;
 		var address_book = $( 'select#shipping_address_book:visible, select#billing_address_book:visible' );
 
@@ -156,7 +157,7 @@
 	 * AJAX call display address on checkout when selected.
 	 */
 	checkout_field_prepop: function( address_type, initial_address ) {
-
+		var $ = this.jQuery;
 		var shipping_address_from_cart = woo_address_book_app.shipping_address_from_cart;
 
 		if ( initial_address && $( '#' + address_type + '_address_book_field' ).hasClass( 'wc-address-book-subscription-renewal' ) ) {
@@ -280,6 +281,6 @@ jQuery( function( $ ) {
 
 	'use strict';
 
-	woo_address_book_app.init();
+	woo_address_book_app.init($);
 
 } );
