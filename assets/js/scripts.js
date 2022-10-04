@@ -46,14 +46,14 @@ var woo_address_book_app = {
 			woo_address_book_app.checkout_field_prepop( 'billing', false );
 		} );
 
-		woo_address_book_app.shipping_address_from_cart = false;
+		this.shipping_address_from_cart = false;
 		// Customer entered address into the shipping calculator
 		if ( $("#woocommerce_enable_shipping_calc").val() === "yes" && $( "form[name=checkout]" ).length > 0 && ( $( "#shipping_country" ).val() !== "" || $( "#shipping_state" ).val() !== "" || $( "#shipping_city" ).val() !== "" || $( "#shipping_postcode" ).val() !== "" ) ) {
 			shipping_country_o = $( "#shipping_country" ).val();
 			shipping_state_o = $( "#shipping_state" ).val();
 			shipping_city_o = $( "#shipping_city" ).val();
 			shipping_postcode_o = $( "#shipping_postcode" ).val();
-			woo_address_book_app.shipping_address_from_cart = true;
+			this.shipping_address_from_cart = true;
 		}
 
 		// Retrieves default shipping address
@@ -158,7 +158,6 @@ var woo_address_book_app = {
 	 */
 	checkout_field_prepop: function( address_type, initial_address ) {
 		var $ = this.jQuery;
-		var shipping_address_from_cart = woo_address_book_app.shipping_address_from_cart;
 
 		if ( initial_address && $( '#' + address_type + '_address_book_field' ).hasClass( 'wc-address-book-subscription-renewal' ) ) {
 			return;
@@ -190,7 +189,7 @@ var woo_address_book_app = {
 				} );
 
 				// If shipping calculator used on cart page
-				if ( address_type === 'shipping' && shipping_address_from_cart ) {
+				if ( address_type === 'shipping' && this.shipping_address_from_cart ) {
 
 					$( "#shipping_country" ).val( shipping_country_o ).trigger( 'change' );
 					$( "#shipping_state" ).val( shipping_state_o ).trigger( 'change' );
@@ -201,7 +200,7 @@ var woo_address_book_app = {
 					delete shipping_state_o;
 					delete shipping_city_o;
 					delete shipping_postcode_o;
-					shipping_address_from_cart = false;
+					this.shipping_address_from_cart = false;
 
 					// Remove BlockUI overlay
 					$( '.woocommerce-shipping-fields' ).unblock();
@@ -229,7 +228,7 @@ var woo_address_book_app = {
 					success: function ( response ) {
 
 						// If shipping calculator used on cart page
-						if ( initial_address && address_type === 'shipping' && shipping_address_from_cart ) {
+						if ( initial_address && address_type === 'shipping' && this.shipping_address_from_cart ) {
 							// If entered values do not equal shipping calculator values
 							if ( shipping_country_o !== response.shipping_country || shipping_state_o !== response.shipping_state || shipping_city_o !== response.shipping_city || shipping_postcode_o !== response.shipping_postcode ) {
 								$( "#shipping_address_book" ).val( 'add_new' ).trigger( 'change' );
