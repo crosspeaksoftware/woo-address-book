@@ -84,6 +84,10 @@ You may also use PoEdit and create a translation file which can be exported as a
 
 == Changelog ==
 
+= 2.3.0 =
+* Dev: **Rare potential breaking change if overriding javascript** Restructured javascript to be more modular and allow external access. [#133](https://github.com/hallme/woo-address-book/pull/133)
+* New: New feature to set a limit for number of saved addresses in the admin settings.
+
 = 2.2.0 =
 * Update: When "Enable the shipping calculator on the cart page" is not checked in the admin then the City/State/Zip fields will not be pre-populated on Add New Address.
 
