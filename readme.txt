@@ -84,6 +84,9 @@ You may also use PoEdit and create a translation file which can be exported as a
 
 == Changelog ==
 
+= 2.4.0 =
+* New: Setting to block readonly fields from updating when changing addresses. They will be updatable by default.
+
 = 2.3.0 =
 * Dev: **Rare potential breaking change if overriding javascript** Restructured javascript to be more modular and allow external access. [#133](https://github.com/hallme/woo-address-book/pull/133)
 * New: New feature to set a limit for number of saved addresses in the admin settings.

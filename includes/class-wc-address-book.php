@@ -194,6 +194,7 @@ class WC_Address_Book {
 				'primary_security'    => wp_create_nonce( 'woo-address-book-primary' ),
 				'checkout_security'   => wp_create_nonce( 'woo-address-book-checkout' ),
 				'delete_confirmation' => __( 'Are you sure you want to delete this address?', 'woo-address-book' ),
+				'allow_readonly'      => $this->get_wcab_option( 'block_readonly' ) === true ? 'no' : 'yes',
 			)
 		);
 

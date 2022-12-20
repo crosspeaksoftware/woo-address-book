@@ -248,7 +248,7 @@ var woo_address_book_app = {
 						Object.keys( response ).forEach( function ( key ) {
 							let input = $( '#' + key );
 							if ( input.length > 0 ) {
-								if ( input.attr( 'readonly' ) !== 'readonly' ) {
+								if ( woo_address_book.allow_readonly !== "no" || input.attr( 'readonly' ) !== 'readonly' ) {
 									if ( input.is("select") ) {
 										if ( input.hasClass( 'selectized' ) && input[0] && input[0].selectize ) {
 											input[0].selectize.setValue( response[key] );

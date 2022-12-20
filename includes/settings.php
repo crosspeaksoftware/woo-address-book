@@ -95,6 +95,13 @@ function woo_address_book_general_settings( $settings ) {
 	);
 
 	$settings[] = array(
+		'desc'    => __( 'Block readonly fields from being populated by changing address during checkout.', 'woo-address-book' ),
+		'id'      => 'woo_address_book_block_readonly',
+		'default' => 'no',
+		'type'    => 'checkbox',
+	);
+
+	$settings[] = array(
 		'type' => 'sectionend',
 		'id'   => 'woo_address_book_options',
 	);
