@@ -27,7 +27,7 @@ WooCommerce Address Book options:
 
 = Code =
 
-View the source on [GitHub](https://github.com/hallme/woo-address-book). You can also submit an [issue](https://github.com/hallme/woo-address-book/issues) or pull request for anything new.
+View the source on [GitHub](https://github.com/crosspeaksoftware/woo-address-book). You can also submit an [issue](https://github.com/crosspeaksoftware/woo-address-book/issues) or pull request for anything new.
 
 == Installation ==
 
@@ -45,7 +45,7 @@ The address book will only begin to display after the primary billing or shippin
 No, this plugin only allows for the storage of multiple shipping addresses. If a customer would like to ship to multiple locations, they should complete multiple orders.
 
 = Why is the address not populating my custom fields at checkout? =
-Most standard custom fields do work with the Address Book. However, if you have custom fields added by a plugin which are updated by javascript then the Address Book plugin will not always know how to handle the data. If you are running into an issue please post an issue in the [support forum](https://wordpress.org/support/plugin/woo-address-book/) or on [github](https://github.com/hallme/woo-address-book/issues) with what plugin or code you are using and as much details as you can. We will determine if the Address Book plugin is able to provide support for the plugin or if a custom solution would need to be developed for your use case.
+Most standard custom fields do work with the Address Book. However, if you have custom fields added by a plugin which are updated by javascript then the Address Book plugin will not always know how to handle the data. If you are running into an issue please post an issue in the [support forum](https://wordpress.org/support/plugin/woo-address-book/) or on [github](https://github.com/crosspeaksoftware/woo-address-book/issues) with what plugin or code you are using and as much details as you can. We will determine if the Address Book plugin is able to provide support for the plugin or if a custom solution would need to be developed for your use case.
 
 = How can I add custom fields to my billing/shipping address? =
 WooCommerce Address Book uses the standard WooCommerce address functions so any method to modify the address fields will still work.
@@ -88,7 +88,7 @@ You may also use PoEdit and create a translation file which can be exported as a
 * New: Setting to block readonly fields from updating when changing addresses. They will be updatable by default.
 
 = 2.3.0 =
-* Dev: **Rare potential breaking change if overriding javascript** Restructured javascript to be more modular and allow external access. [#133](https://github.com/hallme/woo-address-book/pull/133)
+* Dev: **Rare potential breaking change if overriding javascript** Restructured javascript to be more modular and allow external access. [#133](https://github.com/crosspeaksoftware/woo-address-book/pull/133)
 * New: New feature to set a limit for number of saved addresses in the admin settings.
 
 = 2.2.0 =
@@ -99,10 +99,10 @@ You may also use PoEdit and create a translation file which can be exported as a
 * Cleanup: Improve the checking for the address from the cart to prevent some issues with it not being loaded.
 
 = 2.1.3 =
-* Fix: Address saving to customer Address Book if Billing or Shipping Address Book was disabled. [#128](https://github.com/hallme/woo-address-book/issues/128)
+* Fix: Address saving to customer Address Book if Billing or Shipping Address Book was disabled. [#128](https://github.com/crosspeaksoftware/woo-address-book/issues/128)
 
 = 2.1.2 =
-* Fix: "Enable setting Billing Address Nickname during Checkout" setting not working properly [#121](https://github.com/hallme/woo-address-book/issues/121)
+* Fix: "Enable setting Billing Address Nickname during Checkout" setting not working properly [#121](https://github.com/crosspeaksoftware/woo-address-book/issues/121)
 
 = 2.1.1 =
 * Require jquery-blockui for the script to fix loading order.
@@ -121,14 +121,14 @@ You may also use PoEdit and create a translation file which can be exported as a
 = 2.0.0 =
 * This is version 2.0.0 which is a major update with new functionality, be sure to review the changes below.
 * Billing and Shipping address support. This release adds support for Billing addresses in addition to Shipping addresses.
-* New settings to be able to Enable or Disable the address book for billing or shipping. Thanks [Hinyka](https://github.com/hallme/woo-address-book/pull/97)
+* New settings to be able to Enable or Disable the address book for billing or shipping. Thanks [Hinyka](https://github.com/crosspeaksoftware/woo-address-book/pull/97)
   * Make sure to set these settings for your store after updating. Both are enabled by default.
 * Adds settings to set if new address should be selected or primary address on checkout.
 * Adds setting if the address nickname field should show on checkout.
 * Fix checkbox to change address that didn't work from showing with WooCommerce Subscriptions plugin.
 * Adds confirmation when deleting an address from the address book.
-* Support for PHP 8 and jQuery 3. Thanks [Hinyka](https://github.com/hallme/woo-address-book/pull/96)
-* Various other fixes, see [#97](https://github.com/hallme/woo-address-book/pull/97) for details.
+* Support for PHP 8 and jQuery 3. Thanks [Hinyka](https://github.com/crosspeaksoftware/woo-address-book/pull/96)
+* Various other fixes, see [#97](https://github.com/crosspeaksoftware/woo-address-book/pull/97) for details.
 
 = 1.7.5 =
 * Update Country strings that were changed in WooCommerce 4.0
@@ -148,32 +148,32 @@ You may also use PoEdit and create a translation file which can be exported as a
 * Fixed if you had [selectize.js](https://selectize.github.io/selectize.js/) installed on the site but still using selectWoo for checkout. You must now manually apply selectize to the Address Book selector if you wish to use selectize on checkout.
 
 = 1.7.0 =
-* Fixed issue with selectWoo not loadingon checkout if "Ship to a different address?" was not enabled by default. Thanks [titodevera](https://github.com/titodevera) - [#62](https://github.com/hallme/woo-address-book/pull/62)
+* Fixed issue with selectWoo not loadingon checkout if "Ship to a different address?" was not enabled by default. Thanks [titodevera](https://github.com/titodevera) - [#62](https://github.com/crosspeaksoftware/woo-address-book/pull/62)
 * Add support for [selectize.js](https://selectize.github.io/selectize.js/) if used over selectWoo for your select boxes.
 
 = 1.6.1 =
-* Remove unneeded nopriv ajax actions. [#60](https://github.com/hallme/woo-address-book/pull/58) [#61](https://github.com/hallme/woo-address-book/issues/61)
+* Remove unneeded nopriv ajax actions. [#60](https://github.com/crosspeaksoftware/woo-address-book/pull/58) [#61](https://github.com/crosspeaksoftware/woo-address-book/issues/61)
 
 = 1.6.0 =
-* Added support for address nicknames. Thanks [titodevera](https://github.com/titodevera) - [#60](https://github.com/hallme/woo-address-book/pull/58) [#59](https://github.com/hallme/woo-address-book/pull/60)
+* Added support for address nicknames. Thanks [titodevera](https://github.com/titodevera) - [#60](https://github.com/crosspeaksoftware/woo-address-book/pull/58) [#59](https://github.com/crosspeaksoftware/woo-address-book/pull/60)
 * Security: Updated all save calls to do nonce verification checks.
 * Update endpoint url generation to prevent the query parameter from being filtered out. Fixes conflict with [WPML plugin](https://wordpress.org/support/topic/issue-with-woocommerce-multilingual-plugin/).
 
 = 1.5.6 =
-* Stop enqueuing the plugin styles and scripts on every page. Only enqueue them when needed. Thanks [titodevera](https://github.com/titodevera) - [#58](https://github.com/hallme/woo-address-book/pull/58) [#59](https://github.com/hallme/woo-address-book/pull/59)
+* Stop enqueuing the plugin styles and scripts on every page. Only enqueue them when needed. Thanks [titodevera](https://github.com/titodevera) - [#58](https://github.com/crosspeaksoftware/woo-address-book/pull/58) [#59](https://github.com/crosspeaksoftware/woo-address-book/pull/59)
 
 = 1.5.5 =
 * Fix changing country if the field is set to Read Only. Do not change any fields that are set to Read Only.
 
 = 1.5.4 =
-* Fix missing close div in address book form. Thanks [ThomasK0lasa](https://github.com/ThomasK0lasa) - [#54](https://github.com/hallme/woo-address-book/pull/54)
+* Fix missing close div in address book form. Thanks [ThomasK0lasa](https://github.com/ThomasK0lasa) - [#54](https://github.com/crosspeaksoftware/woo-address-book/pull/54)
 * Use a minified version of scripts.js
 * Improve address saving for determining what address name to use next.
-* Fix first address creation on checkout from being set to shipping2 [#55](https://github.com/hallme/woo-address-book/issues/55)
+* Fix first address creation on checkout from being set to shipping2 [#55](https://github.com/crosspeaksoftware/woo-address-book/issues/55)
 * Don't show address picker for new users that don't have addreses yet.
 
 = 1.5.3 =
-* Fix regression from 1.5.0 which broke switching primary address. Thanks [ThomasK0lasa](https://github.com/ThomasK0lasa) - [#53](https://github.com/hallme/woo-address-book/issues/53)
+* Fix regression from 1.5.0 which broke switching primary address. Thanks [ThomasK0lasa](https://github.com/ThomasK0lasa) - [#53](https://github.com/crosspeaksoftware/woo-address-book/issues/53)
 
 = 1.5.2 =
 * Update country field with updates from WooCommerce 3.6.x. Fixes inconsistencies with updated stock version.
@@ -188,7 +188,7 @@ You may also use PoEdit and create a translation file which can be exported as a
 * Fix issue saving more than 10 addresses to the addresse book. Thanks @JonBoss5
 
 = 1.4.1 =
-* Limit get_users to just returning IDs. Significantly decreases the amount of memory needed on activation on a site with many users. ([thanks pjv](https://github.com/hallme/woo-address-book/pull/40))
+* Limit get_users to just returning IDs. Significantly decreases the amount of memory needed on activation on a site with many users. ([thanks pjv](https://github.com/crosspeaksoftware/woo-address-book/pull/40))
 * PHP and JS formatting cleanup
 
 = 1.4.0 =

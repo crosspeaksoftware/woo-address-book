@@ -1,5 +1,5 @@
 {
-    "name": "hallme/woo-address-book",
+    "name": "crosspeak/woo-address-book",
     "description": "Gives your customers the option to store multiple shipping addresses and retrieve them on checkout",
     "type": "wordpress-plugin",
     "license": "GPL-2.0-or-later",

@@ -3,7 +3,7 @@
 set -e
 
 # Wordpress.org username
-wordpressuser="hallme"
+wordpressuser="crosspeak"
 # Wordpress.org plugin slug
 package="woo-address-book"
 
