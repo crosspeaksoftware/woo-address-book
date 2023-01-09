@@ -84,6 +84,9 @@ You may also use PoEdit and create a translation file which can be exported as a
 
 == Changelog ==
 
+= 2.4.1 =
+* Tweak: Update change detection on Address Book selector so the listeners still work even if the elements are reloaded on the page.
+
 = 2.4.0 =
 * New: Setting to block readonly fields from updating when changing addresses. They will be updatable by default.
 
