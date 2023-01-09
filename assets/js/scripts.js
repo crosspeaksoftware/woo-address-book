@@ -42,7 +42,7 @@ var woo_address_book_app = {
 		woo_address_book_app.checkout_field_prepop( 'billing', true );
 
 		// Retrieves billing address when another is selected.
-		$( '#billing_address_book_field #billing_address_book' ).on( 'change', function () {
+		$( document ).on( 'change', '#billing_address_book_field #billing_address_book', function () {
 			woo_address_book_app.checkout_field_prepop( 'billing', false );
 		} );
 
@@ -60,7 +60,7 @@ var woo_address_book_app = {
 		woo_address_book_app.checkout_field_prepop( 'shipping', true );
 
 		// Retrieves shipping address when another is selected.
-		$( '#shipping_address_book_field #shipping_address_book' ).on( 'change', function () {
+		$( document ).on( 'change', '#shipping_address_book_field #shipping_address_book', function () {
 			woo_address_book_app.checkout_field_prepop( 'shipping', false );
 		} );
 
