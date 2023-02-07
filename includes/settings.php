@@ -102,6 +102,13 @@ function woo_address_book_general_settings( $settings ) {
 	);
 
 	$settings[] = array(
+		'desc'    => __( 'Use radio inputs instead of a select element for billing/shipping address on checkout.', 'woo-address-book' ),
+		'id'      => 'woo_address_book_use_radio_input',
+		'default' => 'no',
+		'type'    => 'checkbox',
+	);
+
+	$settings[] = array(
 		'type' => 'sectionend',
 		'id'   => 'woo_address_book_options',
 	);

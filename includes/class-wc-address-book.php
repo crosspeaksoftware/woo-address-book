@@ -198,7 +198,7 @@ class WC_Address_Book {
 			)
 		);
 
-		if ( is_account_page() ) {
+		if ( is_account_page() || is_checkout() ) {
 			wp_enqueue_style( 'woo-address-book' );
 		}
 
@@ -669,9 +669,14 @@ class WC_Address_Book {
 					$address_book = $this->get_address_book( null, $type );
 					$under_limit  = $this->limit_saved_addresses( $type );
 
+					$select_type = 'select';
+					if ( $this->get_wcab_option( 'use_radio_input', 'no' ) === true ) {
+						$select_type = 'radio';
+					}
+
 					$address_selector                            = array();
 					$address_selector[ $type . '_address_book' ] = array(
-						'type'     => 'select',
+						'type'     => $select_type,
 						'class'    => array( 'form-row-wide', 'address_book' ),
 						'label'    => __( 'Address Book', 'woo-address-book' ),
 						'order'    => -1,

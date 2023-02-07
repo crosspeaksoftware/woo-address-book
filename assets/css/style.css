@@ -32,3 +32,15 @@
 .woocommerce-account .address-book .wc-address-book-meta a:hover {
 	cursor: pointer;
 }
+
+.woocommerce-checkout .address_book input.input-radio {
+	display: block;
+	float: left;
+	margin-bottom: 3px;
+	margin-right: 15px;
+}
+
+.woocommerce-checkout .address_book label.radio {
+	line-height: 1;
+	margin-bottom: 1em;
+}

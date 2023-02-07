@@ -17,6 +17,10 @@ var woo_address_book_app = {
 		var $ = this.jQuery;
 		var load_selectWoo = true;
 		var address_book = $( 'select#shipping_address_book:visible, select#billing_address_book:visible' );
+		if ( ! address_book.length ) {
+			address_book = $( 'input[name="shipping_address_book"]:checked, input[name="billing_address_book"]:checked' );
+			load_selectWoo = false;
+		}
 
 		// Check for Selectize being used.
 		if ( $.fn.selectize ) {
@@ -42,7 +46,7 @@ var woo_address_book_app = {
 		woo_address_book_app.checkout_field_prepop( 'billing', true );
 
 		// Retrieves billing address when another is selected.
-		$( document ).on( 'change', '#billing_address_book_field #billing_address_book', function () {
+		$( document ).on( 'change', '#billing_address_book_field #billing_address_book, #billing_address_book_field input[name="billing_address_book"]:checked', function () {
 			woo_address_book_app.checkout_field_prepop( 'billing', false );
 		} );
 
@@ -60,7 +64,7 @@ var woo_address_book_app = {
 		woo_address_book_app.checkout_field_prepop( 'shipping', true );
 
 		// Retrieves shipping address when another is selected.
-		$( document ).on( 'change', '#shipping_address_book_field #shipping_address_book', function () {
+		$( document ).on( 'change', '#shipping_address_book_field #shipping_address_book, #shipping_address_book_field input[name="shipping_address_book"]:checked', function () {
 			woo_address_book_app.checkout_field_prepop( 'shipping', false );
 		} );
 
@@ -171,6 +175,9 @@ var woo_address_book_app = {
 			return;
 		}
 		let that = $( '#' + address_type + '_address_book_field #' + address_type + '_address_book' );
+		if ( ! that.length ) {
+			that = $( '#' + address_type + '_address_book_field input[name="' + address_type + '_address_book"]:checked' );
+		}
 
 		let name = $( that ).val();
 
@@ -179,7 +186,7 @@ var woo_address_book_app = {
 			if ( 'add_new' === name ) {
 
 				// Clear values when adding a new address.
-				$( '.woocommerce-' + address_type + '-fields__field-wrapper input' ).not( $( '#' + address_type + '_country' ) ).not( '#' + address_type + '_address_book' ).each( function () {
+				$( '.woocommerce-' + address_type + '-fields__field-wrapper input' ).not( $( '#' + address_type + '_country' ) ).not( '#' + address_type + '_address_book' ).not( '[name="' + address_type + '_address_book"]' ).each( function () {
 					var input = $( this );
 					if ( input.attr("type") === "checkbox" || input.attr("type") === "radio") {
 						input.prop( "checked", false );
@@ -240,6 +247,7 @@ var woo_address_book_app = {
 							// If entered values do not equal shipping calculator values
 							if ( shipping_country_o !== response.shipping_country || shipping_state_o !== response.shipping_state || shipping_city_o !== response.shipping_city || shipping_postcode_o !== response.shipping_postcode ) {
 								$( "#shipping_address_book" ).val( 'add_new' ).trigger( 'change' );
+								$( 'input#shipping_address_book_add_new').prop( 'checked', true ).trigger( 'change' );
 								return;
 							}
 						}
