@@ -34,13 +34,16 @@
 }
 
 .woocommerce-checkout .address_book input.input-radio {
-	display: block;
-	float: left;
-	margin-bottom: 3px;
 	margin-right: 15px;
+	margin-bottom: 1em;
+	margin-top: 1em;
 }
 
 .woocommerce-checkout .address_book label.radio {
-	line-height: 1;
-	margin-bottom: 1em;
+	display: inline;
+}
+
+.woocommerce-checkout .address_book label.radio::after {
+	content: '\A';
+	white-space: pre;
 }
