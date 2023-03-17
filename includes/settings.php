@@ -6,15 +6,39 @@
  * @package  WooCommerce Address Book
  */
 
-add_filter( 'woocommerce_general_settings', 'woo_address_book_general_settings' );
+/**
+ * The WooCommerce Address Book settings page for the admin.
+ *
+ * @param array $settings_tabs The current array of settings tabs.
+ * @return array
+ */
+function woo_address_book_settings_tab_init( $settings_tabs ) {
+	$advanced_settings = $settings_tabs['advanced'];
+	$settings_tabs['address_book'] = __( 'Address Book', 'woo-address-book' );
+
+	// Unset and reindex the Advanced tab to remain last
+	unset( $settings_tabs['advanced'] );
+	$settings_tabs['advanced'] = $advanced_settings;
+
+	return $settings_tabs;
+}
+// Late priority (50) ensures the other tabs are all set before adding the Address Book tab.
+add_filter( 'woocommerce_settings_tabs_array', 'woo_address_book_settings_tab_init', 50 );
+
+/**
+ * Add admin fields to the Address Book settings page.
+ */
+function woo_address_book_settings_tab() {
+	woocommerce_admin_fields( woo_address_book_general_settings() );
+}
+add_action( 'woocommerce_settings_address_book', 'woo_address_book_settings_tab');
 
 /**
  * The WooCommerce Address Book settings page for the admin.
  *
- * @param array $settings The current settings array.
  * @return array
  */
-function woo_address_book_general_settings( $settings ) {
+function woo_address_book_general_settings() {
 	$settings[] = array(
 		'title' => __( 'WooCommerce Address Book options', 'woo-address-book' ),
 		'type'  => 'title',
@@ -112,6 +136,6 @@ function woo_address_book_general_settings( $settings ) {
 		'type' => 'sectionend',
 		'id'   => 'woo_address_book_options',
 	);
-
+	
 	return $settings;
 }
