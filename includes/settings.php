@@ -29,9 +29,25 @@ add_filter( 'woocommerce_settings_tabs_array', 'woo_address_book_settings_tab_in
  * Add admin fields to the Address Book settings page.
  */
 function woo_address_book_settings_tab() {
-	woocommerce_admin_fields( woo_address_book_general_settings() );
+	$settings = woo_address_book_general_settings();
+	WC_Admin_Settings::output_fields( $settings );
 }
 add_action( 'woocommerce_settings_address_book', 'woo_address_book_settings_tab');
+
+/**
+ * Save Address Book settings page.
+ */
+function woo_address_book_settings_save() {
+    global $current_section;
+    $tab_id = 'address_book';
+
+    $settings = woo_address_book_general_settings();
+    WC_Admin_Settings::save_fields( $settings );
+    if ( $current_section ) {
+        do_action( 'woocommerce_update_options_' . $tab_id . '_' . $current_section );
+    }
+}
+add_action( 'woocommerce_settings_save_address_book', 'woo_address_book_settings_save', 10 );
 
 /**
  * The WooCommerce Address Book settings page for the admin.
