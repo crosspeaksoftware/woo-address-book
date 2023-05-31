@@ -2,13 +2,13 @@
 /**
  * Plugin Name: WooCommerce Address Book
  * Description: Gives your customers the option to store multiple shipping addresses and retrieve them on checkout..
- * Version: 2.4.1
+ * Version: 2.4.2
  * Author: CrossPeak
  * Author URI: https://www.crosspeaksoftware.com/
  * License: GPL2
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: woo-address-book
- * WC tested up to: 7.2.2
+ * WC tested up to: 7.7.1
  *
  * @package WooCommerce Address Book
  */
@@ -17,6 +17,20 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
+
+/**
+ * Declare HPOS compatibility.
+ *
+ * @see https://github.com/woocommerce/woocommerce/wiki/High-Performance-Order-Storage-Upgrade-Recipe-Book#declaring-extension-incompatibility
+ */
+add_action(
+	'before_woocommerce_init',
+	function() {
+		if ( class_exists( \Automattic\WooCommerce\Utilities\FeaturesUtil::class ) ) {
+			\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'custom_order_tables', __FILE__, true );
+		}
+	}
+);
 
 require_once ABSPATH . 'wp-admin/includes/plugin.php';
 

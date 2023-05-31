@@ -2,8 +2,8 @@
 Contributors: crosspeak, hallme, doomwaxer, timbhowe, matt-h-1, hinyka
 Tags: WooCommerce, address book, multiple addresses, address
 Requires at least: 4.6
-Tested up to: 6.1.1
-Stable tag: 2.4.1
+Tested up to: 6.2.3
+Stable tag: 2.4.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -83,6 +83,9 @@ You may also use PoEdit and create a translation file which can be exported as a
 2. Easily select your billing and shipping address on checkout.
 
 == Changelog ==
+
+= 2.4.2 =
+* Declare HPOS compatibility.
 
 = 2.4.1 =
 * Tweak: Update change detection on Address Book selector so the listeners still work even if the elements are reloaded on the page.
