@@ -34,6 +34,8 @@
 	<config name="minimum_supported_wp_version" value="4.6"/>
 	<rule ref="WooCommerce-Core">
 		<exclude name="Squiz.Commenting.FileComment.Missing"/>
+		<exclude name="PHPCompatibility.Operators.NewOperators.t_coalesceFound"/>
+		<exclude name="PHPCompatibility.LanguageConstructs.NewEmptyNonVariable.Found"/>
 	</rule>
 	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
 		<properties>

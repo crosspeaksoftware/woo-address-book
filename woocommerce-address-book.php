@@ -1,14 +1,14 @@
 <?php
 /**
  * Plugin Name: WooCommerce Address Book
- * Description: Gives your customers the option to store multiple shipping addresses and retrieve them on checkout..
+ * Description: Gives your customers the option to store multiple shipping and/or billing addresses and retrieve them on checkout.
  * Version: 2.5.0
  * Author: CrossPeak
  * Author URI: https://www.crosspeaksoftware.com/
  * License: GPL2
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: woo-address-book
- * WC tested up to: 7.7.1
+ * WC tested up to: 8.0.0
  *
  * @package WooCommerce Address Book
  */
@@ -32,30 +32,33 @@ add_action(
 	}
 );
 
-require_once ABSPATH . 'wp-admin/includes/plugin.php';
+/**
+ * Add Notice if WooCommerce is not active.
+ */
+function wc_address_book_woocommerce_notice_error() {
+	$class   = 'notice notice-error';
+	$message = __( 'WooCommerce Address Book requires WooCommerce to be active.', 'woo-address-book' );
 
-if ( ! is_plugin_active( 'woocommerce/woocommerce.php' ) && ! is_plugin_active_for_network( 'woocommerce/woocommerce.php' ) ) {
-	deactivate_plugins( plugin_basename( __FILE__ ) );
+	printf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $class ), esc_attr( $message ) );
+}
 
-	/**
-	 * Deactivate the plugin if WooCommerce is not active.
-	 *
-	 * @since    1.0.0
-	 */
-	function wc_address_book_woocommerce_notice_error() {
-		$class   = 'notice notice-error';
-		$message = __( 'WooCommerce Address Book requires WooCommerce and has been deactivated.', 'woo-address-book' );
-
-		printf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $class ), esc_attr( $message ) );
+/**
+ * Check if WooCommerce is active.
+ */
+function wc_address_book_woocommerce_check() {
+	if ( ! class_exists( 'WooCommerce', false ) ) {
+		add_action( 'admin_notices', 'wc_address_book_woocommerce_notice_error' );
+		add_action( 'network_admin_notices', 'wc_address_book_woocommerce_notice_error' );
 	}
-	add_action( 'admin_notices', 'wc_address_book_woocommerce_notice_error' );
-	add_action( 'network_admin_notices', 'wc_address_book_woocommerce_notice_error' );
-} else {
-	require plugin_dir_path( __FILE__ ) . 'includes/class-wc-address-book.php';
+}
+add_action( 'plugins_loaded', 'wc_address_book_woocommerce_check' );
+
+if ( ! class_exists( 'WC_Address_Book', false ) ) {
+	require __DIR__ . '/includes/class-wc-address-book.php';
 
 	// Adds plugin settings.
-	include_once dirname( __FILE__ ) . '/includes/settings.php';
-
-	// Init Class.
-	WC_Address_Book::get_instance();
+	require __DIR__ . '/includes/settings.php';
 }
+
+// Init Class.
+WC_Address_Book::get_instance();

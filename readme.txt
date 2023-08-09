@@ -84,6 +84,18 @@ You may also use PoEdit and create a translation file which can be exported as a
 
 == Changelog ==
 
+= 3.0.0 =
+* **Potential breaking change**
+  * If you are using this plugin as a user, then nothing should break with this change. All data from older versions of the plugin is updated automatically. You may want to review the plugin settings to make sure that it is setup as you would like.
+  * If you have customizations that accessed any of the plugin functions or changed template files then you will need to review them for updates.
+  * The data structure of the plugin has been re-written. So if you are accessing any data directly from the usermeta table then that will need to be changed.
+  * Also, many of the functions work differently then they used to. Any custom calls to the WC_Address_Book class may need to be changed. Or filters reviewed.
+  * Translators: Many of the text strings have been changed or added in this release, so if you are using a version other than English you will need to make sure your translations are up to date.
+* We've updated the Address Book template and styles with a whole new look. If you've customized the template file or your theme has any styles that affect the address book you will need to make changes to work with the updated template and style.
+* Feature: Add REST API endpoint to get customer addresses.
+* Feature: Add Import/Export feature of addresses. This is disabled by default so you will need to turn it on in the settings.
+* Change: Settings have been moved from WooCommerce -> Settings -> General to their own settings section under Address Book.
+
 = 2.5.0 =
 * Declare HPOS compatibility.
 * Feature: Add option to use radio button instead of dropdown select.

@@ -78,9 +78,7 @@ var woo_address_book_app = {
 		/*
 		 * AJAX call to delete address books.
 		 */
-		$( 'a.wc-address-book-delete' ).on( 'click', function ( e ) {
-
-			e.preventDefault();
+		$( '.wc-address-book-delete' ).on( 'click', function () {
 
 			var confirmDelete = confirm( woo_address_book.delete_confirmation );
 			if ( ! confirmDelete ) {
@@ -88,7 +86,8 @@ var woo_address_book_app = {
 			}
 
 			var addressBook = $( this ).closest( '.address_book' );
-			var name = $( this ).attr( 'id' );
+			var name = $( this ).data( 'wc-address-name' );
+			var type = $( this ).data( 'wc-address-type' );
 			var toRemove = $( this ).closest( '.wc-address-book-address' );
 			var numOfAddresses = parseInt( addressBook.attr( 'data-addresses' ) );
 			var addressLimit = parseInt( addressBook.attr( 'data-limit' ) );
@@ -102,9 +101,10 @@ var woo_address_book_app = {
 				data: {
 					action: 'wc_address_book_delete',
 					name: name,
+					type: type,
 					nonce: woo_address_book.delete_security,
 				},
-				success: function () {
+				success: function (response) {
 					toRemove.remove();
 					addressBook.attr( 'data-addresses', numOfAddresses - 1 );
 					if ( numOfAddresses <= addressLimit ) {
@@ -112,35 +112,47 @@ var woo_address_book_app = {
 						addressBook.find(".wc-address-book-add-new-address a").show();
 					}
 
+					$('.woocommerce-notices-wrapper').html(response);
+
 					// Remove BlockUI overlay
 					$( '.woocommerce-MyAccount-content' ).unblock();
 				}
 			} );
 		} );
 
+		$( '#wc_address_book_upload_billing_csv' ).on( 'change', function ( e ) {
+			if ( $( '#wc_address_book_upload_billing_csv' ).val() ) {
+				$( '.billing-import-btn' ).show();
+			}
+		} );
+		$( '#wc_address_book_upload_shipping_csv' ).on( 'change', function ( e ) {
+			if ( $( '#wc_address_book_upload_shipping_csv' ).val() ) {
+				$( '.shipping-import-btn' ).show();
+			}
+		} );
+
 		/*
-		 * AJAX call to switch address to primary.
+		 * AJAX call to switch address to default.
 		 */
-		$( 'a.wc-address-book-make-primary' ).on( 'click', function ( e ) {
+		$( '.wc-address-book-make-default' ).on( 'click', function () {
 
-			e.preventDefault();
-
-			var name = $( this ).attr( 'id' );
-			var type = name.replace( /\d+/g, '' );
+			var name = $( this ).data( 'wc-address-name' );
+			if ( name === undefined || name === null || name === '' ) {
+				return;
+			}
+			var type = $( this ).data( 'wc-address-type' );
 
 			if ( type === 'billing' ) {
-				var primary_address = $( '.u-column1.woocommerce-Address address' );
+				var main_address_slot = $( '.u-column1.woocommerce-Address address' );
+				var default_address = $( '.billing_address_book .wc-address-book-address-default' );
 			} else if ( type === 'shipping' ) {
-				var primary_address = $( '.u-column2.woocommerce-Address address' );
+				var main_address_slot = $( '.u-column2.woocommerce-Address address' );
+				var default_address = $( '.shipping_address_book .wc-address-book-address-default' );
 			} else {
 				return;
 			}
 
-			var alt_address = $( this ).parent().siblings( 'address' );
-
-			// Swap HTML values for address and label.
-			var pa_html = primary_address.html();
-			var aa_html = alt_address.html();
+			var new_address = $( this ).parents(".wc-address-book-address");
 
 			// Show BlockUI overlay
 			$( '.woocommerce-MyAccount-content' ).block();
@@ -149,13 +161,22 @@ var woo_address_book_app = {
 				url: woo_address_book.ajax_url,
 				type: 'post',
 				data: {
-					action: 'wc_address_book_make_primary',
+					action: 'wc_address_book_make_default',
 					name: name,
-					nonce: woo_address_book.primary_security,
+					type: type,
+					nonce: woo_address_book.default_security,
 				},
-				success: function () {
-					alt_address.html( pa_html );
-					primary_address.html( aa_html );
+				success: function (response) {
+					main_address_slot.html( new_address.find("address").html());
+					new_address.addClass( 'wc-address-book-address-default' );
+					new_address.find( '.wc-address-book-make-default' ).prop('disabled', true).hide();
+					new_address.find( '.wc-address-book-meta' ).append("<span class='wc-address-book-default-text'>" + woo_address_book.default_text + "</span>");
+					new_address.find( '.wc-address-book-delete' ).prop('disabled', true).hide();
+					default_address.removeClass( 'wc-address-book-address-default' );
+					default_address.find( '.wc-address-book-make-default' ).prop('disabled', false).show();
+					default_address.find( '.wc-address-book-default-text' ).remove();
+					default_address.find( '.wc-address-book-delete' ).prop('disabled', false).show();
+					$('.woocommerce-notices-wrapper').html(response);
 
 					// Remove BlockUI overlay
 					$( '.woocommerce-MyAccount-content' ).unblock();
@@ -252,35 +273,54 @@ var woo_address_book_app = {
 							}
 						}
 
+                        inputs_array = [];
+                        values_array = [];
+
 						// Loop through all fields and set values to the form.
-						Object.keys( response ).forEach( function ( key ) {
-							let input = $( '#' + key );
-							if ( input.length > 0 ) {
-								if ( woo_address_book.allow_readonly !== "no" || input.attr( 'readonly' ) !== 'readonly' ) {
-									if ( input.is("select") ) {
-										if ( input.hasClass( 'selectized' ) && input[0] && input[0].selectize ) {
-											input[0].selectize.setValue( response[key] );
-										} else {
-											input.val( response[key] ).trigger( 'change' );
-										}
-									} else if ( input.attr("type") === "checkbox" ) {
-										input.prop( 'checked', response[key] === "1" ).trigger( 'change' );
-									} else {
-										input.val( response[key] ).trigger( 'change' );
-									}
-								}
-							} else {
-								// Handle radio buttons.
-								let radio_field = $( '#' + key + '_field' );
-								if ( radio_field.length > 0 ) {
-									radio_field.find("input[type='radio']").each( function (index, radio_button) {
-										if ( $(radio_button).val() === response[key] ) {
-											$(radio_button).prop( 'checked', true ).trigger( 'change' );
-										}
-									});
-								}
-							}
-						} );
+                        Object.keys( response ).forEach( function ( key ) {
+                            let input = $( '#' + key );
+
+                            // Save set input values to variables.
+                            // Used to verify everything was set correctly after the fact.
+                            // Some localized plugins use a different order and can cause previous values to be removed.
+                            if ( typeof response[key] !== 'undefined' && typeof input.attr("name") !== 'undefined' ) {
+                                inputs_array.push( input );
+                                values_array.push( response[key] );
+                            }
+
+                            if ( input.length > 0 ) {
+                                if ( woo_address_book.allow_readonly !== "no" || input.attr( 'readonly' ) !== 'readonly' ) {
+                                    if ( input.is("select") ) {
+                                        if ( input.hasClass( 'selectized' ) && input[0] && input[0].selectize ) {
+                                            input[0].selectize.setValue( response[key] );
+                                        } else {
+                                            input.val( response[key] ).trigger( 'change' );
+                                        }
+                                    } else if ( input.attr("type") === "checkbox" ) {
+                                        input.prop( 'checked', response[key] === "1" ).trigger( 'change' );
+                                    } else {
+                                        input.val( response[key] ).trigger( 'change' );
+                                    }
+                                }
+                            } else {
+                                // Handle radio buttons.
+                                let radio_field = $( '#' + key + '_field' );
+                                if ( radio_field.length > 0 ) {
+                                    radio_field.find("input[type='radio']").each( function (index, radio_button) {
+                                        if ( $(radio_button).val() === response[key] ) {
+                                            $(radio_button).prop( 'checked', true ).trigger( 'change' );
+                                        }
+                                    });
+                                }
+                            }
+                        } );
+
+                        // Loop through the inputs and make sure their values match the saved values.
+                        inputs_array.forEach( function ( input, index ) {
+                            if ( input.val() !== values_array[index] ) {
+                                input.val( values_array[index] ).trigger( 'change' );
+                            }
+                        });
 
 						// Remove BlockUI overlay
 						$( '.woocommerce-' + address_type + '-fields' ).unblock();
