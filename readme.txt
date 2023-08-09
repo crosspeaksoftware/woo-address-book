@@ -84,6 +84,9 @@ You may also use PoEdit and create a translation file which can be exported as a
 
 == Changelog ==
 
+= 3.0.1 =
+ * Fix: Fix potential temporary PHP fatal error in 3.0.0
+
 = 3.0.0 =
 * **Potential breaking change**
   * If you are using this plugin as a user, then nothing should break with this change. All data from older versions of the plugin is updated automatically. You may want to review the plugin settings to make sure that it is setup as you would like.

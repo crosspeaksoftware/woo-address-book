@@ -787,7 +787,12 @@ class WC_Address_Book {
 			$address[ $address_field_key ] = $this->get_customer_meta( $custom_field, $customer );
 			if ( $upgrade && 'billing' !== $key && 'shipping' !== $key ) {
 				// Delete legacy address book meta data from versions prior to 3.0.
-				delete_user_meta( $customer->get_id(), $custom_field );
+				if ( $customer ) {
+					$customer_id = $customer->get_id();
+				} else {
+					$customer_id = get_current_user_id();
+				}
+				delete_user_meta( $customer_id, $custom_field );
 			}
 		}
 
