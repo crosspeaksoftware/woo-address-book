@@ -3,7 +3,7 @@
  * WooCommerce Address Book.
  *
  * @class    WC_Address_Book
- * @version  3.0.0
+ * @version  3.0.1
  * @package  WooCommerce Address Book
  */
 class WC_Address_Book {
@@ -34,7 +34,7 @@ class WC_Address_Book {
 	public function __construct() {
 
 		// Version Number.
-		$this->version = '3.0.0';
+		$this->version = '3.0.1';
 
 		// Enqueue Styles and Scripts.
 		add_action( 'wp_enqueue_scripts', array( $this, 'scripts_styles' ) );
