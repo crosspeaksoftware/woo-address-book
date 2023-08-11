@@ -587,7 +587,9 @@ class WC_Address_Book {
 					$address_data = get_user_meta( $user_id, 'wc_address_book_address_' . $type . '_' . $address_name, true );
 					if ( ! empty( $address_data ) ) {
 						foreach ( $address_data as $key => $value ) {
-							update_user_meta( $user_id, $address_name . '_' . $key, $value );
+							if ( ! empty( $value ) ) {
+								update_user_meta( $user_id, $address_name . '_' . $key, $value );
+							}
 						}
 					}
 				}

@@ -84,7 +84,7 @@ You may also use PoEdit and create a translation file which can be exported as a
 
 == Changelog ==
 
-= 2.6.1 =
+= 2.6.1 and 2.6.2 =
 * Detect and downgrade from Address Book 3.0 addresses if they exist.
 
 = 2.6.0 =
