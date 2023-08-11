@@ -3,7 +3,7 @@
  * WooCommerce Address Book.
  *
  * @class    WC_Address_Book
- * @version  2.6.1
+ * @version  2.6.2
  * @package  WooCommerce Address Book
  */
 class WC_Address_Book {
@@ -34,7 +34,7 @@ class WC_Address_Book {
 	public function __construct() {
 
 		// Version Number.
-		$this->version = '2.6.1';
+		$this->version = '2.6.2';
 
 		// Register hooks that are fired when the plugin is activated, deactivated, and uninstalled, respectively.
 		register_activation_hook( __FILE__, array( $this, 'activate' ) );
