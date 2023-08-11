@@ -579,6 +579,22 @@ class WC_Address_Book {
 			return array();
 		}
 
+		// Downgrade from 3.0 if in that format.
+		if ( isset( $address_names['addresses'] ) ) {
+			$address_names = $address_names['addresses'];
+			foreach ( $address_names as $address_name ) {
+				if ( strpos( $address_name, $type ) !== false ) {
+					$address_data = get_user_meta( $user_id, 'wc_address_book_address_' . $type . '_' . $address_name, true );
+					if ( ! empty( $address_data ) ) {
+						foreach ( $address_data as $key => $value ) {
+							update_user_meta( $user_id, $address_name . '_' . $key, $value );
+						}
+					}
+				}
+			}
+			update_user_meta( $user_id, 'wc_address_book_' . $type, $address_names );
+		}
+
 		return $address_names;
 	}
 
