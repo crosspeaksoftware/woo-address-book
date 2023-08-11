@@ -2,13 +2,13 @@
 /**
  * Plugin Name: WooCommerce Address Book
  * Description: Gives your customers the option to store multiple shipping addresses and retrieve them on checkout..
- * Version: 2.5.0
+ * Version: 2.6.0
  * Author: CrossPeak
  * Author URI: https://www.crosspeaksoftware.com/
  * License: GPL2
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: woo-address-book
- * WC tested up to: 7.7.1
+ * WC tested up to: 8.0.1
  *
  * @package WooCommerce Address Book
  */
@@ -58,4 +58,18 @@ if ( ! is_plugin_active( 'woocommerce/woocommerce.php' ) && ! is_plugin_active_f
 
 	// Init Class.
 	WC_Address_Book::get_instance();
+}
+
+add_action( 'in_plugin_update_message-woo-address-book/woocommerce-address-book.php', 'woo_address_book_update_notice', 10, 2 );
+/**
+ * Show plugin changes on the plugins screen.
+ *
+ * @param array    $args Unused parameter.
+ * @param stdClass $response Plugin update response.
+ */
+function woo_address_book_update_notice( $args, $response ) {
+	if ( version_compare( $response->new_version, '3.0', '<' ) ) {
+		return;
+	}
+	echo '<br><span style="display: inline-block; background-color: #d54e21; padding: 5px 10px 5px 10px; color: #f9f9f9; margin-top: 10px"><b>Version 3.0</b> introduces new data structure and templates. This will <b>break custom user modifications</b>! Please test it before upgrading.</span>';
 }

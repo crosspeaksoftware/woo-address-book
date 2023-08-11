@@ -84,6 +84,10 @@ You may also use PoEdit and create a translation file which can be exported as a
 
 == Changelog ==
 
+= 2.6.0 =
+* Add notice about 3.0.0
+* Warning: *3.x+* will be a breaking change if you have customizations for the plugin.
+
 = 2.5.0 =
 * Declare HPOS compatibility.
 * Feature: Add option to use radio button instead of dropdown select.
