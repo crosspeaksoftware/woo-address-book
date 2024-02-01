@@ -2,8 +2,8 @@
 Contributors: crosspeak, hallme, doomwaxer, timbhowe, matt-h-1, hinyka
 Tags: WooCommerce, address book, multiple addresses, address
 Requires at least: 4.6
-Tested up to: 6.2.3
-Stable tag: 3.0.1
+Tested up to: 6.3
+Stable tag: 3.0.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -82,7 +82,16 @@ You may also use PoEdit and create a translation file which can be exported as a
 1. Manage your address book on the account page. Choose your primary billing address, shipping address, or add multiple alternative addresses.
 2. Easily select your billing and shipping address on checkout.
 
+== Upgrade Notice ==
+
+= 3.0.0 =
+New data structure and templates are used this will **break custom user modifications**! Please test it before upgrading.
+
 == Changelog ==
+
+= 3.0.2 =
+ * Extra sanitization of data.
+ * More validation of imported csvs.
 
 = 3.0.1 =
  * Fix: Fix potential temporary PHP fatal error in 3.0.0

@@ -31,9 +31,9 @@ if ( ! $type ) {
 
 		// Hide the billing address book if there are no addresses to show and no ability to add new ones.
 		$woo_address_book_count_section = count( $woo_address_book_billing_address_book['addresses'] );
-		$woo_address_book_save_limit    = get_option( 'woo_address_book_billing_save_limit', 0 );
+		$woo_address_book_save_limit    = (int) get_option( 'woo_address_book_billing_save_limit', 0 );
 
-		if ( 1 == $woo_address_book_save_limit && $woo_address_book_count_section <= 1 ) {
+		if ( 1 === $woo_address_book_save_limit && $woo_address_book_count_section <= 1 ) {
 			$woo_address_book_hide_billing_address_book = true;
 		} else {
 			$woo_address_book_hide_billing_address_book = false;
@@ -76,6 +76,7 @@ if ( ! $type ) {
 
 					/**
 					 * Filter the billing address book description.
+					 * Output should be escaped before returning.
 					 *
 					 * @since 3.0.0
 					 * @param string $woo_address_book_shipping_description The shipping address book description.
@@ -83,7 +84,7 @@ if ( ! $type ) {
 					 * @param int    $woo_address_book_count_section The shipping address book count.
 					 * @return string
 					 */
-					echo apply_filters( 'woo_address_book_billing_description', $woo_address_book_billing_description, $woo_address_book_save_limit, $woo_address_book_count_section ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped It is escaped when building the variable.
+					echo apply_filters( 'woo_address_book_billing_description', $woo_address_book_billing_description, $woo_address_book_save_limit, $woo_address_book_count_section ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 					?>
 				</p>
@@ -94,6 +95,7 @@ if ( ! $type ) {
 						/**
 						 * Filter the billing address before formatting.
 						 *
+						 * @since 1.0.0
 						 * This is a core WooCommerce filter that we are also using here for consistent formatting.
 						 */
 						$woo_address_book_address = apply_filters(
@@ -118,7 +120,7 @@ if ( ! $type ) {
 									?>
 									<button type="button" data-wc-address-type="billing" data-wc-address-name="<?php echo esc_attr( $woo_address_book_name ); ?>" class="wc-address-book-delete button wp-element-button" disabled style="display: none;"><?php echo esc_html__( 'Delete', 'woo-address-book' ); ?></button>
 									<button type="button" data-wc-address-type="billing" data-wc-address-name="<?php echo esc_attr( $woo_address_book_name ); ?>" class="wc-address-book-make-default button wp-element-button" disabled style="display: none;"><?php echo esc_html__( 'Set as Default', 'woo-address-book' ); ?></button>
-									<span class="wc-address-book-default-text"><?php _e( 'Default', 'woo-address-book' ); ?></span>
+									<span class="wc-address-book-default-text"><?php esc_html_e( 'Default', 'woo-address-book' ); ?></span>
 									<?php
 								else :
 									?>
@@ -142,9 +144,9 @@ if ( ! $type ) {
 
 		// Hide the billing address book if there are no addresses to show and no ability to add new ones.
 		$woo_address_book_count_section = count( $woo_address_book_shipping_address_book['addresses'] );
-		$woo_address_book_save_limit    = intval( get_option( 'woo_address_book_shipping_save_limit', 0 ) );
+		$woo_address_book_save_limit    = (int) get_option( 'woo_address_book_shipping_save_limit', 0 );
 
-		if ( 1 == $woo_address_book_save_limit && $woo_address_book_count_section <= 1 ) {
+		if ( 1 === $woo_address_book_save_limit && $woo_address_book_count_section <= 1 ) {
 			$woo_address_book_hide_shipping_address_book = true;
 		} else {
 			$woo_address_book_hide_shipping_address_book = false;
@@ -188,6 +190,7 @@ if ( ! $type ) {
 
 					/**
 					 * Filter the shipping address book description.
+					 * Output should be escaped before returning.
 					 *
 					 * @since 3.0.0
 					 * @param string $woo_address_book_shipping_description The shipping address book description.
@@ -195,7 +198,7 @@ if ( ! $type ) {
 					 * @param int    $woo_address_book_count_section The shipping address book count.
 					 * @return string
 					 */
-					echo apply_filters( 'woo_address_book_shipping_description', $woo_address_book_shipping_description, $woo_address_book_save_limit, $woo_address_book_count_section ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped It is escaped when building the variable.
+					echo apply_filters( 'woo_address_book_shipping_description', $woo_address_book_shipping_description, $woo_address_book_save_limit, $woo_address_book_count_section ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 					?>
 				</p>
@@ -208,6 +211,7 @@ if ( ! $type ) {
 						/**
 						 * Filter the shipping address before formatting.
 						 *
+						 * @since 1.0.0
 						 * This is a core WooCommerce filter that we are also using here for consistent formatting.
 						 */
 						$woo_address_book_address = apply_filters(
@@ -232,7 +236,7 @@ if ( ! $type ) {
 									?>
 									<button type="button" data-wc-address-type="shipping" data-wc-address-name="<?php echo esc_attr( $woo_address_book_name ); ?>" class="wc-address-book-delete button wp-element-button" disabled style="display: none;"><?php echo esc_html__( 'Delete', 'woo-address-book' ); ?></button>
 									<button type="button" data-wc-address-type="shipping" data-wc-address-name="<?php echo esc_attr( $woo_address_book_name ); ?>" class="wc-address-book-make-default button wp-element-button" disabled style="display: none;"><?php echo esc_html__( 'Set as Default', 'woo-address-book' ); ?></button>
-									<span class="wc-address-book-default-text"><?php _e( 'Default', 'woo-address-book' ); ?></span>
+									<span class="wc-address-book-default-text"><?php esc_html_e( 'Default', 'woo-address-book' ); ?></span>
 									<?php
 								else :
 									?>
@@ -278,7 +282,7 @@ if ( ! $type ) {
 						</div>
 					</form>
 					<hr>
-					<p><strong><?php $wc_address_book->add_wc_address_book_export_button( 'billing' ); ?></strong></p>
+					<p><strong><?php $wc_address_book->add_export_button( 'billing' ); ?></strong></p>
 				</div>
 					<?php
 				}
@@ -301,7 +305,7 @@ if ( ! $type ) {
 						</div>
 					</form>
 					<hr>
-					<p><strong><?php $wc_address_book->add_wc_address_book_export_button( 'shipping' ); ?></strong></p>
+					<p><strong><?php $wc_address_book->add_export_button( 'shipping' ); ?></strong></p>
 				</div>
 					<?php
 				}
