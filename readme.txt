@@ -11,6 +11,8 @@ Gives your customers the option to store multiple billing and shipping addresses
 
 == Description ==
 
+**Notice**>> This plugin is does not currently work with the WooCommerce Block Checkout. It currently only supports the Classic WooCommerce checkout. We hope to find a way to integrate with the Block Checkout in the future.
+
 Gives your customers the option to store multiple billing and shipping addresses and retrieve them on checkout. Addresses can be updated and modified quickly and easily in /my-account/, or saved as part of the checkout process.
 
 There is a [demo setup](https://woo-address-book.crosspeak.dev) if you would like to try this plugin out with a demo store.
