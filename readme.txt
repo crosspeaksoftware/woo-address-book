@@ -2,7 +2,7 @@
 Contributors: crosspeak, hallme, doomwaxer, timbhowe, matt-h-1, hinyka
 Tags: WooCommerce, address book, multiple addresses, address
 Requires at least: 4.6
-Tested up to: 6.5.2
+Tested up to: 6.5.3
 Stable tag: 2.6.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -85,6 +85,10 @@ You may also use PoEdit and create a translation file which can be exported as a
 2. Easily select your billing and shipping address on checkout.
 
 == Changelog ==
+
+= 2.6.3 =
+* Declare checkout block incompatibility.
+* Bump versions.
 
 = 2.6.1 and 2.6.2 =
 * Detect and downgrade from Address Book 3.0 addresses if they exist.
