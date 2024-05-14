@@ -72,5 +72,5 @@ function woo_address_book_update_notice( $args, $response ) {
 	if ( version_compare( $response->new_version, '3.0', '<' ) ) {
 		return;
 	}
-	echo '<br><span style="display: inline-block; background-color: #d54e21; padding: 5px 10px 5px 10px; color: #f9f9f9; margin-top: 10px"><b>Version 3.0</b> introduces new data structure and templates. This will <b>break custom user modifications</b>! Please test it before upgrading.</span>';
+	echo '<br><span style="display: inline-block; background-color: #d54e21; padding: 5px 10px 5px 10px; color: #f9f9f9; margin-top: 10px"><b>Version 3.x+</b> introduces new data structure and templates. This will <b>break some custom user modifications</b> especially if you access the user meta directly! Please test it before upgrading.</span>';
 }
