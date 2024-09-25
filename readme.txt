@@ -1,9 +1,11 @@
 === WooCommerce Address Book ===
 Contributors: crosspeak, hallme, doomwaxer, timbhowe, matt-h-1, hinyka
 Tags: WooCommerce, address book, multiple addresses, address
+Donate link: https://www.crosspeaksoftware.com/process-payment/
 Requires at least: 4.6
 Tested up to: 6.3
-Stable tag: 3.0.2
+Requires PHP: 7.1
+Stable tag: 3.0.2.9
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -13,21 +15,35 @@ Gives your customers the option to store multiple billing and shipping addresses
 
 Gives your customers the option to store multiple billing and shipping addresses and retrieve them on checkout. Addresses can be updated and modified quickly and easily in /my-account/, or saved as part of the checkout process.
 
+Tools to import and export saved addresses available to customers.
+
 There is a [demo setup](https://woo-address-book.crosspeak.dev) if you would like to try this plugin out with a demo store.
 
 = Settings =
 
-The settings for this plugin are located in WooCommerce General settings: WooCommerce -> Settings -> General.
+The settings for this plugin are located in WooCommerce General settings: WooCommerce -> Settings -> Address Book.
 
 WooCommerce Address Book options:
 
 * Enable billing/shipping address book
 * Add New Address as default selection
 * Enable setting Billing/Shipping Address Nickname during Checkout
+* Limit number of billing addresses that each user can save
+* Enable or disable import/export functionality
 
 = Code =
 
 View the source on [GitHub](https://github.com/crosspeaksoftware/woo-address-book). You can also submit an [issue](https://github.com/crosspeaksoftware/woo-address-book/issues) or pull request for anything new.
+
+= PRO =
+
+The WooCommerce Address Book plugin is also available in a professional version which includes more functionality. WooCommerce Address Book Pro features:
+
+* Backoffice support
+  * When adding orders through the Admin you can select from a customer's address book.
+  * Manage a customer's address book right from their user profile.
+
+[Upgrade to WooCommerce Address Book Pro](https://www.crosspeaksoftware.com/downloads/woocommerce-address-book-pro/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=Pro%20Upgrade)
 
 == Installation ==
 
@@ -38,8 +54,8 @@ View the source on [GitHub](https://github.com/crosspeaksoftware/woo-address-boo
 
 == Frequently Asked Questions ==
 
-= Why can't I add a new address to my address book? =
-The address book will only begin to display after the primary billing or shipping address has been created for the customer.
+= Does this work with the Block Checkout? =
+Not yet, but we are working on it.
 
 = Will this plugin allow my customers to ship to multiple locations with a single order? =
 No, this plugin only allows for the storage of multiple shipping addresses. If a customer would like to ship to multiple locations, they should complete multiple orders.
