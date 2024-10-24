@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
-const PLUGIN_VERSION = '3.0.2.9';
+const PLUGIN_VERSION = '3.0.2.12';
 
 /**
  * Adds a link/button to the my account page under the addresses for adding additional addresses to their account.
@@ -286,7 +286,7 @@ function checkout_address_select_field( array $fields ) {
 					if ( $default_to_new_address ) {
 						$address_selector[ $type . '_address_book' ]['default'] = 'add_new';
 					} else {
-						$address_selector[ $type . '_address_book' ]['default'] = $type;
+						$address_selector[ $type . '_address_book' ]['default'] = $address_book->default_key();
 					}
 
 					$fields[ $type ] = $address_selector + $fields[ $type ];
