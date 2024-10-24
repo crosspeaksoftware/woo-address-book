@@ -602,7 +602,7 @@ function address_to_edit( $address, $load_address ) {
 			// This is new address, blank out all values.
 			foreach ( $address as $key => $settings ) {
 				// Leave email and phone alone since they are most likely the same.
-				if ( ! empty( $settings['value'] ) && 'key' !== 'billing_email' && 'key' !== 'billing_phone' ) {
+				if ( ! empty( $settings['value'] ) && 'billing_email' !== $key && 'billing_phone' !== $key ) {
 					$address[ $key ]['value'] = null;
 				}
 			}
