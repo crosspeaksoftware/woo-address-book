@@ -3,7 +3,7 @@ Contributors: crosspeak, hallme, doomwaxer, timbhowe, matt-h-1, hinyka
 Tags: WooCommerce, address book, multiple addresses, address
 Requires at least: 4.6
 Tested up to: 6.5.3
-Stable tag: 2.6.4
+Stable tag: 2.6.5
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -85,6 +85,9 @@ You may also use PoEdit and create a translation file which can be exported as a
 2. Easily select your billing and shipping address on checkout.
 
 == Changelog ==
+
+= 2.6.5 =
+* Fix compiled stylesheet as part of build process.
 
 = 2.6.4 =
 * Use WooCommerce ajax instead of WordPress ajax for improved compatibility.
