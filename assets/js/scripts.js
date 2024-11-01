@@ -97,10 +97,10 @@ var woo_address_book_app = {
 			$( '.woocommerce-MyAccount-content' ).block();
 
 			$.ajax( {
-				url: woo_address_book.ajax_url,
+				url: woo_address_book.wc_ajax_url.toString()
+					.replace( '%%endpoint%%', 'wc_address_book_delete' ),
 				type: 'post',
 				data: {
-					action: 'wc_address_book_delete',
 					name: name,
 					nonce: woo_address_book.delete_security,
 				},
@@ -146,10 +146,10 @@ var woo_address_book_app = {
 			$( '.woocommerce-MyAccount-content' ).block();
 
 			$.ajax( {
-				url: woo_address_book.ajax_url,
+				url: woo_address_book.wc_ajax_url.toString()
+					.replace( '%%endpoint%%', 'wc_address_book_make_primary' ),
 				type: 'post',
 				data: {
-					action: 'wc_address_book_make_primary',
 					name: name,
 					nonce: woo_address_book.primary_security,
 				},
@@ -231,10 +231,10 @@ var woo_address_book_app = {
 				$( '.woocommerce-' + address_type + '-fields' ).block();
 
 				$.ajax( {
-					url: woo_address_book.ajax_url,
+					url: woo_address_book.wc_ajax_url.toString()
+						.replace( '%%endpoint%%', 'wc_address_book_checkout_update' ),
 					type: 'post',
 					data: {
-						action: 'wc_address_book_checkout_update',
 						name: name,
 						type: address_type,
 						nonce: woo_address_book.checkout_security,

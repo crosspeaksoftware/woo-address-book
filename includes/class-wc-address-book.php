@@ -55,13 +55,13 @@ class WC_Address_Book {
 		add_filter( 'woocommerce_checkout_fields', array( $this, 'checkout_address_select_field' ), 9999, 1 );
 
 		// AJAX action to delete an address.
-		add_action( 'wp_ajax_wc_address_book_delete', array( $this, 'wc_address_book_delete' ) );
+		add_action( 'wc_ajax_wc_address_book_delete', array( $this, 'wc_address_book_delete' ) );
 
 		// AJAX action to set a primary address.
-		add_action( 'wp_ajax_wc_address_book_make_primary', array( $this, 'wc_address_book_make_primary' ) );
+		add_action( 'wc_ajax_wc_address_book_make_primary', array( $this, 'wc_address_book_make_primary' ) );
 
 		// AJAX action to refresh the address at checkout.
-		add_action( 'wp_ajax_wc_address_book_checkout_update', array( $this, 'wc_address_book_checkout_update' ) );
+		add_action( 'wc_ajax_wc_address_book_checkout_update', array( $this, 'wc_address_book_checkout_update' ) );
 
 		// Update the customer data with the information entered on checkout.
 		add_filter( 'woocommerce_checkout_update_customer_data', array( $this, 'woocommerce_checkout_update_customer_data' ), 10, 2 );
@@ -190,6 +190,7 @@ class WC_Address_Book {
 			'woo_address_book',
 			array(
 				'ajax_url'            => admin_url( 'admin-ajax.php' ),
+				'wc_ajax_url'         => class_exists( 'WC_AJAX' ) ? WC_AJAX::get_endpoint( '%%endpoint%%' ) : '?wc-ajax=%%endpoint%%',
 				'delete_security'     => wp_create_nonce( 'woo-address-book-delete' ),
 				'primary_security'    => wp_create_nonce( 'woo-address-book-primary' ),
 				'checkout_security'   => wp_create_nonce( 'woo-address-book-checkout' ),
@@ -915,9 +916,7 @@ class WC_Address_Book {
 			}
 		}
 
-		echo wp_json_encode( $response );
-
-		die();
+		wp_send_json( $response );
 	}
 
 	/**
