@@ -211,10 +211,6 @@ var woo_address_book_app = {
 					$( "#shipping_city" ).val( shipping_city_o );
 					$( "#shipping_postcode" ).val( shipping_postcode_o );
 
-					delete shipping_country_o;
-					delete shipping_state_o;
-					delete shipping_city_o;
-					delete shipping_postcode_o;
 					this.shipping_address_from_cart = false;
 
 					// Remove BlockUI overlay
