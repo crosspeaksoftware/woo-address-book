@@ -86,6 +86,9 @@ You may also use PoEdit and create a translation file which can be exported as a
 
 == Changelog ==
 
+= 2.6.4 =
+* Use WooCommerce ajax instead of WordPress ajax for improved compatibility.
+
 = 2.6.3 =
 * Declare checkout block incompatibility.
 * Bump versions.
