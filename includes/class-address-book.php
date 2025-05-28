@@ -263,7 +263,7 @@ class Address_Book {
 		$this->address_keys[] = $key;
 		$this->update_address_meta( $key, $address );
 		if ( $as_default ) {
-			$this->default = $key;
+			$this->set_default( $key );
 		}
 		$this->update_address_book_meta();
 		return $key;
