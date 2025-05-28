@@ -118,6 +118,9 @@ function validate_address_nickname( string $new_nickname, string $type ) {
 	}
 
 	$address_book = get_address_book( $customer, $type );
+	if ( $current_address_name === $type && ! empty( $address_book->default_key() ) ) {
+		$current_address_name = $address_book->default_key();
+	}
 
 	if ( $address_book->count() > 0 ) {
 		foreach ( $address_book->addresses() as $address_name => $address ) {
