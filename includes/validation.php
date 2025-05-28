@@ -18,10 +18,10 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @param array<string,array<string,mixed>> $address The set of WooCommerce Address Fields.
  * @param array<string,string>              $values The set of values to validate.
- * @param string                            $load_address Address type to load, billing or shipping.
+ * @param string                            $address_type Address type to load, billing or shipping.
  * @return array<string,string>
  */
-function validate_address( $address, $values, $load_address ) {
+function validate_address( $address, $values, $address_type ) {
 	$address_values = array();
 	foreach ( $address as $key => $field ) {
 		if ( ! isset( $field['type'] ) ) {
@@ -55,7 +55,7 @@ function validate_address( $address, $values, $load_address ) {
 				foreach ( $field['validate'] as $rule ) {
 					switch ( $rule ) {
 						case 'postcode':
-							$country = wc_clean( wp_unslash( $values[ $load_address . '_country' ] ) );
+							$country = wc_clean( wp_unslash( $values[ $address_type . '_country' ] ) );
 							$value   = wc_format_postcode( $value, $country );
 
 							if ( '' !== $value && ! \WC_Validation::is_postcode( $value, $country ) ) {
@@ -88,7 +88,7 @@ function validate_address( $address, $values, $load_address ) {
 			}
 		}
 
-		$book_key                    = substr( $key, strlen( $load_address . '_' ) );
+		$book_key                    = substr( $key, strlen( $address_type . '_' ) );
 		$address_values[ $book_key ] = $value;
 	}
 	return $address_values;

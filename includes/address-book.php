@@ -491,6 +491,16 @@ add_filter( 'woocommerce_checkout_update_customer_data', __NAMESPACE__ . '\wooco
  * @return void
  */
 function save_address_form_handler() {
+	if ( empty( $_POST['action'] ) || 'edit_address' !== $_POST['action'] ) {
+		return;
+	}
+
+	$nonce_value = wc_get_var( $_REQUEST['woocommerce-edit-address-nonce'], wc_get_var( $_REQUEST['_wpnonce'], '' ) ); // @codingStandardsIgnoreLine.
+
+	if ( ! wp_verify_nonce( $nonce_value, 'woocommerce-edit_address' ) ) {
+		return;
+	}
+
 	$is_default        = false;
 	$address_book_name = null;
 	if ( isset( $_GET['address-book'] ) ) {
@@ -502,17 +512,7 @@ function save_address_form_handler() {
 		// Not an address book address, so load default address.
 		$is_default = true;
 	}
-	global $wp;
 
-	$nonce_value = wc_get_var( $_REQUEST['woocommerce-edit-address-nonce'], wc_get_var( $_REQUEST['_wpnonce'], '' ) ); // @codingStandardsIgnoreLine.
-
-	if ( ! wp_verify_nonce( $nonce_value, 'woocommerce-edit_address' ) ) {
-		return;
-	}
-
-	if ( empty( $_POST['action'] ) || 'edit_address' !== $_POST['action'] ) {
-		return;
-	}
 	// Change post action so that the WooCommerce save_address doesn't trigger.
 	$_POST['action'] = 'edit_address_book';
 
@@ -524,34 +524,36 @@ function save_address_form_handler() {
 		return;
 	}
 
-	$load_address = isset( $wp->query_vars['edit-address'] ) ? wc_edit_address_i18n( sanitize_title( $wp->query_vars['edit-address'] ), true ) : 'billing';
+	global $wp;
 
-	if ( ! isset( $_POST[ $load_address . '_country' ] ) ) {
+	$address_type = isset( $wp->query_vars['edit-address'] ) ? wc_edit_address_i18n( sanitize_title( $wp->query_vars['edit-address'] ), true ) : 'billing';
+
+	if ( ! isset( $_POST[ $address_type . '_country' ] ) ) {
 		return;
 	}
 
-	$address = WC()->countries->get_address_fields( wc_clean( wp_unslash( $_POST[ $load_address . '_country' ] ) ), $load_address . '_' );
+	$address = WC()->countries->get_address_fields( wc_clean( wp_unslash( $_POST[ $address_type . '_country' ] ) ), $address_type . '_' );
 
-	$address_values = validate_address( $address, $_POST, $load_address );
+	$address_values = validate_address( $address, $_POST, $address_type );
 
 	/**
 	 * Hook: woocommerce_after_save_address_validation.
 	 *
 	 * Allow developers to add custom validation logic and throw an error to prevent save.
 	 *
-	 * @since 3.0.0
+	 * @since 3.6.0
 	 * @param int          $user_id User ID being saved.
-	 * @param string       $load_address Type of address e.g. billing or shipping.
+	 * @param string       $address_type Type of address; 'billing' or 'shipping'.
 	 * @param array        $address The address fields.
-	 * @param \WC_Customer $customer The customer object being saved. @since 3.6.0
+	 * @param \WC_Customer $customer The customer object being saved.
 	 */
-	do_action( 'woocommerce_after_save_address_validation', $customer->get_id(), $load_address, $address, $customer );
+	do_action( 'woocommerce_after_save_address_validation', $customer->get_id(), $address_type, $address, $customer );
 
 	if ( 0 < wc_notice_count( 'error' ) ) {
 		return;
 	}
 
-	$address_book = get_address_book( $customer, $load_address );
+	$address_book = get_address_book( $customer, $address_type );
 
 	if ( $is_default ) {
 		$address_book_name = $address_book->default_key();
@@ -572,13 +574,19 @@ function save_address_form_handler() {
 	/**
 	 * Hook: woocommerce_customer_save_address.
 	 *
-	 * Allow developers to perform additional actions when the customer address is saved.
+	 * Fires after a customer address has been saved.
 	 *
-	 * @since 3.0.0
-	 * @param int         $user_id User ID being saved.
-	 * @param string      $load_address Type of address e.g. billing or shipping.
+	 * @since 3.6.0
+	 * @param int          $user_id User ID being saved.
+	 * @param string       $address_type Type of address; 'billing' or 'shipping'.
+	 * @param array        $address The address fields. Since 9.8.0.
+	 * @param \WC_Customer $customer The customer object being saved. Since 9.8.0.
 	 */
-	do_action( 'woocommerce_customer_save_address', $customer->get_id(), $load_address );
+	do_action( 'woocommerce_customer_save_address', $customer->get_id(), $address_type, $address, $customer );
+
+	if ( 0 < wc_notice_count( 'error' ) ) {
+		return;
+	}
 
 	wp_safe_redirect( wc_get_endpoint_url( 'edit-address', '', wc_get_page_permalink( 'myaccount' ) ) );
 	exit;
