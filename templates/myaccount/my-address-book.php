@@ -37,7 +37,7 @@ if ( setting( 'billing_enable' ) === true ) {
 
 	// Hide the billing address book if there are no addresses to show and no ability to add new ones.
 	$woo_address_book_count_section = $woo_address_book_billing_address_book->count();
-	$woo_address_book_save_limit    = (int) get_option( 'woo_address_book_billing_save_limit', 0 );
+	$woo_address_book_save_limit    = $woo_address_book_billing_address_book->limit();
 
 	if ( 1 === $woo_address_book_save_limit && $woo_address_book_billing_address_book->count() <= 1 ) {
 		$woo_address_book_hide_billing_address_book = true;
@@ -61,17 +61,17 @@ if ( setting( 'billing_enable' ) === true ) {
 				<?php
 				$woo_address_book_billing_description = esc_html( __( 'The following billing addresses are available during the checkout process. ', 'woo-address-book' ) );
 
-				if ( $woo_address_book_save_limit > 1 ) {
+				if ( $woo_address_book_save_limit > 0 ) {
 					$woo_address_book_billing_description .= ' ' . esc_html(
 						sprintf(
 							/* translators: %1s: The number of addresses that can be saved. */
 							_n(
-								'You can save a maximum of %1s address in addition to the default.',
-								'You can save a maximum of %1s addresses in addition to the default.',
-								$woo_address_book_save_limit - 1,
+								'You can save a maximum of %1s address.',
+								'You can save a maximum of %1s addresses.',
+								$woo_address_book_save_limit,
 								'woo-address-book'
 							),
-							$woo_address_book_save_limit - 1
+							$woo_address_book_save_limit
 						)
 					);
 
@@ -148,7 +148,7 @@ if ( setting( 'shipping_enable' ) === true ) {
 
 	// Hide the billing address book if there are no addresses to show and no ability to add new ones.
 	$woo_address_book_count_section = $woo_address_book_shipping_address_book->count();
-	$woo_address_book_save_limit    = (int) get_option( 'woo_address_book_shipping_save_limit', 0 );
+	$woo_address_book_save_limit    = $woo_address_book_shipping_address_book->limit();
 
 	if ( 1 === $woo_address_book_save_limit && $woo_address_book_count_section <= 1 ) {
 		$woo_address_book_hide_shipping_address_book = true;
@@ -173,17 +173,17 @@ if ( setting( 'shipping_enable' ) === true ) {
 				<?php
 				$woo_address_book_shipping_description = esc_html( __( 'The following shipping addresses are available during the checkout process.', 'woo-address-book' ) );
 
-				if ( $woo_address_book_save_limit > 1 ) {
+				if ( $woo_address_book_save_limit > 0 ) {
 					$woo_address_book_shipping_description .= ' ' . esc_html(
 						sprintf(
 							/* translators: %1s: The number of addresses that can be saved. */
 							_n(
-								'You can save a maximum of %1s address in addition to the default.',
-								'You can save a maximum of %1s addresses in addition to the default.',
-								$woo_address_book_save_limit - 1,
+								'You can save a maximum of %1s address.',
+								'You can save a maximum of %1s addresses.',
+								$woo_address_book_save_limit,
 								'woo-address-book'
 							),
-							$woo_address_book_save_limit - 1
+							$woo_address_book_save_limit
 						)
 					);
 
