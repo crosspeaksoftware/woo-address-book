@@ -26,54 +26,21 @@ const PLUGIN_VERSION = '3.0.2.12';
  * @return void
  */
 function add_additional_address_button( string $type ) {
-	$under_limit = limit_saved_addresses( $type );
-
-	$add_button_classes = 'add button wc-address-book-add-' . $type . '-button';
-
 	/**
 	 * Filter to override if the add new address button should be shown.
 	 *
 	 * @since 2.0.0
 	 */
-	if ( apply_filters( 'wc_address_book_show_' . $type . '_address_button', true ) ) :
-		?>
-	<div class="wc-address-book-add-new-address add-new-address">
-		<span
-			class="<?php echo esc_attr( $add_button_classes ); ?> disabled"
-				<?php
-				if ( $under_limit ) {
-					echo 'style="display:none"';
-				}
-				?>
-			>
-			<?php
-			if ( 'billing' === $type ) {
-				echo esc_html__( 'Billing Address Book Full', 'woo-address-book' );
-			} elseif ( 'shipping' === $type ) {
-				echo esc_html__( 'Shipping Address Book Full', 'woo-address-book' );
-			}
-			?>
-		</span>
-		<a
-			href="<?php echo esc_url( get_address_book_endpoint_url( 'new', $type ) ); ?>"
-			class="<?php echo esc_attr( $add_button_classes ); ?>"
-				<?php
-				if ( ! $under_limit ) {
-					echo 'style="display:none"';
-				}
-				?>
-			>
-			<?php
-			if ( 'billing' === $type ) {
-				echo esc_html__( 'Add New Billing Address', 'woo-address-book' );
-			} elseif ( 'shipping' === $type ) {
-				echo esc_html__( 'Add New Shipping Address', 'woo-address-book' );
-			}
-			?>
-		</a>
-	</div>
-		<?php
-endif;
+	if ( apply_filters( 'wc_address_book_show_' . $type . '_address_button', true ) ) {
+		wc_get_template(
+			'myaccount/add-address-button.php',
+			array(
+				'woo_address_book_address_type' => $type,
+			),
+			'',
+			plugin_dir_path( __DIR__ ) . 'templates/'
+		);
+	}
 }
 
 /**
