@@ -17,7 +17,6 @@
 namespace CrossPeakSoftware\WooCommerce\AddressBook\Templates\AddAddressButton;
 
 use function CrossPeakSoftware\WooCommerce\AddressBook\get_address_book_endpoint_url;
-use function CrossPeakSoftware\WooCommerce\AddressBook\limit_saved_addresses;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
@@ -26,42 +25,41 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Template variables:
  *
- * @var string $woo_address_book_address_type 'billing' or 'shipping'.
+ * @var \CrossPeakSoftware\WooCommerce\AddressBook\Address_Book $woo_address_book The current address book.
  */
 
-$woo_address_book_add_button_classes = 'add button wc-address-book-add-' . $woo_address_book_address_type . '-button';
-$woo_address_book_under_limit        = limit_saved_addresses( $woo_address_book_address_type );
+$woo_address_book_add_button_classes = 'add button wc-address-book-add-' . $woo_address_book->type() . '-button';
 ?>
 <div class="wc-address-book-add-new-address add-new-address">
 	<span
 		class="<?php echo esc_attr( $woo_address_book_add_button_classes ); ?> disabled"
 			<?php
-			if ( $woo_address_book_under_limit ) {
+			if ( $woo_address_book->is_under_limit() ) {
 				echo 'style="display:none"';
 			}
 			?>
 		>
 		<?php
-		if ( 'billing' === $woo_address_book_address_type ) {
+		if ( $woo_address_book->is_billing() ) {
 			echo esc_html__( 'Billing Address Book Full', 'woo-address-book' );
-		} elseif ( 'shipping' === $woo_address_book_address_type ) {
+		} elseif ( $woo_address_book->is_shipping() ) {
 			echo esc_html__( 'Shipping Address Book Full', 'woo-address-book' );
 		}
 		?>
 	</span>
 	<a
-		href="<?php echo esc_url( get_address_book_endpoint_url( 'new', $woo_address_book_address_type ) ); ?>"
+		href="<?php echo esc_url( get_address_book_endpoint_url( 'new', $woo_address_book->type() ) ); ?>"
 		class="<?php echo esc_attr( $woo_address_book_add_button_classes ); ?>"
 			<?php
-			if ( ! $woo_address_book_under_limit ) {
+			if ( ! $woo_address_book->is_under_limit() ) {
 				echo 'style="display:none"';
 			}
 			?>
 		>
 		<?php
-		if ( 'billing' === $woo_address_book_address_type ) {
+		if ( $woo_address_book->is_billing() ) {
 			echo esc_html__( 'Add New Billing Address', 'woo-address-book' );
-		} elseif ( 'shipping' === $woo_address_book_address_type ) {
+		} elseif ( $woo_address_book->is_shipping() ) {
 			echo esc_html__( 'Add New Shipping Address', 'woo-address-book' );
 		}
 		?>

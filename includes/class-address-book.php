@@ -240,6 +240,82 @@ class Address_Book {
 	}
 
 	/**
+	 * Get the current address limit.
+	 * Use 0 for unlimited.
+	 *
+	 * @return int
+	 */
+	public function limit() {
+		$save_limit = (int) get_option( 'woo_address_book_' . $this->type . '_save_limit', 0 );
+		/**
+		 * Filters the number of saved addresses.
+		 *
+		 * @since 3.1.0
+		 * @param int $save_limit Number of addresses that are able to be saved.
+		 * @param string $type - 'billing' or 'shipping'.
+		 *
+		 * @return int Use 0 for unlimited.
+		 */
+		return (int) apply_filters( 'woo_address_book_limit', $save_limit, $this->type );
+	}
+
+	/**
+	 * Check if we are under the address limit.
+	 *
+	 * @return bool
+	 */
+	public function is_under_limit() {
+		/**
+		 * Filters whether we are under the address limit.
+		 *
+		 * @since 3.1.0
+		 * @param ?boolean $preempt Whether to preempt the limit. Default null.
+		 * @param string $type - 'billing' or 'shipping'.
+		 *
+		 * @return ?boolean true if under the limit, false if over. null to continue checking as normal.
+		 */
+		$preempt = apply_filters( 'woo_address_book_is_under_limit', null, $this->type );
+		if ( ! is_null( $preempt ) ) {
+			return $preempt;
+		}
+		$save_limit = $this->limit();
+		if ( empty( $save_limit ) ) {
+			return true;
+		}
+		if ( $this->count() < $save_limit ) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Get the current Address book type.
+	 *
+	 * @return string
+	 */
+	public function type() {
+		return $this->type;
+	}
+
+	/**
+	 * Check if the address book is for billing.
+	 *
+	 * @return boolean
+	 */
+	public function is_billing() {
+		return 'billing' === $this->type;
+	}
+
+	/**
+	 * Check if the address book is for shipping.
+	 *
+	 * @return boolean
+	 */
+	public function is_shipping() {
+		return 'shipping' === $this->type;
+	}
+
+	/**
 	 * Save the address to the customer's profile
 	 *
 	 * @param string $key The key of the address.

@@ -26,6 +26,11 @@ const PLUGIN_VERSION = '3.0.2.12';
  * @return void
  */
 function add_additional_address_button( string $type ) {
+	$customer = get_current_customer( 'checkout_address_select_field' );
+	if ( empty( $customer ) ) {
+		return;
+	}
+	$address_book = get_address_book( $customer, $type );
 	/**
 	 * Filter to override if the add new address button should be shown.
 	 *
@@ -35,35 +40,12 @@ function add_additional_address_button( string $type ) {
 		wc_get_template(
 			'myaccount/add-address-button.php',
 			array(
-				'woo_address_book_address_type' => $type,
+				'woo_address_book' => $address_book,
 			),
 			'',
 			plugin_dir_path( __DIR__ ) . 'templates/'
 		);
 	}
-}
-
-/**
- * Removes the link/button to add new addresses, if over the save limit in the settings.
- *
- * @param string $type - 'billing' or 'shipping'.
- *
- * @return boolean
- */
-function limit_saved_addresses( string $type ) {
-	$save_limit = get_option( 'woo_address_book_' . $type . '_save_limit', 0 );
-	if ( empty( $save_limit ) ) {
-		return true;
-	}
-	$customer = get_current_customer( 'limit_saved_addresses' );
-	if ( ! $customer ) {
-		return true;
-	}
-	$address_book = get_address_book( $customer, $type );
-	if ( $address_book->count() < $save_limit ) {
-		return true;
-	}
-	return false;
 }
 
 /**
@@ -210,7 +192,6 @@ function checkout_address_select_field( array $fields ) {
 		foreach ( $fields as $type => $address_fields ) {
 			if ( ( 'billing' === $type && setting( 'billing_enable' ) === true ) || ( 'shipping' === $type && setting( 'shipping_enable' ) === true ) ) {
 				$address_book = get_address_book( $customer, $type );
-				$under_limit  = limit_saved_addresses( $type );
 
 				$select_type = 'select';
 				if ( setting( 'use_radio_input', 'no' ) === true ) {
@@ -246,7 +227,7 @@ function checkout_address_select_field( array $fields ) {
 						$address_selector[ $type . '_address_book' ]['class'][] = 'wc-address-book-subscription-renewal';
 					}
 
-					if ( $under_limit ) {
+					if ( $address_book->is_under_limit() ) {
 						$address_selector[ $type . '_address_book' ]['options']['add_new'] = __( 'Add New Address', 'woo-address-book' );
 					}
 
@@ -418,7 +399,9 @@ function woocommerce_checkout_update_customer_data( bool $update_customer_data, 
 	if ( ! empty( $address_book_billing_address ) && setting( 'billing_enable' ) ) {
 		$billing_address_book = get_address_book( $customer, 'billing' );
 		if ( 'add_new' === $billing_name || false === $billing_name || ! $billing_address_book->has( $billing_name ) ) {
-			$billing_address_book->add( $address_book_billing_address );
+			if ( $billing_address_book->is_under_limit() ) {
+				$billing_address_book->add( $address_book_billing_address );
+			}
 		} else {
 			$address = $billing_address_book->address( $billing_name );
 			$address = array_merge( $address, $address_book_billing_address );
@@ -428,7 +411,9 @@ function woocommerce_checkout_update_customer_data( bool $update_customer_data, 
 	if ( ! empty( $address_book_shipping_address ) && setting( 'shipping_enable' ) ) {
 		$shipping_address_book = get_address_book( $customer, 'shipping' );
 		if ( 'add_new' === $shipping_name || false === $shipping_name || ! $shipping_address_book->has( $shipping_name ) ) {
-			$shipping_address_book->add( $address_book_shipping_address );
+			if ( $shipping_address_book->is_under_limit() ) {
+				$shipping_address_book->add( $address_book_shipping_address );
+			}
 		} else {
 			$address = $shipping_address_book->address( $shipping_name );
 			$address = array_merge( $address, $address_book_shipping_address );
@@ -527,8 +512,13 @@ function save_address_form_handler() {
 	}
 
 	if ( is_null( $address_book_name ) ) {
-		$address_book->add( $address_values, $is_default );
-		wc_add_notice( __( 'Address added successfully.', 'woo-address-book' ) );
+		if ( $address_book->is_under_limit() ) {
+			$address_book->add( $address_values, $is_default );
+			wc_add_notice( __( 'Address added successfully.', 'woo-address-book' ) );
+		} else {
+			wc_add_notice( __( 'You have reached the maximum number of saved addresses.', 'woo-address-book' ), 'error' );
+			return;
+		}
 	} else {
 		$address_book->update( $address_book_name, $address_values );
 		if ( $is_default ) {
