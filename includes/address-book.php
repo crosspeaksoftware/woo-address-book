@@ -337,12 +337,18 @@ function woocommerce_checkout_update_customer_data( bool $update_customer_data, 
 
 	$customer = new \WC_Customer( $customer_id );
 
-	if ( ! setting( 'billing_enable' ) ) {
-		$billing_name = 'billing';
+	$billing_address_book = null;
+	if ( setting( 'billing_enable' ) ) {
+		$billing_address_book = get_address_book( $customer, 'billing' );
+	} else {
+		$billing_name = false;
 	}
 
-	if ( ! setting( 'shipping_enable' ) ) {
-		$shipping_name = 'shipping';
+	$shipping_address_book = null;
+	if ( setting( 'shipping_enable' ) ) {
+		$shipping_address_book = get_address_book( $customer, 'shipping' );
+	} else {
+		$shipping_name = false;
 	}
 
 	$data = $checkout_object->get_posted_data();
@@ -383,9 +389,9 @@ function woocommerce_checkout_update_customer_data( bool $update_customer_data, 
 		}
 
 		// Store custom meta.
-		if ( 'shipping' !== $shipping_name && 0 === stripos( $key, 'shipping_' ) ) { // phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedIf
+		if ( false !== $shipping_name && 0 === stripos( $key, 'shipping_' ) ) { // phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedIf
 			// Don't store custom shipping to meta.
-		} elseif ( 'billing' !== $billing_name && 0 === stripos( $key, 'billing_' ) ) { // phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedElseif
+		} elseif ( false !== $billing_name && 0 === stripos( $key, 'billing_' ) ) { // phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedElseif
 			// Don't store custom billing to meta.
 		} elseif ( is_callable( array( $customer, "set_{$key}" ) ) ) {
 			// Use setters where available.
@@ -396,11 +402,10 @@ function woocommerce_checkout_update_customer_data( bool $update_customer_data, 
 			$customer->update_meta_data( $key, $value );
 		}
 	}
-	if ( ! empty( $address_book_billing_address ) && setting( 'billing_enable' ) ) {
-		$billing_address_book = get_address_book( $customer, 'billing' );
+	if ( ! empty( $address_book_billing_address ) && ! empty( $billing_address_book ) ) {
 		if ( 'add_new' === $billing_name || false === $billing_name || ! $billing_address_book->has( $billing_name ) ) {
 			if ( $billing_address_book->is_under_limit() ) {
-				$billing_address_book->add( $address_book_billing_address );
+				$billing_address_book->add( $address_book_billing_address, false === $billing_name );
 			}
 		} else {
 			$address = $billing_address_book->address( $billing_name );
@@ -408,11 +413,10 @@ function woocommerce_checkout_update_customer_data( bool $update_customer_data, 
 			$billing_address_book->update( $billing_name, $address );
 		}
 	}
-	if ( ! empty( $address_book_shipping_address ) && setting( 'shipping_enable' ) ) {
-		$shipping_address_book = get_address_book( $customer, 'shipping' );
+	if ( ! empty( $address_book_shipping_address ) && ! empty( $shipping_address_book ) ) {
 		if ( 'add_new' === $shipping_name || false === $shipping_name || ! $shipping_address_book->has( $shipping_name ) ) {
 			if ( $shipping_address_book->is_under_limit() ) {
-				$shipping_address_book->add( $address_book_shipping_address );
+				$shipping_address_book->add( $address_book_shipping_address, false === $shipping_name );
 			}
 		} else {
 			$address = $shipping_address_book->address( $shipping_name );
