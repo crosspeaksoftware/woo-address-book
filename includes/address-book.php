@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
-const PLUGIN_VERSION = '3.0.2.12';
+const PLUGIN_VERSION = '3.0.2.13';
 
 /**
  * Adds a link/button to the my account page under the addresses for adding additional addresses to their account.
