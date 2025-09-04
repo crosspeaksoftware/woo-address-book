@@ -387,7 +387,7 @@ class WC_Address_Book {
 			'\CrossPeakSoftware\WooCommerce\AddressBook\get_address_book'
 		);
 		$customer = new \WC_Customer( $user_id );
-		return \CrossPeakSoftware\WooCommerce\AddressBook\get_address_book( $customer, $type )['addresses'] ?? array();
+		return \CrossPeakSoftware\WooCommerce\AddressBook\get_address_book( $customer, $type )->addresses();
 	}
 
 	/**
