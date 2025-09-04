@@ -324,6 +324,9 @@ class Address_Book {
 	 */
 	public function update( string $key, array $address ) {
 		$this->update_address_meta( $key, $address );
+		if ( $this->is_default( $key ) ) {
+			$this->set_default( $key );
+		}
 		$this->save_customer();
 	}
 
