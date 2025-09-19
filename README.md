@@ -1,4 +1,4 @@
-# WooCommerce Address Book
+# Address Book for WooCommerce
 
 Gives your customers the option to store multiple shipping addresses and retrieve them on checkout. Addresses can be updated and modified quickly and easily in `/my-account/`, or saved as part of the checkout process.
 
@@ -23,4 +23,3 @@ See the changelog at https://wordpress.org/plugins/woo-address-book/#developers 
 
 ## License
 GPLv2 or later
-
