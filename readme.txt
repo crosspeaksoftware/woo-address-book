@@ -2,8 +2,8 @@
 Contributors: crosspeak, hallme, doomwaxer, timbhowe, matt-h-1, hinyka
 Tags: WooCommerce, address book, multiple addresses, address
 Requires at least: 4.6
-Tested up to: 6.8.2
-Stable tag: 2.6.5
+Tested up to: 6.9
+Stable tag: 2.6.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -85,6 +85,9 @@ You may also use PoEdit and create a translation file which can be exported as a
 2. Easily select your billing and shipping address on checkout.
 
 == Changelog ==
+
+= 2.6.6 =
+* Fix: Handle the woocommerce_checkout_update_customer_data filter value in our address save overide.
 
 = 2.6.5 =
 * Fix compiled stylesheet as part of build process.
