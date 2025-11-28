@@ -10,7 +10,7 @@
  * Text Domain: woo-address-book
  * WC tested up to: 10.1.2
  *
- * @package WooCommerce Address Book
+ * @package Address Book for WooCommerce
  */
 
 // Prevent direct access data leaks.
