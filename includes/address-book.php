@@ -317,6 +317,9 @@ function address_select_label( array $address ) {
  * @return boolean
  */
 function woocommerce_checkout_update_customer_data( bool $update_customer_data, \WC_Checkout $checkout_object ) {
+	if ( ! $update_customer_data ) {
+		return $update_customer_data;
+	}
 	// Nonce is checked in the checkout before this function is run on the filter.
 	$billing_name  = isset( $_POST['billing_address_book'] ) ? sanitize_text_field( wp_unslash( $_POST['billing_address_book'] ) ) : false; // phpcs:ignore WordPress.Security.NonceVerification.Missing
 	$shipping_name = isset( $_POST['shipping_address_book'] ) ? sanitize_text_field( wp_unslash( $_POST['shipping_address_book'] ) ) : false; // phpcs:ignore WordPress.Security.NonceVerification.Missing
@@ -436,7 +439,7 @@ function woocommerce_checkout_update_customer_data( bool $update_customer_data, 
 
 	return $update_customer_data;
 }
-add_filter( 'woocommerce_checkout_update_customer_data', __NAMESPACE__ . '\woocommerce_checkout_update_customer_data', 10, 2 );
+add_filter( 'woocommerce_checkout_update_customer_data', __NAMESPACE__ . '\woocommerce_checkout_update_customer_data', 1000, 2 );
 
 /**
  * Replace the WooCommerce Save Address form handler.
