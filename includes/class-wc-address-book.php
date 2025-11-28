@@ -64,7 +64,7 @@ class WC_Address_Book {
 		add_action( 'wc_ajax_wc_address_book_checkout_update', array( $this, 'wc_address_book_checkout_update' ) );
 
 		// Update the customer data with the information entered on checkout.
-		add_filter( 'woocommerce_checkout_update_customer_data', array( $this, 'woocommerce_checkout_update_customer_data' ), 10, 2 );
+		add_filter( 'woocommerce_checkout_update_customer_data', array( $this, 'woocommerce_checkout_update_customer_data' ), 1000, 2 );
 
 		add_action( 'woocommerce_before_checkout_shipping_form', array( $this, 'woocommerce_before_checkout_shipping_form' ) );
 
@@ -930,6 +930,9 @@ class WC_Address_Book {
 	 * @return boolean
 	 */
 	public function woocommerce_checkout_update_customer_data( $update_customer_data, $checkout_object ) {
+		if ( ! $update_customer_data ) {
+			return $update_customer_data;
+		}
 		$billing_name            = isset( $_POST['billing_address_book'] ) ? sanitize_text_field( wp_unslash( $_POST['billing_address_book'] ) ) : false;
 		$shipping_name           = isset( $_POST['shipping_address_book'] ) ? sanitize_text_field( wp_unslash( $_POST['shipping_address_book'] ) ) : false;
 		$customer_id             = apply_filters( 'woocommerce_checkout_customer_id', get_current_user_id() );
