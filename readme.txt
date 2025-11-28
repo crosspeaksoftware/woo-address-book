@@ -3,9 +3,9 @@ Contributors: crosspeak, hallme, doomwaxer, timbhowe, matt-h-1, hinyka
 Tags: WooCommerce, address book, multiple addresses, address
 Donate link: https://www.crosspeaksoftware.com/process-payment/
 Requires at least: 4.6
-Tested up to: 6.3
+Tested up to: 6.9
 Requires PHP: 7.1
-Stable tag: 3.0.2.13
+Stable tag: 3.0.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
