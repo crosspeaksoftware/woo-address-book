@@ -75,7 +75,7 @@ add_action( 'rest_api_init', __NAMESPACE__ . '\get_addresses_endpoint' );
  * Get the addresses for a customer.
  *
  * @param \WP_REST_Request $request Full details about the request.
- * @return array
+ * @return \WP_REST_Response
  */
 function get_addresses( $request ) {
 	if ( ! empty( $request['address_type'] ) ) {
@@ -83,7 +83,7 @@ function get_addresses( $request ) {
 	} else {
 		$types = array( 'billing', 'shipping' );
 	}
-	$user_id   = $request['id'];
+	$user_id   = (int) $request['id'];
 	$customer  = new \WC_Customer( $request['id'] );
 	$addresses = array(
 		'id' => $user_id,
@@ -94,7 +94,7 @@ function get_addresses( $request ) {
 		$addresses[ $type . '_default' ] = $address->default_key();
 	}
 
-	return $addresses;
+	return new \WP_REST_Response( $addresses );
 }
 
 /**
@@ -102,7 +102,7 @@ function get_addresses( $request ) {
  *
  * @param \WP_REST_Request $request Full details about the request.
  *
- * @return array|\WP_Error
+ * @return \WP_REST_Response|\WP_Error
  */
 function create_address( $request ) {
 	$data = $request->get_json_params();
@@ -164,9 +164,7 @@ function create_address( $request ) {
 	 */
 	do_action( 'woocommerce_api_create_address_book_address', $customer->get_id(), $data, $type, $key );
 
-	status_header( 201 );
-
-	return array( $key => $data );
+	return new \WP_REST_Response( array( $key => $address_book->address( $key ) ), 201 );
 }
 
 /**
@@ -174,7 +172,7 @@ function create_address( $request ) {
  *
  * @param \WP_REST_Request $request Full details about the request.
  *
- * @return array|\WP_Error
+ * @return \WP_REST_Response|\WP_Error
  */
 function edit_address( $request ) {
 	$data = $request->get_json_params();
@@ -238,7 +236,7 @@ function edit_address( $request ) {
 	 */
 	do_action( 'woocommerce_api_edit_address_book_address', $customer->get_id(), $data, $type, $address_id );
 
-	return array( $address_id => $address_book->address( $address_id ) );
+	return new \WP_REST_Response( array( $address_id => $address_book->address( $address_id ) ) );
 }
 
 
@@ -247,7 +245,7 @@ function edit_address( $request ) {
  *
  * @param \WP_REST_Request $request Full details about the request.
  *
- * @return string|\WP_Error
+ * @return \WP_REST_Response|\WP_Error
  */
 function delete_address( $request ) {
 	$user_id    = $request['id'];
@@ -294,9 +292,7 @@ function delete_address( $request ) {
 	 */
 	do_action( 'woocommerce_api_delete_address_book_address', $customer->get_id(), $type, $address_id );
 
-	status_header( 202 );
-
-	return '';
+	return new \WP_REST_Response( '', 202 );
 }
 
 /**
