@@ -66,7 +66,7 @@ function get_settings_fields() {
 		),
 		array(
 			'desc'            => __( 'Enable "Add New Address" as default selection at checkout', 'woo-address-book' ),
-			'desc_tip'        => 'When checked, the billing address book will default to "Add New Address" during checkout instead of the default address. The default address will still be used if the address book limit is set and reached.',
+			'desc_tip'        => __( 'When checked, the billing address book will default to "Add New Address" during checkout instead of the default address. The default address will still be used if the address book limit is set and reached.', 'woo-address-book' ),
 			'id'              => 'woo_address_book_billing_default_to_new_address',
 			'default'         => 'no',
 			'type'            => 'checkbox',
@@ -75,7 +75,7 @@ function get_settings_fields() {
 		),
 		array(
 			'desc'            => __( 'Enable setting Billing Address Nickname at checkout', 'woo-address-book' ),
-			'desc_tip'        => 'When checked, you can set a nickname for the billing address at checkout. When unchecked, the addresses will not have a nickname unless added in the "My account" menu.',
+			'desc_tip'        => __( 'When checked, you can set a nickname for the billing address at checkout. When unchecked, the addresses will not have a nickname unless added in the "My account" menu.', 'woo-address-book' ),
 			'id'              => 'woo_address_book_billing_address_nickname_checkout',
 			'default'         => 'no',
 			'type'            => 'checkbox',
@@ -104,7 +104,7 @@ function get_settings_fields() {
 		),
 		array(
 			'desc'            => __( 'Enable "Add New Address" as default selection at checkout', 'woo-address-book' ),
-			'desc_tip'        => 'When checked, the shipping address book will default to "Add New Address" during checkout instead of the default address. The default address will still be used if the address book limit is set and reached.',
+			'desc_tip'        => __( 'When checked, the shipping address book will default to "Add New Address" during checkout instead of the default address. The default address will still be used if the address book limit is set and reached.', 'woo-address-book' ),
 			'id'              => 'woo_address_book_shipping_default_to_new_address',
 			'default'         => 'no',
 			'type'            => 'checkbox',
@@ -113,7 +113,7 @@ function get_settings_fields() {
 		),
 		array(
 			'desc'            => __( 'Enable setting Shipping Address Nickname at checkout', 'woo-address-book' ),
-			'desc_tip'        => 'When checked, you can set a nickname for the shipping address at checkout. When unchecked, the addresses will not have a nickname unless added in the "My account" menu.',
+			'desc_tip'        => __( 'When checked, you can set a nickname for the shipping address at checkout. When unchecked, the addresses will not have a nickname unless added in the "My account" menu.', 'woo-address-book' ),
 			'id'              => 'woo_address_book_shipping_address_nickname_checkout',
 			'default'         => 'no',
 			'type'            => 'checkbox',
