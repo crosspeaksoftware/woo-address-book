@@ -20,9 +20,18 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return void
  */
 function load_plugin_textdomain() {
-	\load_plugin_textdomain( 'woo-address-book', false, basename( dirname( __DIR__ ) ) . '/languages/' );
+	$loaded = \load_plugin_textdomain( 'woo-address-book', false, basename( dirname( __DIR__ ) ) . '/languages/' );
+
+	// Fallback: load .mo directly using absolute path if relative loading failed.
+	if ( ! $loaded ) {
+		$locale = determine_locale();
+		$mofile = dirname( __DIR__ ) . '/languages/woo-address-book-' . $locale . '.mo';
+		if ( file_exists( $mofile ) ) {
+			\load_textdomain( 'woo-address-book', $mofile );
+		}
+	}
 }
-add_action( 'init', __NAMESPACE__ . '\load_plugin_textdomain' );
+add_action( 'init', __NAMESPACE__ . '\load_plugin_textdomain', 1 );
 
 /**
  * Enqueue scripts and styles
