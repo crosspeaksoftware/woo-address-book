@@ -19,7 +19,7 @@ msgstr ""
 
 #. Plugin Name of the plugin
 msgid "WooCommerce Address Book"
-msgstr "WooCommerce Rubrica Indirizzi"
+msgstr "WooCommerce Address Book"
 
 #. Description of the plugin
 msgid "Gives your customers the option to store multiple shipping and/or billing addresses and retrieve them on checkout."
@@ -27,7 +27,7 @@ msgstr "Offre ai tuoi clienti la possibilità di salvare più indirizzi di spedi
 
 #: woocommerce-address-book.php:48
 msgid "WooCommerce Address Book requires WooCommerce to be active."
-msgstr "WooCommerce Rubrica Indirizzi richiede che WooCommerce sia attivo."
+msgstr "WooCommerce Address Book richiede che WooCommerce sia attivo."
 
 #: includes/address-book.php:73
 msgid "Address book"
@@ -175,11 +175,11 @@ msgstr "Esporta tutti gli indirizzi di spedizione"
 
 #: includes/settings.php:53
 msgid "WooCommerce Address Book options"
-msgstr "Opzioni WooCommerce Rubrica Indirizzi"
+msgstr "Opzioni WooCommerce Address Book"
 
 #: includes/settings.php:55
 msgid "Setting options for WooCommerce Address Book plugin."
-msgstr "Opzioni di configurazione per il plugin WooCommerce Rubrica Indirizzi."
+msgstr "Opzioni di configurazione per il plugin WooCommerce Address Book."
 
 #: includes/settings.php:59
 msgid "Billing address book"
