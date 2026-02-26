@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
-const PLUGIN_VERSION = '3.0.3';
+const PLUGIN_VERSION = '3.1.0';
 
 /**
  * Adds a link/button to the my account page under the addresses for adding additional addresses to their account.
@@ -304,6 +304,33 @@ function address_select_label( array $address ) {
 	 * @param array $address The address data.
 	 */
 	return apply_filters( 'wc_address_book_address_select_label', $label, $address );
+}
+
+/**
+ * Generate the header to use for the address.
+ *
+ * @since 3.1.0
+ *
+ * @param array $address An array of WooCommerce Address data.
+ * @return string
+ */
+function address_header( array $address ) {
+	if ( ! empty( $address['address_nickname'] ) ) {
+		$header = $address['address_nickname'];
+	} elseif ( ! empty( $address['address_1'] ) ) {
+		$header = $address['address_1'];
+	} else {
+		$header = __( 'Unnamed Address', 'woo-address-book' );
+	}
+
+	/**
+	 * Modify the address book header.
+	 *
+	 * @since 3.1.0
+	 * @param string $header The address book header.
+	 * @param array $address The address data.
+	 */
+	return apply_filters( 'crosspeak_address_book_address_header', $header, $address );
 }
 
 /**

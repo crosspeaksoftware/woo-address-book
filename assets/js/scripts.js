@@ -199,7 +199,7 @@ var woo_address_book_app = {
 							default_address.removeClass( 'wc-address-book-address-default' );
 							default_address.find( '.wc-address-book-make-default' ).prop( 'disabled', false );
 							default_address.find( '.wc-address-book-delete' ).prop( 'disabled', false );
-							default_address.find( '.wc-address-book-address-badges' ).prependTo( new_address );
+							default_address.find( '.wc-address-book-address-badges' ).appendTo( new_address.find("header") );
 							$( '.woocommerce-notices-wrapper' ).html( response );
 
 							// Remove BlockUI overlay.

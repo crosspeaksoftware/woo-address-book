@@ -1,11 +1,11 @@
 === WooCommerce Address Book ===
-Contributors: crosspeak, hallme, doomwaxer, timbhowe, matt-h-1, hinyka
+Contributors: crosspeak, hallme, doomwaxer, timbhowe, matt-h, hinyka
 Tags: WooCommerce, address book, multiple addresses, address
 Donate link: https://www.crosspeaksoftware.com/process-payment/
 Requires at least: 4.6
-Tested up to: 6.9
-Requires PHP: 7.1
-Stable tag: 3.0.3
+Tested up to: 6.9.1
+Requires PHP: 7.4
+Stable tag: 3.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -37,19 +37,19 @@ View the source on [GitHub](https://github.com/crosspeaksoftware/woo-address-boo
 
 = PRO =
 
-The WooCommerce Address Book plugin is also available in a professional version which includes more functionality. WooCommerce Address Book Pro features:
+The Address Book plugin is also available in a professional version which includes more functionality. Address Book Pro for WooCommerce features:
 
 * Backoffice support
   * When adding orders through the Admin you can select from a customer's address book.
   * Manage a customer's address book right from their user profile.
 
-[Upgrade to WooCommerce Address Book Pro](https://www.crosspeaksoftware.com/downloads/woocommerce-address-book-pro/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=Pro%20Upgrade)
+[Upgrade to Address Book Pro for WooCommerce](https://www.crosspeaksoftware.com/downloads/address-book-pro-for-woocommerce/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=Pro%20Upgrade)
 
 == Installation ==
 
 1. Upload the `woo-address-book` folder to the `/wp-content/plugins/` directory
 2. Make sure you have WooCommerce installed and enabled.
-3. Activate the WooCommerce Address Book through the 'Plugins' menu in WordPress.
+3. Activate Address Book for WooCommerce through the 'Plugins' menu in WordPress.
 4. Address Book options will now appear on the customer's account page and checkout once they've entered their primary billing or shipping address.
 
 == Frequently Asked Questions ==
@@ -100,10 +100,24 @@ You may also use PoEdit and create a translation file which can be exported as a
 
 == Upgrade Notice ==
 
-= 3.0.0 =
-New data structure and templates are used this will **break custom user modifications**! Please test it before upgrading.
+= 3.1.0 =
+New data structure and templates are used this will **break custom modifications**! Please test it before upgrading.
 
 == Changelog ==
+
+= 3.1.0 =
+* **Potential breaking change** for updating from 2.x versions.
+  * If you are using this plugin as a user, then nothing should break with this change. All data from older versions of the plugin is updated automatically. You may want to review the plugin settings to make sure that it is setup as you would like.
+  * If you have customizations that accessed any of the plugin functions or changed template files then you will need to review them for updates.
+  * The data structure of the plugin has been re-written. So if you are accessing any data directly from the usermeta table then that will need to be changed.
+  * Also, all functions work differently then they used to.
+    * The WC_Address_Book class has been deprecated. Any custom calls to the WC_Address_Book class may need to be changed.
+    * Many filters have changed and should be reviewed.
+  * Translators: Many of the text strings have been changed or added in this release, so if you are using a version other than English you will need to make sure your translations are up to date.
+* We've updated the Address Book template and styles with a whole new look. If you've customized the template file or your theme has any styles that affect the address book you will need to make changes to work with the updated template and style.
+* Feature: Add REST API endpoint to get customer addresses.
+* Feature: Add Import/Export feature of addresses. This is disabled by default so you will need to turn it on in the settings.
+* Change: Settings have been moved from WooCommerce -> Settings -> General to their own settings section under Address Book.
 
 = 3.0.2 =
  * Extra sanitization of data.
@@ -113,16 +127,29 @@ New data structure and templates are used this will **break custom user modifica
  * Fix: Fix potential temporary PHP fatal error in 3.0.0
 
 = 3.0.0 =
-* **Potential breaking change**
+* Beta versions. **Potential breaking change**
   * If you are using this plugin as a user, then nothing should break with this change. All data from older versions of the plugin is updated automatically. You may want to review the plugin settings to make sure that it is setup as you would like.
   * If you have customizations that accessed any of the plugin functions or changed template files then you will need to review them for updates.
-  * The data structure of the plugin has been re-written. So if you are accessing any data directly from the usermeta table then that will need to be changed.
-  * Also, many of the functions work differently then they used to. Any custom calls to the WC_Address_Book class may need to be changed. Or filters reviewed.
-  * Translators: Many of the text strings have been changed or added in this release, so if you are using a version other than English you will need to make sure your translations are up to date.
-* We've updated the Address Book template and styles with a whole new look. If you've customized the template file or your theme has any styles that affect the address book you will need to make changes to work with the updated template and style.
-* Feature: Add REST API endpoint to get customer addresses.
-* Feature: Add Import/Export feature of addresses. This is disabled by default so you will need to turn it on in the settings.
-* Change: Settings have been moved from WooCommerce -> Settings -> General to their own settings section under Address Book.
+
+= 2.6.6 =
+* Fix: Handle the woocommerce_checkout_update_customer_data filter value in our address save overide.
+
+= 2.6.5 =
+* Fix compiled stylesheet as part of build process.
+
+= 2.6.4 =
+* Use WooCommerce ajax instead of WordPress ajax for improved compatibility.
+
+= 2.6.3 =
+* Declare checkout block incompatibility.
+* Bump versions.
+
+= 2.6.1 and 2.6.2 =
+* Detect and downgrade from Address Book 3.0 addresses if they exist.
+
+= 2.6.0 =
+* Add notice about 3.0.0
+* Warning: *3.x+* will be a breaking change if you have customizations for the plugin.
 
 = 2.5.0 =
 * Declare HPOS compatibility.

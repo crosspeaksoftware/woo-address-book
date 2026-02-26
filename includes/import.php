@@ -178,7 +178,7 @@ function parse_csv_file( string $file, string $type, string $delimiter = ',' ) {
 		while ( ( $data = fgetcsv( $handle, 10000, $delimiter ) ) !== false ) { // phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition.FoundInWhileCondition
 			if ( $first_row ) {
 				// Values in the first row are used as key names.
-				$keys      = array_values( $data );
+				$keys      = $data;
 				$first_row = false;
 			} else {
 				$row = array();

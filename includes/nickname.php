@@ -125,7 +125,7 @@ function validate_address_nickname( string $new_nickname, string $type ) {
 	if ( $address_book->count() > 0 ) {
 		foreach ( $address_book->addresses() as $address_name => $address ) {
 			if ( $current_address_name !== $address_name ) {
-				$address_nickname = $address['address_nickname'];
+				$address_nickname = $address['address_nickname'] ?? '';
 				if ( ! empty( $new_nickname ) && sanitize_title( $address_nickname ) === sanitize_title( $new_nickname ) ) {
 					// address nickname should be unique.
 					wc_add_notice( __( 'Address nickname should be unique, another address is using the nickname.', 'woo-address-book' ), 'error' );
@@ -138,39 +138,6 @@ function validate_address_nickname( string $new_nickname, string $type ) {
 
 	return $new_nickname;
 }
-
-/**
- * Perform the replacement of the localized format with the data.
- *
- * @param array<string, string> $address Address Formats.
- * @param array<string, string> $args Address Data.
- * @return array<string, string>
- */
-function address_nickname_field_replacement( array $address, array $args ) {
-	$address['{address_nickname}'] = '';
-
-	if ( ! empty( $args['address_nickname'] ) ) {
-		$address['{address_nickname}'] = $args['address_nickname'];
-	}
-
-	return $address;
-}
-add_filter( 'woocommerce_formatted_address_replacements', __NAMESPACE__ . '\address_nickname_field_replacement', 10, 2 );
-
-/**
- * Prefix address formats with the address nickname.
- *
- * @param array<string, string> $formats All of the country formats.
- * @return array<string, string>
- */
-function address_nickname_localization_format( array $formats ) {
-	foreach ( $formats as $iso_code => $format ) {
-		$formats[ $iso_code ] = "{address_nickname}\n" . $format;
-	}
-
-	return $formats;
-}
-add_filter( 'woocommerce_localisation_address_formats', __NAMESPACE__ . '\address_nickname_localization_format', -10 );
 
 /**
  * Get the address nickname to add it to the formatted address data.

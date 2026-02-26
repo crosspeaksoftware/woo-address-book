@@ -18,6 +18,7 @@ namespace CrossPeakSoftware\WooCommerce\AddressBook\Templates\MyAddressBook;
 
 use function CrossPeakSoftware\WooCommerce\AddressBook\Settings\setting;
 use function CrossPeakSoftware\WooCommerce\AddressBook\get_address_book;
+use function CrossPeakSoftware\WooCommerce\AddressBook\address_header;
 use function CrossPeakSoftware\WooCommerce\AddressBook\add_additional_address_button;
 use function CrossPeakSoftware\WooCommerce\AddressBook\get_address_book_endpoint_url;
 use function CrossPeakSoftware\WooCommerce\AddressBook\Export\add_export_button;
@@ -116,6 +117,8 @@ if ( setting( 'billing_enable' ) === true ) {
 					$woo_address_book_address_default = $woo_address_book_billing_address_book->is_default( $woo_address_book_key );
 					?>
 					<div class="wc-address-book-address<?php echo esc_attr( $woo_address_book_address_default ? ' wc-address-book-address-default' : '' ); ?>">
+						<header class="woocommerce-Address-title title">
+							<h3><?php echo esc_html( address_header( $woo_address_book_address ) ); ?></h3>
 						<?php
 						if ( $woo_address_book_address_default ) {
 							?>
@@ -125,6 +128,7 @@ if ( setting( 'billing_enable' ) === true ) {
 							<?php
 						}
 						?>
+						</header>
 						<address>
 							<?php echo wp_kses( $woo_address_book_formatted_address, array( 'br' => array() ) ); ?>
 						</address>
@@ -230,15 +234,18 @@ if ( setting( 'shipping_enable' ) === true ) {
 					$woo_address_book_address_default = $woo_address_book_shipping_address_book->is_default( $woo_address_book_key );
 					?>
 					<div class="wc-address-book-address<?php echo esc_attr( $woo_address_book_address_default ? ' wc-address-book-address-default' : '' ); ?>">
-					<?php
-					if ( $woo_address_book_address_default ) {
-						?>
-							<div class="wc-address-book-address-badges">
-								<span class="wc-address-book-address-default-label"><?php esc_html_e( 'Default', 'woo-address-book' ); ?></span>
-							</div>
+						<header class="woocommerce-Address-title title">
+							<h3><?php echo esc_html( address_header( $woo_address_book_address ) ); ?></h3>
 							<?php
-					}
-					?>
+							if ( $woo_address_book_address_default ) {
+								?>
+								<div class="wc-address-book-address-badges">
+									<span class="wc-address-book-address-default-label"><?php esc_html_e( 'Default', 'woo-address-book' ); ?></span>
+								</div>
+								<?php
+							}
+							?>
+						</header>
 						<address>
 							<?php echo wp_kses( $woo_address_book_formatted_address, array( 'br' => array() ) ); ?>
 						</address>
