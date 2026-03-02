@@ -1,4 +1,4 @@
-=== WooCommerce Address Book ===
+=== Address Book for WooCommerce ===
 Contributors: crosspeak, hallme, doomwaxer, timbhowe, matt-h, hinyka
 Tags: WooCommerce, address book, multiple addresses, address
 Donate link: https://www.crosspeaksoftware.com/process-payment/
@@ -12,6 +12,8 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Gives your customers the option to store multiple billing and shipping addresses and retrieve them on checkout.
 
 == Description ==
+
+**Notice** - This plugin is does not currently work with the WooCommerce Block Checkout. It currently only supports the Classic WooCommerce checkout. We hope to find a way to integrate with the Block Checkout in the future.
 
 Gives your customers the option to store multiple billing and shipping addresses and retrieve them on checkout. Addresses can be updated and modified quickly and easily in /my-account/, or saved as part of the checkout process.
 
@@ -64,7 +66,7 @@ No, this plugin only allows for the storage of multiple shipping addresses. If a
 Most standard custom fields do work with the Address Book. However, if you have custom fields added by a plugin which are updated by javascript then the Address Book plugin will not always know how to handle the data. If you are running into an issue please post an issue in the [support forum](https://wordpress.org/support/plugin/woo-address-book/) or on [github](https://github.com/crosspeaksoftware/woo-address-book/issues) with what plugin or code you are using and as much details as you can. We will determine if the Address Book plugin is able to provide support for the plugin or if a custom solution would need to be developed for your use case.
 
 = How can I add custom fields to my billing/shipping address? =
-WooCommerce Address Book uses the standard WooCommerce address functions so any method to modify the address fields will still work.
+Address Book for WooCommerce uses the standard WooCommerce address functions so any method to modify the address fields will still work.
 We have tested that using the standard filters works correctly:
 * [https://docs.woocommerce.com/document/tutorial-customising-checkout-fields-using-actions-and-filters/](https://docs.woocommerce.com/document/tutorial-customising-checkout-fields-using-actions-and-filters/)
 We have also tested this plugin by WooCommerce:
